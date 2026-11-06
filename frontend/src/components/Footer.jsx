@@ -243,21 +243,22 @@ export default function Footer({
                 href="https://www.instagram.com/viral_clip_ai/?__pwa=1"
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Follow ViralClip AI on Instagram: @viral_clip_ai"
+                title="Follow @viral_clip_ai on Instagram for new updates & features"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '4px',
-                  color: '#e1306c',
+                  gap: '5px',
+                  color: '#a1a1aa',
                   textDecoration: 'none',
+                  fontSize: '0.74rem',
                   fontWeight: 600,
-                  transition: 'opacity 0.15s ease'
+                  transition: 'color 0.15s ease'
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#a1a1aa')}
               >
-                <InstagramLogo size={13} weight="bold" />
-                <span>@viral_clip_ai</span>
+                <InstagramLogo size={13} weight="bold" color="#f472b6" />
+                <span>@viral_clip_ai • Updates & Features</span>
               </a>
             </div>
 

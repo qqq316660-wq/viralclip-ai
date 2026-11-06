@@ -1,15 +1,16 @@
 {
-  "version": "1.6.4",
+  "version": "1.6.5",
   "min_version": "1.0.0",
-  "release_date": "2026-11-06T06:16:46Z",
-  "title": "Footer Alignment & Clean Update View",
+  "release_date": "2026-11-06T06:41:06Z",
+  "title": "Refined Professional Dark UI",
   "changelog": [
-    "Fixed footer alignment: cleanly pinned to bottom edge-to-edge",
-    "Cleaned up updater: removed developer tabs for a simple user experience"
+    "Separated Instagram and Updates into clean distinct tiers",
+    "Instagram badge updated with Updates & Features in soft dark luxury style",
+    "Toned down high-contrast badges for a comfortable, eye-friendly experience"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.6.4.zip",
-  "checksum": "sha256:854f5f9e9dc87a99ccfe48a1c97e096337ad3759320fa378e379a4303944b1dc",
-  "size_bytes": 258716,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.6.5.zip",
+  "checksum": "sha256:9ea4497debf838bf3efbb8a20085171a75e1ce776f912c814d70859ffb75a763",
+  "size_bytes": 258946,
   "mandatory": false,
   "rollback_version": null
 }

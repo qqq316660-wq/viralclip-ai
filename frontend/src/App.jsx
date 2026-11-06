@@ -627,43 +627,44 @@ export default function App() {
         onShutdown={handleAppShutdown}
       />
 
-      {/* New Software Update Available Banner (Sticky Notification) */}
+      {/* New Software Update Available Banner (Sticky Notification - Subtle Matte Luxury Dark Style) */}
       {updateInfo?.update_available && !showUpdateModal && (
         <div
           style={{
             maxWidth: '1240px',
-            margin: '12px auto 0',
+            margin: '8px auto 0',
             width: 'calc(100% - 40px)',
-            background: 'linear-gradient(90deg, rgba(30, 215, 96, 0.16) 0%, rgba(20, 20, 20, 0.95) 100%)',
-            border: '1px solid rgba(30, 215, 96, 0.45)',
+            background: '#161616',
+            border: '1px solid rgba(255, 255, 255, 0.09)',
             color: '#ffffff',
             borderRadius: '12px',
-            padding: '10px 18px',
+            padding: '9px 16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '12px',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)'
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.35)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
             <span
               style={{
-                background: 'var(--spotify-green)',
-                color: '#000000',
+                background: 'rgba(74, 222, 128, 0.1)',
+                color: '#86efac',
+                border: '1px solid rgba(74, 222, 128, 0.25)',
                 fontSize: '11px',
-                fontWeight: 800,
+                fontWeight: 700,
                 padding: '2px 8px',
                 borderRadius: '6px'
               }}
             >
-              UPDATE v{updateInfo.latest_version}
+              Update v{updateInfo.latest_version}
             </span>
-            <span style={{ fontSize: '13px', fontWeight: 600 }}>
-              {updateInfo.title || `ViralClip AI v${updateInfo.latest_version} is available!`}
+            <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#f4f4f5' }}>
+              {updateInfo.title || `ViralClip AI v${updateInfo.latest_version} is available`}
             </span>
             {updateInfo.changelog?.[0] && (
-              <span style={{ color: 'var(--text-subdued)', fontSize: '12px' }}>
+              <span style={{ color: '#a1a1aa', fontSize: '12px' }}>
                 • {updateInfo.changelog[0]}
               </span>
             )}
@@ -672,15 +673,26 @@ export default function App() {
             type="button"
             onClick={() => setShowUpdateModal(true)}
             style={{
-              background: 'var(--spotify-green)',
-              color: '#000000',
-              border: 'none',
+              background: 'rgba(255, 255, 255, 0.08)',
+              color: '#ffffff',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
               borderRadius: 'var(--radius-full)',
-              padding: '6px 16px',
+              padding: '5px 16px',
               fontSize: '12px',
-              fontWeight: 800,
+              fontWeight: 700,
               cursor: 'pointer',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              transition: 'all 0.15s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'var(--spotify-green)';
+              e.currentTarget.style.color = '#000000';
+              e.currentTarget.style.borderColor = 'transparent';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.color = '#ffffff';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
             }}
           >
             Update Now
