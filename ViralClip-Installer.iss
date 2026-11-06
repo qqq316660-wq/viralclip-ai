@@ -46,7 +46,6 @@ Source: "d:\ns1\Stop ViralClip.vbs"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\ns1\Launch.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\ns1\ViralClip.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\ns1\start_viralclip.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "d:\ns1\push_update.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\ns1\VERSION"; DestDir: "{app}"; Flags: ignoreversion
 Source: "d:\ns1\storage\firebase_config.json"; DestDir: "{app}\storage"; Flags: ignoreversion
 

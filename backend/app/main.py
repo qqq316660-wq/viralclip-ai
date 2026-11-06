@@ -59,10 +59,19 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for Frontend development
+# Secure CORS policy: Restricts cross-origin requests exclusively to local app origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://127.0.0.1:8001",
+        "http://localhost:8001",
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+        "http://127.0.0.1",
+        "http://localhost",
+        "null"
+    ],
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -607,9 +616,17 @@ if FRONTEND_DIST.exists():
         # Do not intercept API requests
         if full_path.startswith("api"):
             raise HTTPException(status_code=404, detail="Not Found")
-        target_file = FRONTEND_DIST / full_path
-        if target_file.exists() and target_file.is_file():
-            return FileResponse(target_file)
+        # Prevent Path Traversal
+        try:
+            target_file = (FRONTEND_DIST / full_path).resolve()
+            if not str(target_file).startswith(str(FRONTEND_DIST.resolve())):
+                raise HTTPException(status_code=403, detail="Access denied")
+            if target_file.exists() and target_file.is_file():
+                return FileResponse(target_file)
+        except HTTPException:
+            raise
+        except Exception:
+            pass
         index_file = FRONTEND_DIST / "index.html"
         if index_file.exists():
             return FileResponse(
