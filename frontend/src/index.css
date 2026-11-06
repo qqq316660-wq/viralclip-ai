@@ -1,0 +1,307 @@
+/* Spotify Design System Tokens per DESIGN.md & Taste-Skill */
+:root {
+  --font-title: 'SpotifyMixUITitle', 'CircularSp-Arab', 'CircularSp-Hebr', 'CircularSp-Cyrl', 'CircularSp-Deva', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-body: 'SpotifyMixUI', 'CircularSp-Arab', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Primary Brand Colors */
+  --spotify-green: #1ed760;
+  --spotify-green-hover: #1fdf64;
+  --spotify-green-press: #169c46;
+  --spotify-green-border: #1db954;
+
+  /* Surface Hierarchy (Dark Immersion) */
+  --bg-base: #121212;
+  --bg-surface: #181818;
+  --bg-surface-elevated: #1f1f1f;
+  --bg-card: #181818;
+  --bg-card-hover: #242424;
+  --bg-card-active: #2a2a2a;
+  --bg-dark-card: #252525;
+
+  /* Text & Labels */
+  --text-base: #ffffff;
+  --text-subdued: #b3b3b3;
+  --text-bright: #cbcbcb;
+  --text-pure: #fdfdfd;
+
+  /* Semantic */
+  --text-negative: #f3727f;
+  --text-warning: #ffa42b;
+  --text-announcement: #539df5;
+
+  /* Borders & Dividers */
+  --border-subtle: #282828;
+  --border-gray: #4d4d4d;
+  --border-light: #7c7c7c;
+  --separator: #2a2a2a;
+
+  /* Pill & Circle Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-pill: 500px;
+  --radius-full: 9999px;
+  --radius-circle: 50%;
+
+  /* Shadows per Spotify DESIGN.md */
+  --shadow-heavy: rgba(0, 0, 0, 0.5) 0px 8px 24px;
+  --shadow-medium: rgba(0, 0, 0, 0.3) 0px 8px 8px;
+  --shadow-card-hover: rgba(0, 0, 0, 0.6) 0px 12px 28px;
+  --shadow-green-glow: 0 0 24px rgba(30, 215, 96, 0.35);
+  --shadow-inset-border: rgb(18, 18, 18) 0px 1px 0px, rgb(124, 124, 124) 0px 0px 0px 1px inset;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-base);
+  color: var(--text-base);
+  min-height: 100dvh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #121212 70%);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  color: var(--text-base);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Custom Spotify Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: #2e2e2e;
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #404040;
+}
+
+/* Spotify Card Surface */
+.spotify-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-medium);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.spotify-card:hover {
+  background: var(--bg-card-hover);
+}
+
+.spotify-card-elevated {
+  background: var(--bg-surface-elevated);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-heavy);
+}
+
+/* Spotify Primary Button (Green Pill) */
+.btn-spotify-primary {
+  background: var(--spotify-green);
+  color: #000000;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 14px 32px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-green-glow);
+  white-space: nowrap;
+}
+
+.btn-spotify-primary:hover:not(:disabled) {
+  background: var(--spotify-green-hover);
+  transform: scale(1.04);
+}
+
+.btn-spotify-primary:active:not(:disabled) {
+  background: var(--spotify-green-press);
+  transform: scale(0.98);
+}
+
+.btn-spotify-primary:disabled {
+  background: #2a2a2a;
+  color: #666666;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Spotify Secondary Dark Pill Button */
+.btn-spotify-secondary {
+  background: var(--bg-surface-elevated);
+  color: var(--text-base);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  border: 1px solid var(--border-gray);
+  border-radius: var(--radius-full);
+  padding: 10px 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.btn-spotify-secondary:hover:not(:disabled) {
+  background: #2a2a2a;
+  border-color: #ffffff;
+  color: #ffffff;
+  transform: scale(1.02);
+}
+
+.btn-spotify-secondary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Spotify Pill Input */
+.spotify-pill-input {
+  width: 100%;
+  padding: 12px 20px 12px 44px;
+  background: var(--bg-surface-elevated);
+  color: #ffffff;
+  font-size: 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  outline: none;
+  box-shadow: var(--shadow-inset-border);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.spotify-pill-input:focus {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 1px #ffffff;
+}
+
+.spotify-pill-input::placeholder {
+  color: var(--text-subdued);
+}
+
+/* Circular Play / Action Button */
+.btn-spotify-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-circle);
+  background: var(--spotify-green);
+  color: #000000;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-medium);
+}
+
+.btn-spotify-circle:hover:not(:disabled) {
+  transform: scale(1.08);
+  background: var(--spotify-green-hover);
+}
+
+.btn-spotify-circle:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* Range Slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #3e3e3e;
+  border-radius: var(--radius-full);
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-circle);
+  background: var(--spotify-green);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  background: var(--spotify-green-hover);
+}
+
+/* Animation utilities */
+@keyframes spin-spotify {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-spotify {
+  animation: spin-spotify 1s linear infinite;
+}
+
+/* Repurpose Specs (SettingsBar) Responsive Grid & Alignment */
+.settings-layout-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 370px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1160px) {
+  .settings-layout-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* Legal & Compliance Modal Animation */
+@keyframes legalModalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
