@@ -1,16 +1,15 @@
 {
   "version": "1.6.4",
   "min_version": "1.0.0",
-  "release_date": "2026-11-06T05:54:36Z",
-  "title": "Footer Alignment & Layout Fix",
+  "release_date": "2026-11-06T06:16:46Z",
+  "title": "Footer Alignment & Clean Update View",
   "changelog": [
     "Fixed footer alignment: cleanly pinned to bottom edge-to-edge",
-    "Automatic update popup notification on launch",
-    "Added top sticky update notification CTA banner"
+    "Cleaned up updater: removed developer tabs for a simple user experience"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.6.4.zip",
-  "checksum": "sha256:cfa3745c677596033e8a45d5994a418206a0cdf058fd7d98bc452cefd812a23e",
-  "size_bytes": 263140,
+  "checksum": "sha256:854f5f9e9dc87a99ccfe48a1c97e096337ad3759320fa378e379a4303944b1dc",
+  "size_bytes": 258716,
   "mandatory": false,
   "rollback_version": null
 }

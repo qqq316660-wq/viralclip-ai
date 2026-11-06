@@ -5,9 +5,6 @@ import {
   ArrowClockwise,
   CheckCircle,
   WarningCircle,
-  CloudArrowDown,
-  ClockCounterClockwise,
-  Gear,
   DownloadSimple,
   SpinnerGap,
   ArrowRight,
@@ -22,7 +19,6 @@ export default function UpdateModal({
   initialUpdateInfo = null,
   onUpdateSuccess = null
 }) {
-  const [activeTab, setActiveTab] = useState('update'); // 'update' | 'backups' | 'settings'
   const [isChecking, setIsChecking] = useState(false);
   const [updateInfo, setUpdateInfo] = useState(initialUpdateInfo);
   const [checkError, setCheckError] = useState('');
@@ -34,13 +30,6 @@ export default function UpdateModal({
     message: '',
     error: null
   });
-
-  // Backups and Settings
-  const [backups, setBackups] = useState([]);
-  const [isLoadingBackups, setIsLoadingBackups] = useState(false);
-  const [updateConfig, setUpdateConfig] = useState(null);
-  const [customManifestUrl, setCustomManifestUrl] = useState('');
-  const [configSaveStatus, setConfigSaveStatus] = useState('');
 
   useEffect(() => {
     if (initialUpdateInfo) {
@@ -54,8 +43,6 @@ export default function UpdateModal({
       if (!updateInfo) {
         handleCheckForUpdates();
       }
-      fetchBackups();
-      fetchConfig();
     }
   }, [isOpen]);
 
@@ -113,54 +100,6 @@ export default function UpdateModal({
       setCheckError('Backend server not reachable for updates.');
     } finally {
       setIsChecking(false);
-    }
-  };
-
-  const fetchBackups = async () => {
-    setIsLoadingBackups(true);
-    try {
-      const res = await fetch(`${backendUrl}/api/updater/backups`);
-      if (res.ok) {
-        const data = await res.json();
-        setBackups(data.backups || []);
-      }
-    } catch {
-      // ignore
-    } finally {
-      setIsLoadingBackups(false);
-    }
-  };
-
-  const fetchConfig = async () => {
-    try {
-      const res = await fetch(`${backendUrl}/api/updater/config`);
-      if (res.ok) {
-        const data = await res.json();
-        setUpdateConfig(data);
-        setCustomManifestUrl(data.manifest_url || '');
-      }
-    } catch {
-      // ignore
-    }
-  };
-
-  const handleSaveConfig = async () => {
-    setConfigSaveStatus('Saving...');
-    try {
-      const res = await fetch(`${backendUrl}/api/updater/config`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ manifest_url: customManifestUrl.trim() })
-      });
-      if (res.ok) {
-        setConfigSaveStatus('Saved successfully!');
-        setTimeout(() => setConfigSaveStatus(''), 2500);
-        handleCheckForUpdates();
-      } else {
-        setConfigSaveStatus('Failed to save.');
-      }
-    } catch {
-      setConfigSaveStatus('Error saving config.');
     }
   };
 
@@ -378,94 +317,6 @@ export default function UpdateModal({
           </div>
         </div>
 
-        {/* Tab Navigation */}
-        <div
-          style={{
-            display: 'flex',
-            padding: '10px 24px',
-            borderBottom: '1px solid #1e1e1e',
-            background: '#141414',
-            gap: '8px'
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => setActiveTab('update')}
-            style={{
-              background: activeTab === 'update' ? '#242424' : 'transparent',
-              color: activeTab === 'update' ? '#ffffff' : 'var(--text-subdued)',
-              border: 'none',
-              borderRadius: 'var(--radius-full)',
-              padding: '6px 14px',
-              fontSize: '12px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <CloudArrowDown size={14} weight="bold" />
-            <span>Update</span>
-            {updateInfo?.update_available && (
-              <span
-                style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  background: 'var(--spotify-green)',
-                  marginLeft: '2px'
-                }}
-              />
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab('backups');
-              fetchBackups();
-            }}
-            style={{
-              background: activeTab === 'backups' ? '#242424' : 'transparent',
-              color: activeTab === 'backups' ? '#ffffff' : 'var(--text-subdued)',
-              border: 'none',
-              borderRadius: 'var(--radius-full)',
-              padding: '6px 14px',
-              fontSize: '12px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <ClockCounterClockwise size={14} />
-            <span>Rollback Backups {backups.length > 0 ? `(${backups.length})` : ''}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('settings')}
-            style={{
-              background: activeTab === 'settings' ? '#242424' : 'transparent',
-              color: activeTab === 'settings' ? '#ffffff' : 'var(--text-subdued)',
-              border: 'none',
-              borderRadius: 'var(--radius-full)',
-              padding: '6px 14px',
-              fontSize: '12px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Gear size={14} />
-            <span>Settings</span>
-          </button>
-        </div>
-
         {/* Modal Body */}
         <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }}>
           {/* Active Work Progress Card */}
@@ -600,8 +451,8 @@ export default function UpdateModal({
             </div>
           )}
 
-          {/* TAB 1: UPDATE SCREEN */}
-          {activeTab === 'update' && !isWorking && taskState.state !== 'completed' && (
+          {/* DIRECT UPDATE SCREEN */}
+          {!isWorking && taskState.state !== 'completed' && (
             <div>
               {/* Rollback Directive Alert */}
               {updateInfo?.rollback_required ? (
@@ -813,133 +664,6 @@ export default function UpdateModal({
                   </button>
                 </div>
               )}
-            </div>
-          )}
-
-          {/* TAB 2: BACKUPS & ROLLBACK */}
-          {activeTab === 'backups' && (
-            <div>
-              <div style={{ fontSize: '13px', color: 'var(--text-subdued)', marginBottom: '14px', lineHeight: '1.4' }}>
-                Whenever you install an update, a safe backup of your previous working version is automatically created. If an update ever causes an issue, you can restore a previous version with 1-click.
-              </div>
-
-              {isLoadingBackups ? (
-                <div style={{ textAlign: 'center', padding: '30px' }}>
-                  <SpinnerGap size={24} className="spin-animation" color="var(--spotify-green)" />
-                </div>
-              ) : backups.length === 0 ? (
-                <div
-                  style={{
-                    padding: '24px',
-                    background: '#161616',
-                    borderRadius: '12px',
-                    textAlign: 'center',
-                    color: 'var(--text-subdued)',
-                    fontSize: '12px'
-                  }}
-                >
-                  No previous backup snapshots found yet. Backups are generated automatically during every update.
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {backups.map((b, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        background: '#181818',
-                        border: '1px solid #282828',
-                        borderRadius: '10px',
-                        padding: '12px 16px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        flexWrap: 'wrap',
-                        gap: '10px'
-                      }}
-                    >
-                      <div>
-                        <div style={{ fontSize: '13px', fontWeight: 700, color: '#ffffff' }}>
-                          Backup v{b.version}
-                        </div>
-                        <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
-                          Created: {b.created_at} • Size: {formatSize(b.size_bytes)}
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleRollback(b.filename)}
-                        disabled={isWorking}
-                        style={{
-                          background: 'rgba(255, 170, 0, 0.12)',
-                          color: '#ffaa00',
-                          border: '1px solid rgba(255, 170, 0, 0.3)',
-                          borderRadius: 'var(--radius-full)',
-                          padding: '5px 14px',
-                          fontSize: '11px',
-                          fontWeight: 700,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Restore this Version
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* TAB 3: SETTINGS */}
-          {activeTab === 'settings' && (
-            <div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#ffffff', marginBottom: '8px' }}>
-                Remote Manifest URL (version.json):
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginBottom: '10px', lineHeight: '1.4' }}>
-                The endpoint where ViralClip AI Studio looks for update releases. You can point this to your GitHub raw file, Cloudflare bucket, or local test server (e.g. <code>http://127.0.0.1:8085/version.json</code>).
-              </div>
-
-              <input
-                type="text"
-                value={customManifestUrl}
-                onChange={(e) => setCustomManifestUrl(e.target.value)}
-                placeholder="https://raw.githubusercontent.com/.../version.json"
-                style={{
-                  width: '100%',
-                  background: '#1c1c1c',
-                  border: '1px solid #333333',
-                  borderRadius: '8px',
-                  padding: '10px 14px',
-                  fontSize: '12px',
-                  color: '#ffffff',
-                  marginBottom: '14px',
-                  fontFamily: 'var(--font-mono)'
-                }}
-              />
-
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-                <span style={{ fontSize: '11px', color: 'var(--spotify-green)', fontWeight: 600 }}>
-                  {configSaveStatus}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={handleSaveConfig}
-                  style={{
-                    background: 'var(--spotify-green)',
-                    color: '#000000',
-                    border: 'none',
-                    borderRadius: 'var(--radius-full)',
-                    padding: '8px 20px',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    cursor: 'pointer'
-                  }}
-                >
-                  Save Manifest URL
-                </button>
-              </div>
             </div>
           )}
         </div>
