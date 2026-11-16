@@ -56,7 +56,7 @@ from app.srt_parser import parse_srt_file
 app = FastAPI(
     title="ViralClip AI API",
     description="High-performance backend for automated AI video clipping & viral short creation",
-    version="1.0.0"
+    version="1.6.6"
 )
 
 # Secure CORS policy: Restricts cross-origin requests exclusively to local app origins

@@ -11,18 +11,59 @@ Error generating stack: `+e.message+`
 # =====================================================================
 import os, sys, shutil, tempfile, subprocess, time, re, socket, uuid, threading
 
-# 1. Ensure modern PyAV and faster-whisper are installed and up to date
-# Note: "av>=11.0.0" is strictly required by modern faster-whisper to support
-# metadata_errors in av.open without crashing on Kaggle/Colab!
-print("📦 Installing/verifying dependencies (av>=11.0.0, faster-whisper, fastapi, uvicorn)...")
+# 1. Ensure modern PyAV, CUDA 12 runtime, and faster-whisper are installed and up to date
+print("📦 Installing/verifying dependencies (CUDA 12, av>=11.0.0, faster-whisper, fastapi, uvicorn)...")
 subprocess.check_call([
     sys.executable, "-m", "pip", "install", "-q", "-U",
+    "nvidia-cublas-cu12",
+    "nvidia-cudnn-cu12",
     "av>=11.0.0",
     "faster-whisper",
     "fastapi",
     "uvicorn",
     "python-multipart"
 ])
+
+# 2. Configure Dynamic Linker & Pre-load CUDA 12 Shared Libraries for CTranslate2
+import site, glob, ctypes
+
+def setup_cuda_libraries():
+    """Locates and loads nvidia-cublas-cu12 and nvidia-cudnn-cu12 into dynamic linker and memory."""
+    site_dirs = site.getsitepackages()
+    if hasattr(site, "getusersitepackages"):
+        site_dirs.append(site.getusersitepackages())
+
+    cuda_lib_dirs = []
+    for s in site_dirs:
+        for pkg in ["cublas", "cudnn"]:
+            p = os.path.join(s, "nvidia", pkg, "lib")
+            if os.path.isdir(p) and p not in cuda_lib_dirs:
+                cuda_lib_dirs.append(p)
+
+    if cuda_lib_dirs:
+        current_ld = os.environ.get("LD_LIBRARY_PATH", "")
+        new_ld = ":".join(cuda_lib_dirs) + (f":{current_ld}" if current_ld else "")
+        os.environ["LD_LIBRARY_PATH"] = new_ld
+
+    sys_lib_candidates = ["/usr/lib/x86_64-linux-gnu", "/usr/local/cuda/lib64", "/usr/lib"]
+    target_sys_lib = next((d for d in sys_lib_candidates if os.path.isdir(d) and os.access(d, os.W_OK)), None)
+
+    for lib_dir in cuda_lib_dirs:
+        for so_file in glob.glob(os.path.join(lib_dir, "*.so*")):
+            so_name = os.path.basename(so_file)
+            if target_sys_lib:
+                dest = os.path.join(target_sys_lib, so_name)
+                if not os.path.exists(dest):
+                    try:
+                        os.symlink(so_file, dest)
+                    except Exception:
+                        pass
+            try:
+                ctypes.CDLL(so_file, mode=ctypes.RTLD_GLOBAL)
+            except Exception:
+                pass
+
+setup_cuda_libraries()
 
 # Safeguard against PyAV metadata_errors keyword mismatch across all versions
 try:
@@ -44,7 +85,7 @@ try:
 except Exception as patch_err:
     pass
 
-# 2. Download cloudflared binary
+# 3. Download cloudflared binary
 if not os.path.exists("./cloudflared-linux-amd64"):
     print("📥 Downloading Cloudflare binary...")
     os.system("wget -q -nc https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64")
@@ -70,16 +111,30 @@ except Exception as e:
 jobs_db = {}
 
 def run_transcription_worker(job_id: str, file_path: str):
+    global model
     try:
-        print(f"⚙️ [Job {job_id}] Transcribing on GPU (Fast Turbo Mode)...")
-        segments, info = model.transcribe(
-            file_path,
-            beam_size=1,
-            best_of=1,
-            word_timestamps=True,
-            vad_filter=True,
-            condition_on_previous_text=False
-        )
+        print(f"⚙️ [Job {job_id}] Transcribing (Fast Turbo Mode)...")
+        try:
+            segments, info = model.transcribe(
+                file_path,
+                beam_size=1,
+                best_of=1,
+                word_timestamps=True,
+                vad_filter=True,
+                condition_on_previous_text=False
+            )
+        except Exception as gpu_exec_err:
+            print(f"⚠️ GPU transcription error: {gpu_exec_err}")
+            print("⚡ Auto-recovering: Switching to CPU transcription...")
+            cpu_model = WhisperModel("medium", device="cpu", compute_type="int8")
+            segments, info = cpu_model.transcribe(
+                file_path,
+                beam_size=1,
+                best_of=1,
+                word_timestamps=True,
+                vad_filter=True,
+                condition_on_previous_text=False
+            )
 
         result_segments = []
         all_words = []
@@ -192,7 +247,7 @@ for _ in range(30):
     if os.path.exists("cloudflared.log"):
         with open("cloudflared.log", "r") as f:
             content = f.read()
-            match = re.search(r"https://[a-zA-Z0-9-]+\\.trycloudflare\\.com", content)
+            match = re.search(r"https://[a-zA-Z0-9-]+.trycloudflare.com", content)
             if match:
                 url = match.group(0)
                 break

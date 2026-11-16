@@ -50,6 +50,55 @@ def generate_keys_batch(count: int = 100):
             keys.append(k)
     return keys
 
+def export_keys_to_files(keys: list, base_name: str = "generated_keys"):
+    """Exports generated keys to both plain TXT and Excel-ready CSV format."""
+    txt_path = BASE_DIR / "tools" / f"{base_name}_{len(keys)}.txt"
+    csv_path = BASE_DIR / "tools" / f"{base_name}_{len(keys)}.csv"
+
+    # TXT Export (one key per line)
+    with open(txt_path, "w", encoding="utf-8") as f:
+        for k in keys:
+            f.write(k + "\n")
+
+    # CSV Export (Excel & Payment Gateway compatible)
+    with open(csv_path, "w", encoding="utf-8") as f:
+        f.write("Index,License_Key,Status,Device_Locked,Owner_Name,Created_At\n")
+        now_str = time.strftime("%Y-%m-%d %H:%M:%S")
+        for i, k in enumerate(keys, 1):
+            f.write(f"{i},{k},active,Unused,Unassigned,{now_str}\n")
+
+    return txt_path, csv_path
+
+def upload_keys_batch_firestore(project_id: str, keys_chunk: list):
+    """
+    Uploads up to 500 keys in a single atomic batch commit request to Firestore.
+    Significantly faster (upload 10,000 keys in ~15 seconds instead of 30 minutes).
+    """
+    url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents:commit"
+    created_time = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+    writes = []
+    for k in keys_chunk:
+        doc_name = f"projects/{project_id}/databases/(default)/documents/licenses/{k}"
+        writes.append({
+            "update": {
+                "name": doc_name,
+                "fields": {
+                    "key": {"stringValue": k},
+                    "hwid": {"stringValue": ""},
+                    "registered_name": {"stringValue": ""},
+                    "registered_phone": {"stringValue": ""},
+                    "status": {"stringValue": "active"},
+                    "created_at": {"stringValue": created_time},
+                    "activated_at": {"stringValue": ""}
+                }
+            }
+        })
+
+    payload = {"writes": writes}
+    res = requests.post(url, json=payload, timeout=30.0)
+    return res.status_code == 200, res.text
+
 def upload_key_to_firestore(project_id: str, key: str):
     """
     Creates document in Firestore collection 'licenses' with document ID = key.
@@ -116,8 +165,8 @@ def main():
         print(f"\n Connected Firebase Project: {project_id}")
 
     print("\nSelect an action:")
-    print(" [1] Generate 100 Keys (Save to text file)")
-    print(" [2] Generate Custom Number of Keys & Upload to Firebase")
+    print(" [1] Generate Keys Locally (Save to TXT & Excel-ready CSV)")
+    print(" [2] Generate & Fast-Upload Batch to Firebase (Supports 100 to 10,000+ keys)")
     print(" [3] Check Status of a License Key")
     print(" [4] Reset PC-Lock (HWID) for a Customer")
     print(" [5] Exit")
@@ -125,63 +174,63 @@ def main():
     choice = input("\nEnter choice [1-5]: ").strip()
 
     if choice == "1":
-        count = 100
+        try:
+            count = int(input("\nHow many keys to generate (e.g. 100, 1000, 10000)? ").strip() or "100")
+        except ValueError:
+            count = 100
+        print(f"\n[*] Generating {count} unique cryptographic license keys...")
+        t0 = time.time()
         keys = generate_keys_batch(count)
-        out_file = BASE_DIR / "tools" / f"generated_keys_{count}.txt"
-        with open(out_file, "w", encoding="utf-8") as f:
-            for k in keys:
-                f.write(k + "\n")
-        print(f"\n Successfully generated {count} license keys!")
-        print(f"📁 Saved to: {out_file}")
+        txt_path, csv_path = export_keys_to_files(keys, f"keys_batch_{count}")
+        elapsed = time.time() - t0
+        print(f"\n✅ Successfully generated {count} license keys in {elapsed:.2f}s!")
+        print(f"📁 TXT format (1 per line): {txt_path}")
+        print(f"📁 CSV format (Excel ready): {csv_path}")
 
     elif choice == "2":
         if not project_id:
             print("\n❌ Error: Please configure 'project_id' in storage/firebase_config.json first.")
             return
-        
+
         try:
-            count = int(input("\nHow many keys to generate (e.g. 50, 100)? ").strip() or "50")
+            count = int(input("\nHow many keys to generate & upload (e.g. 100, 1000, 10000)? ").strip() or "100")
         except ValueError:
-            count = 50
+            count = 100
 
-        print(f"\nGenerating {count} keys...")
+        print(f"\n[*] Generating {count} keys in memory...")
+        t0 = time.time()
         keys = generate_keys_batch(count)
-        
-        # Save local copy first
-        out_file = BASE_DIR / "tools" / f"uploaded_keys_{count}_{int(time.time())}.txt"
-        with open(out_file, "w", encoding="utf-8") as f:
-            for k in keys:
-                f.write(k + "\n")
+        txt_path, csv_path = export_keys_to_files(keys, f"firebase_keys_{count}")
+        print(f"[*] Local backup saved to {txt_path.name} & {csv_path.name}")
 
-        print(f"Uploading {count} keys to Firebase Firestore collection 'licenses'...")
-        success_count = 0
-        consecutive_denied = 0
+        chunk_size = 500  # Firestore commit maximum
+        total_batches = (count + chunk_size - 1) // chunk_size
+        print(f"\n[*] Fast-uploading {count} keys across {total_batches} atomic batch commits (500 keys/commit)...")
 
-        for i, k in enumerate(keys, 1):
-            ok, msg = upload_key_to_firestore(project_id, k)
+        uploaded = 0
+        for b_idx in range(total_batches):
+            chunk = keys[b_idx * chunk_size:(b_idx + 1) * chunk_size]
+            ok, msg = upload_keys_batch_firestore(project_id, chunk)
             if ok:
-                success_count += 1
-                consecutive_denied = 0
-                print(f" [{i}/{count}] Uploaded: {k}")
+                uploaded += len(chunk)
+                pct = int((uploaded / count) * 100)
+                print(f" [Batch {b_idx + 1}/{total_batches}] ✅ Uploaded {len(chunk)} keys (Total: {uploaded}/{count} - {pct}%)")
             else:
-                print(f" [{i}/{count}] ❌ Failed: {k}")
+                print(f" [Batch {b_idx + 1}/{total_batches}] ❌ Failed: {msg[:100]}")
                 if "PERMISSION_DENIED" in msg or "403" in msg:
-                    consecutive_denied += 1
-                    if consecutive_denied >= 3:
-                        print("\n" + "=" * 65)
-                        print("❌ FIRESTORE PERMISSION DENIED (403 ERROR)")
-                        print("=" * 65)
-                        print("Firebase rules ne keys create karne se block kar diya hai.")
-                        print("\nFIX (1 Minute):")
-                        print("1. Firebase Console kholiye -> Firestore Database -> 'Rules' tab.")
-                        print("2. 'allow create: if true;' add kijiye aur 'Publish' par click kijiye.")
-                        print("   (Exact rules Step 3 in FIREBASE_SETUP_GUIDE.md mein likhi hain)")
-                        print("=" * 65)
-                        break
-            time.sleep(0.05) # gentle rate-limiting
+                    print("\n" + "=" * 65)
+                    print("❌ FIRESTORE PERMISSION DENIED (403 ERROR)")
+                    print("Firebase rules need 'allow create: if true;' to add keys.")
+                    print("Check FIREBASE_SETUP_GUIDE.md Step 3.")
+                    print("=" * 65)
+                    break
+            time.sleep(0.3)
 
-        print(f"\n Upload Summary: {success_count}/{count} keys created in Firestore.")
-        print(f"📁 Keys list saved locally at: {out_file}")
+        elapsed = time.time() - t0
+        print(f"\n✅ Complete! {uploaded}/{count} keys created in Firestore database in {elapsed:.1f}s.")
+        print(f"📁 Keys files saved at:")
+        print(f"   TXT: {txt_path}")
+        print(f"   CSV: {csv_path}")
 
 
     elif choice == "3":

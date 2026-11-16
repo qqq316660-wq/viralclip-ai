@@ -121,7 +121,9 @@ def package_update(
             if "__pycache__" in root:
                 continue
             for f in files:
-                if f.endswith((".pyc", ".tmp")):
+                if f.endswith((".pyc", ".tmp", ".csv", ".txt")):
+                    continue
+                if f in ("license_manager.py", "push_update.py"):
                     continue
                 if f.lower() == "node.exe" and not include_node:
                     continue

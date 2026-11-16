@@ -9,6 +9,8 @@ build/
 storage/
 installer_output/
 tools/node.exe
+tools/*.csv
+tools/*.txt
 __pycache__/
 *.pyc
 *.log

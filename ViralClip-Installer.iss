@@ -3,7 +3,7 @@
 ; bundled FFmpeg, production React frontend SPA, and silent background daemon launcher.
 
 #define MyAppName "ViralClip AI Studio"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.6.6"
 #define MyAppPublisher "ViralClip AI"
 #define MyAppURL "https://github.com"
 #define MyAppExeName "ViralClip.vbs"
@@ -32,6 +32,10 @@ DisableProgramGroupPage=yes
 CloseApplications=force
 RestartApplications=no
 UninstallDisplayIcon={app}\ViralClip.ico
+VersionInfoVersion=1.6.6.0
+VersionInfoCompany=ViralClip AI
+VersionInfoDescription=ViralClip AI Studio Installer
+VersionInfoTextVersion=1.6.6
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -56,7 +60,7 @@ Source: "d:\ns1\frontend\dist\*"; DestDir: "{app}\web"; Flags: ignoreversion rec
 Source: "d:\ns1\backend\*"; DestDir: "{app}\backend"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "__pycache__\*,*.pyc,*.pyo,*.log"
 
 ; Tools directory (Colab, Kaggle GPU server scripts & Node JS challenge solver)
-Source: "d:\ns1\tools\*"; DestDir: "{app}\tools"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "__pycache__\*,*.pyc,*.pyo,*.log"
+Source: "d:\ns1\tools\*"; DestDir: "{app}\tools"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "__pycache__\*,*.pyc,*.pyo,*.log,*.csv,*.txt,license_manager.py,push_update.py"
 
 ; Bundled FFmpeg & FFprobe standalone binaries
 Source: "C:\Users\Akash\AppData\Local\Programs\ViralClip AI\ffmpeg\*"; DestDir: "{app}\ffmpeg"; Flags: ignoreversion recursesubdirs createallsubdirs
