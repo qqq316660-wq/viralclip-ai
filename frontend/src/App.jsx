@@ -366,10 +366,10 @@ export default function App() {
       const payload = {
         video_url: activeTab === 'url' ? videoUrl.trim() : null,
         upload_id: activeTab === 'file' ? uploadId : null,
-        subtitle_upload_id: activeTab === 'file' ? subtitleUploadId : null,
+        subtitle_upload_id: subtitleUploadId || null,
         reuse_job_id: activeTab === 'history' && selectedHistoryVideo ? selectedHistoryVideo.reuse_job_id : null,
         reuse_video_id: activeTab === 'history' && selectedHistoryVideo ? selectedHistoryVideo.reuse_video_id : null,
-        colab_transcribe_url: activeTab === 'url' && colabUrl.trim() ? colabUrl.trim() : null,
+        colab_transcribe_url: colabUrl && colabUrl.trim() ? colabUrl.trim() : null,
         video_quality: videoQuality,
         aspect_ratio: aspectRatio,
         fit_mode: fitMode,

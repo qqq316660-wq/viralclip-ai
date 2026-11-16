@@ -3,7 +3,7 @@
 ; bundled FFmpeg, production React frontend SPA, and silent background daemon launcher.
 
 #define MyAppName "ViralClip AI Studio"
-#define MyAppVersion "1.6.6"
+#define MyAppVersion "1.6.7"
 #define MyAppPublisher "ViralClip AI"
 #define MyAppURL "https://github.com"
 #define MyAppExeName "ViralClip.vbs"
@@ -32,10 +32,10 @@ DisableProgramGroupPage=yes
 CloseApplications=force
 RestartApplications=no
 UninstallDisplayIcon={app}\ViralClip.ico
-VersionInfoVersion=1.6.6.0
+VersionInfoVersion=1.6.7.0
 VersionInfoCompany=ViralClip AI
 VersionInfoDescription=ViralClip AI Studio Installer
-VersionInfoTextVersion=1.6.6
+VersionInfoTextVersion=1.6.7
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
