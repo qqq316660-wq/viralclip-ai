@@ -1,16 +1,15 @@
 {
-  "version": "1.6.6",
+  "version": "1.6.7",
   "min_version": "1.0.0",
-  "release_date": "2026-11-16T17:12:55Z",
-  "title": "Kaggle GPU CUDA 12 Fix & Auto-Recovery",
+  "release_date": "2026-11-16T18:27:27Z",
+  "title": "Fix SRT Subtitle Upload for YouTube and Video URLs",
   "changelog": [
-    "Fixed Kaggle libcublas.so.12 CUDA 12 missing library issue",
-    "Added automatic GPU to CPU fallback on Kaggle server",
-    "Bundled updated Kaggle and Colab server scripts"
+    "Fixed issue where attached SRT files were discarded when using YouTube URL tab",
+    "Allowed custom SRT and Kaggle GPU across all video source tabs"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.6.6.zip",
-  "checksum": "sha256:67a4f064c1a951d12c50701cb14a0d2393fc6314803af9567d63e6ab962b8c5b",
-  "size_bytes": 254979,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.6.7.zip",
+  "checksum": "sha256:0eedde4465f329100e9b98434856b76ddb73a753045af59794173ae9ddffd609",
+  "size_bytes": 255414,
   "mandatory": false,
   "rollback_version": null
 }
