@@ -1,8 +1,8 @@
 {
   "version": "1.7.0",
   "min_version": "1.0.0",
-  "release_date": "2026-11-17T13:03:26Z",
-  "title": "ViralClip AI v1.7.0 - Subtitle ON/OFF Toggle & Long Video Neural Sync",
+  "release_date": "2026-11-17T13:13:41Z",
+  "title": "ViralClip AI v1.7.0 - Subtitle ON/OFF Toggle & Error Parsing",
   "changelog": [
     "Added Subtitle ON/OFF button to completely disable burned captions on demand",
     "Dynamic Whisper transcription timeout up to 45 mins for long gaming & podcast videos",
@@ -10,8 +10,8 @@
     "Saved short clips unique folder scoping & SRT subtitle auto-sync"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.7.0.zip",
-  "checksum": "sha256:dc29e44b6b9479defe6fb0b430e4a5815e11c8a8af72c4b4af7dfb3c70c15ff7",
-  "size_bytes": 256549,
+  "checksum": "sha256:6e002cb3a79a90d3c1b577a6cf7613dd3fab7848c7755978cd0160ef8fd15ea8",
+  "size_bytes": 256640,
   "mandatory": false,
   "rollback_version": null
 }
