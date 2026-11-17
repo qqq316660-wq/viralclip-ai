@@ -473,7 +473,12 @@ async def render_job_clips(
             if l_matches:
                 logo_file = l_matches[0]
 
+        clean_job_prefix = str(job_id).replace("job_", "")
         for idx, clip in enumerate(candidates_list):
+            # Ensure clip ID is uniquely scoped to this specific job so clips from different jobs never collide
+            if not clip.id.startswith(f"{clean_job_prefix}_"):
+                clip.id = f"{clean_job_prefix}_{clip.id}"
+
             sub_path = CLIPS_DIR / f"{clip.id}_subtitles.ass"
             output_mp4 = CLIPS_DIR / f"{clip.id}.mp4"
 

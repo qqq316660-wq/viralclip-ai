@@ -135,7 +135,7 @@ export default function AiPromptReview({
         const hookReason = item.hook_reason || item.reason || item.virality_reason || '';
 
         return {
-          id: item.id || `custom_clip_${idx + 1}`,
+          id: item.id || `custom_clip_${Date.now()}_${idx + 1}`,
           title: headline,
           suggested_headline: headline,
           hook: item.hook || headline,
