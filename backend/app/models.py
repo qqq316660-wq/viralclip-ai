@@ -15,6 +15,7 @@ class FitMode(str, Enum):
     SQUARE_CENTER = "square_center"
 
 class SubtitleStyle(str, Enum):
+    NONE = "none"                        # No subtitles / captions turned off
     SINGLE_WORD_POP = "single_word_pop"  # 1-Word explosive punchy pop
     HORMOZI = "hormozi"                  # Bold uppercase yellow bounce
     MRBEAST = "mrbeast"                  # Dynamic high-contrast green burst

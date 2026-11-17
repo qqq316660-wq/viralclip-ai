@@ -26,6 +26,10 @@ def generate_ass_subtitles(
     """
     Generates word-by-word or single-word-pop animated ASS subtitles with precise placement.
     """
+    if style == SubtitleStyle.NONE or str(style).lower() in ("none", "off", "disabled"):
+        output_ass_path.write_text("[Script Info]\nTitle: Empty\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n", encoding="utf-8")
+        return output_ass_path
+
     # Filter words within the clip range
     clip_words = [
         w for w in words

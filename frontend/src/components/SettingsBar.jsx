@@ -27,6 +27,14 @@ import TemplatePanel from './TemplatePanel';
 
 const SUBTITLE_PRESETS = [
   {
+    id: 'none',
+    name: 'No Subtitles',
+    badge: 'OFF',
+    description: 'Video without burned captions',
+    highlightColor: '#ef4444',
+    isSingleWord: false
+  },
+  {
     id: 'single_word_pop',
     name: '1-Word Pop',
     badge: 'VIRAL',
@@ -1019,20 +1027,52 @@ export default function SettingsBar({
           <div>
             {/* Caption Style Selector */}
             <div style={{ marginBottom: '22px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <label
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    color: 'var(--text-subdued)'
-                  }}
-                >
-                  Subtitle Style Preset
-                </label>
-                <span style={{ fontSize: '11px', color: 'var(--spotify-green)', fontWeight: 700 }}>
-                  Live in Mockup ➜
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <label
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px',
+                      color: 'var(--text-subdued)'
+                    }}
+                  >
+                    Subtitle Style Preset
+                  </label>
+                  {/* Dedicated Toggle Button to turn captions ON/OFF */}
+                  <button
+                    type="button"
+                    disabled={isProcessing}
+                    onClick={() => {
+                      if (subtitleStyle === 'none') {
+                        setSubtitleStyle('single_word_pop');
+                      } else {
+                        setSubtitleStyle('none');
+                      }
+                    }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      padding: '3px 10px',
+                      borderRadius: '20px',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      cursor: isProcessing ? 'not-allowed' : 'pointer',
+                      border: subtitleStyle === 'none' ? '1px solid #ef4444' : '1px solid var(--spotify-green)',
+                      background: subtitleStyle === 'none' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(30, 215, 96, 0.15)',
+                      color: subtitleStyle === 'none' ? '#ef4444' : 'var(--spotify-green)',
+                      transition: 'all 0.15s ease'
+                    }}
+                    title={subtitleStyle === 'none' ? 'Click to enable captions' : 'Click to turn off captions completely'}
+                  >
+                    <span>{subtitleStyle === 'none' ? '🚫' : '💬'}</span>
+                    <span>{subtitleStyle === 'none' ? 'Captions: OFF' : 'Captions: ON'}</span>
+                  </button>
+                </div>
+                <span style={{ fontSize: '11px', color: subtitleStyle === 'none' ? '#ef4444' : 'var(--spotify-green)', fontWeight: 700 }}>
+                  {subtitleStyle === 'none' ? 'Captions Hidden' : 'Live in Mockup ➜'}
                 </span>
               </div>
 
@@ -1099,7 +1139,32 @@ export default function SettingsBar({
               </div>
             </div>
 
-            {/* Caption Placement Preset (Top, Center, Bottom) */}
+            {subtitleStyle === 'none' ? (
+              <div
+                style={{
+                  background: 'rgba(239, 68, 68, 0.08)',
+                  border: '1px dashed rgba(239, 68, 68, 0.35)',
+                  borderRadius: 'var(--radius-md)',
+                  padding: '16px 20px',
+                  marginBottom: '22px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}
+              >
+                <span style={{ fontSize: '24px' }}>🚫</span>
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#f87171' }}>
+                    Captions / Subtitles are Turned OFF
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
+                    Clips will render clean without any burned subtitles. Click any style preset above or the "Captions: OFF" button to turn them back on.
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* Caption Placement Preset (Top, Center, Bottom) */}
             <div style={{ marginBottom: '22px' }}>
               <label
                 style={{
@@ -1267,6 +1332,8 @@ export default function SettingsBar({
                 </div>
               </div>
             </div>
+            </>
+            )}
 
             {/* Step Navigation Bar */}
             <div
@@ -1908,11 +1975,11 @@ export default function SettingsBar({
 
                 <div style={{ background: '#1c1c1c', padding: '10px 12px', borderRadius: 'var(--radius-sm)' }}>
                   <div style={{ fontSize: '10px', color: 'var(--text-subdued)', textTransform: 'uppercase' }}>Subtitles</div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#ffffff', marginTop: '2px' }}>
-                    {SUBTITLE_PRESETS.find(p => p.id === subtitleStyle)?.name || subtitleStyle}
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: subtitleStyle === 'none' ? '#ef4444' : '#ffffff', marginTop: '2px' }}>
+                    {subtitleStyle === 'none' ? 'Disabled (Off)' : (SUBTITLE_PRESETS.find(p => p.id === subtitleStyle)?.name || subtitleStyle)}
                   </div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-subdued)', marginTop: '2px' }}>
-                    {captionPosition.toUpperCase()} • {captionScale}x
+                  <div style={{ fontSize: '10px', color: subtitleStyle === 'none' ? '#ef4444' : 'var(--text-subdued)', marginTop: '2px' }}>
+                    {subtitleStyle === 'none' ? 'Clean / No Burned Captions' : `${captionPosition.toUpperCase()} • ${captionScale}x`}
                   </div>
                 </div>
 

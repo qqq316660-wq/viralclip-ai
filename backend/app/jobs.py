@@ -499,21 +499,27 @@ async def render_job_clips(
                 target_w = 1080
                 target_h = 1920
 
-            # 2. Generate ASS Subtitles
-            generate_ass_subtitles(
-                words=words,
-                clip_start=clip.start_time,
-                clip_end=clip.end_time,
-                output_ass_path=sub_path,
-                style=request.subtitle_style,
-                position=getattr(request, "caption_position", "bottom") or "bottom",
-                offset_x=getattr(request, "caption_offset_x", 0) or 0,
-                offset_y=getattr(request, "caption_offset_y", 0) or 0,
-                scale=getattr(request, "caption_scale", 1.0) or 1.0,
-                width=target_w,
-                height=target_h,
-                social_card_enabled=is_social_card
+            # 2. Generate ASS Subtitles (Skip if subtitles disabled)
+            subtitles_disabled = (
+                str(getattr(request, "subtitle_style", "")).lower() in ("none", "off", "disabled")
+                or getattr(request, "subtitle_style", None) == SubtitleStyle.NONE
             )
+
+            if not subtitles_disabled:
+                generate_ass_subtitles(
+                    words=words,
+                    clip_start=clip.start_time,
+                    clip_end=clip.end_time,
+                    output_ass_path=sub_path,
+                    style=request.subtitle_style,
+                    position=getattr(request, "caption_position", "bottom") or "bottom",
+                    offset_x=getattr(request, "caption_offset_x", 0) or 0,
+                    offset_y=getattr(request, "caption_offset_y", 0) or 0,
+                    scale=getattr(request, "caption_scale", 1.0) or 1.0,
+                    width=target_w,
+                    height=target_h,
+                    social_card_enabled=is_social_card
+                )
 
             # 3. Generate Branding Overlay (Hook Text, Brand Logo, Watermark, Social Card)
             branding_overlay_path = None
@@ -587,7 +593,7 @@ async def render_job_clips(
                 source_video_path=video_path,
                 start_time=clip.start_time,
                 end_time=clip.end_time,
-                ass_subtitle_path=sub_path,
+                ass_subtitle_path=None if subtitles_disabled else sub_path,
                 output_clip_path=output_mp4,
                 aspect_ratio=render_aspect,
                 fit_mode=request.fit_mode,

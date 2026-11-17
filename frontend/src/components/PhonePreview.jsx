@@ -13,6 +13,17 @@ import {
 } from '@phosphor-icons/react';
 
 const SUBTITLE_PRESETS = {
+  none: {
+    id: 'none',
+    name: 'No Subtitles',
+    words: [],
+    highlightColor: '#ef4444',
+    baseColor: '#ffffff',
+    fontStyle: 'none',
+    fontFamily: 'sans-serif',
+    isSingleWord: false,
+    intervalMs: 1000
+  },
   single_word_pop: {
     id: 'single_word_pop',
     name: '1-Word Pop',
@@ -199,9 +210,11 @@ export default function PhonePreview({
   const [isHoveringLogo, setIsHoveringLogo] = useState(false);
   const dragStartRef = useRef({ startX: 0, startY: 0, initialLogoX: 0, initialLogoY: 0 });
 
-  const preset = SUBTITLE_PRESETS[subtitleStyle] || SUBTITLE_PRESETS.single_word_pop;
+  const isNone = subtitleStyle === 'none' || subtitleStyle === 'off';
+  const preset = (!isNone && SUBTITLE_PRESETS[subtitleStyle]) ? SUBTITLE_PRESETS[subtitleStyle] : SUBTITLE_PRESETS.single_word_pop;
 
   useEffect(() => {
+    if (isNone || !preset.words || preset.words.length === 0) return;
     const interval = setInterval(() => {
       setActiveIdx((prev) => {
         const next = (prev + 1) % preset.words.length;
@@ -210,7 +223,7 @@ export default function PhonePreview({
       });
     }, preset.intervalMs);
     return () => clearInterval(interval);
-  }, [preset]);
+  }, [preset, isNone]);
 
   // Dragging event listeners for freeform logo placement
   const handleLogoMouseDown = (e) => {
@@ -1616,119 +1629,121 @@ export default function PhonePreview({
             </div>
           )}
 
-          {/* LIVE CAPTION RENDERER IN THE PHONE SCREEN (DRAGGABLE) */}
-          <div
-            onMouseDown={handleSubtitleMouseDown}
-            onTouchStart={handleSubtitleTouchStart}
-            onMouseEnter={() => setIsHoveringSubtitle(true)}
-            onMouseLeave={() => setIsHoveringSubtitle(false)}
-            style={{
-              position: 'absolute',
-              top: `${getCaptionTopPercent()}%`,
-              left: `calc(50% + ${getCaptionLeftOffset()}px)`,
-              transform: 'translate(-50%, -50%)',
-              zIndex: 36,
-              width: '88%',
-              textAlign: 'center',
-              cursor: isDraggingSubtitle ? 'grabbing' : 'grab',
-              userSelect: 'none',
-              touchAction: 'none',
-              pointerEvents: 'auto',
-              padding: '6px',
-              borderRadius: '8px',
-              border: isDraggingSubtitle
-                ? '1.5px dashed var(--spotify-green)'
-                : isHoveringSubtitle
-                ? '1.5px dashed rgba(30, 215, 96, 0.6)'
-                : '1.5px solid transparent',
-              background: isDraggingSubtitle ? 'rgba(30, 215, 96, 0.12)' : 'transparent',
-              transition: isDraggingSubtitle ? 'none' : 'background 0.15s ease, border 0.15s ease'
-            }}
-          >
-            {(isHoveringSubtitle || isDraggingSubtitle) && (
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '-18px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  background: 'rgba(0, 0, 0, 0.85)',
-                  color: 'var(--spotify-green)',
-                  fontSize: '8px',
-                  fontWeight: 800,
-                  padding: '1px 6px',
-                  borderRadius: '4px',
-                  whiteSpace: 'nowrap',
-                  pointerEvents: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3px',
-                  border: '1px solid rgba(30,215,96,0.3)'
-                }}
-              >
-                <ArrowsOutCardinal size={9} weight="bold" />
-                <span>DRAG CAPTION</span>
-              </div>
-            )}
-            {preset.isSingleWord ? (
-              /* Single Word Pop (1-Word Punchy Zoom) */
-              <div
-                key={popKey}
-                style={{
-                  display: 'inline-block',
-                  fontFamily: preset.fontFamily,
-                  fontSize: `${28 * (captionScale || 1.0)}px`,
-                  fontWeight: 900,
-                  textTransform: 'uppercase',
-                  color: preset.highlightColor,
-                  WebkitTextStroke: '2px #000000',
-                  textShadow: '0 4px 12px rgba(0, 0, 0, 0.95), 0 0 20px rgba(250, 204, 21, 0.6)',
-                  transform: 'scale(1.15)',
-                  letterSpacing: '1px'
-                }}
-              >
-                {preset.words[activeIdx]}
-              </div>
-            ) : (
-              /* Multi-Word Karaoke Sequence */
-              <div
-                style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'center',
-                  gap: '5px',
-                  lineHeight: 1.2
-                }}
-              >
-                {preset.words.map((word, idx) => {
-                  const isHighlighted = idx === activeIdx;
-                  return (
-                    <span
-                      key={`${word}-${idx}`}
-                      style={{
-                        fontFamily: preset.fontFamily,
-                        fontSize: `${17 * (captionScale || 1.0)}px`,
-                        fontWeight: 900,
-                        textTransform: preset.fontStyle === 'uppercase' ? 'uppercase' : 'none',
-                        color: isHighlighted ? preset.highlightColor : preset.baseColor,
-                        WebkitTextStroke: isHighlighted ? '1.5px #000000' : '1px #000000',
-                        textShadow: '0 2px 8px rgba(0, 0, 0, 0.9)',
-                        transform: isHighlighted ? 'scale(1.18)' : 'scale(1)',
-                        transition: 'all 0.14s cubic-bezier(0.4, 0, 0.2, 1)',
-                        display: 'inline-block',
-                        background: preset.hasBox ? (isHighlighted ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.55)') : 'transparent',
-                        padding: preset.hasBox ? '2px 6px' : '0px',
-                        borderRadius: preset.hasBox ? '4px' : '0px',
-                        border: preset.hasBox ? (isHighlighted ? '1px solid rgba(250,204,21,0.5)' : '1px solid rgba(255,255,255,0.1)') : 'none'
-                      }}
-                    >
-                      {word}
-                    </span>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          {/* LIVE CAPTION RENDERER IN THE PHONE SCREEN (DRAGGABLE) - Hidden if disabled */}
+          {!isNone && (
+            <div
+              onMouseDown={handleSubtitleMouseDown}
+              onTouchStart={handleSubtitleTouchStart}
+              onMouseEnter={() => setIsHoveringSubtitle(true)}
+              onMouseLeave={() => setIsHoveringSubtitle(false)}
+              style={{
+                position: 'absolute',
+                top: `${getCaptionTopPercent()}%`,
+                left: `calc(50% + ${getCaptionLeftOffset()}px)`,
+                transform: 'translate(-50%, -50%)',
+                zIndex: 36,
+                width: '88%',
+                textAlign: 'center',
+                cursor: isDraggingSubtitle ? 'grabbing' : 'grab',
+                userSelect: 'none',
+                touchAction: 'none',
+                pointerEvents: 'auto',
+                padding: '6px',
+                borderRadius: '8px',
+                border: isDraggingSubtitle
+                  ? '1.5px dashed var(--spotify-green)'
+                  : isHoveringSubtitle
+                  ? '1.5px dashed rgba(30, 215, 96, 0.6)'
+                  : '1.5px solid transparent',
+                background: isDraggingSubtitle ? 'rgba(30, 215, 96, 0.12)' : 'transparent',
+                transition: isDraggingSubtitle ? 'none' : 'background 0.15s ease, border 0.15s ease'
+              }}
+            >
+              {(isHoveringSubtitle || isDraggingSubtitle) && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '-18px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: 'rgba(0, 0, 0, 0.85)',
+                    color: 'var(--spotify-green)',
+                    fontSize: '8px',
+                    fontWeight: 800,
+                    padding: '1px 6px',
+                    borderRadius: '4px',
+                    whiteSpace: 'nowrap',
+                    pointerEvents: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '3px',
+                    border: '1px solid rgba(30,215,96,0.3)'
+                  }}
+                >
+                  <ArrowsOutCardinal size={9} weight="bold" />
+                  <span>DRAG CAPTION</span>
+                </div>
+              )}
+              {preset.isSingleWord ? (
+                /* Single Word Pop (1-Word Punchy Zoom) */
+                <div
+                  key={popKey}
+                  style={{
+                    display: 'inline-block',
+                    fontFamily: preset.fontFamily,
+                    fontSize: `${28 * (captionScale || 1.0)}px`,
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    color: preset.highlightColor,
+                    WebkitTextStroke: '2px #000000',
+                    textShadow: '0 4px 12px rgba(0, 0, 0, 0.95), 0 0 20px rgba(250, 204, 21, 0.6)',
+                    transform: 'scale(1.15)',
+                    letterSpacing: '1px'
+                  }}
+                >
+                  {preset.words[activeIdx]}
+                </div>
+              ) : (
+                /* Multi-Word Karaoke Sequence */
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'center',
+                    gap: '5px',
+                    lineHeight: 1.2
+                  }}
+                >
+                  {preset.words.map((word, idx) => {
+                    const isHighlighted = idx === activeIdx;
+                    return (
+                      <span
+                        key={`${word}-${idx}`}
+                        style={{
+                          fontFamily: preset.fontFamily,
+                          fontSize: `${17 * (captionScale || 1.0)}px`,
+                          fontWeight: 900,
+                          textTransform: preset.fontStyle === 'uppercase' ? 'uppercase' : 'none',
+                          color: isHighlighted ? preset.highlightColor : preset.baseColor,
+                          WebkitTextStroke: isHighlighted ? '1.5px #000000' : '1px #000000',
+                          textShadow: '0 2px 8px rgba(0, 0, 0, 0.9)',
+                          transform: isHighlighted ? 'scale(1.18)' : 'scale(1)',
+                          transition: 'all 0.14s cubic-bezier(0.4, 0, 0.2, 1)',
+                          display: 'inline-block',
+                          background: preset.hasBox ? (isHighlighted ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.55)') : 'transparent',
+                          padding: preset.hasBox ? '2px 6px' : '0px',
+                          borderRadius: preset.hasBox ? '4px' : '0px',
+                          border: preset.hasBox ? (isHighlighted ? '1px solid rgba(250,204,21,0.5)' : '1px solid rgba(255,255,255,0.1)') : 'none'
+                        }}
+                      >
+                        {word}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Home Screen Indicator Bar */}
