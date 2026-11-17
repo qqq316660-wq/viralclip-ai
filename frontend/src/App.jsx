@@ -428,7 +428,15 @@ export default function App() {
 
       if (!jobRes.ok) {
         const errData = await jobRes.json();
-        throw new Error(errData.detail || 'Could not queue generation job on backend');
+        let errMsg = 'Could not queue generation job on backend';
+        if (typeof errData.detail === 'string') {
+          errMsg = errData.detail;
+        } else if (Array.isArray(errData.detail) && errData.detail.length > 0) {
+          errMsg = errData.detail.map(d => (typeof d === 'string' ? d : d.msg || JSON.stringify(d))).join(', ');
+        } else if (errData.detail) {
+          errMsg = JSON.stringify(errData.detail);
+        }
+        throw new Error(errMsg);
       }
 
       const jobData = await jobRes.json();
