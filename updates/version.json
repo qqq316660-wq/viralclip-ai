@@ -1,15 +1,16 @@
 {
-  "version": "1.6.7",
+  "version": "1.6.8",
   "min_version": "1.0.0",
-  "release_date": "2026-11-16T18:27:27Z",
-  "title": "Fix SRT Subtitle Upload for YouTube and Video URLs",
+  "release_date": "2026-11-17T09:00:51Z",
+  "title": "Fix Multi-Project Folder Clip Isolation",
   "changelog": [
-    "Fixed issue where attached SRT files were discarded when using YouTube URL tab",
-    "Allowed custom SRT and Kaggle GPU across all video source tabs"
+    "Fixed issue where multiple project folders shared identical clip filenames",
+    "Uniquely scoped all generated clips to their respective project job ID",
+    "Prevented clips from being overwritten when creating new projects"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.6.7.zip",
-  "checksum": "sha256:0eedde4465f329100e9b98434856b76ddb73a753045af59794173ae9ddffd609",
-  "size_bytes": 255414,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.6.8.zip",
+  "checksum": "sha256:74d246a2a57aca6dbf68644d9fc57adc6badc191e91a80528465f1874340c8cc",
+  "size_bytes": 257185,
   "mandatory": false,
   "rollback_version": null
 }
