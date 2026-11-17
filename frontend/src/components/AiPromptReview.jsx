@@ -116,9 +116,30 @@ export default function AiPromptReview({
         return;
       }
 
+      const videoDuration = job?.duration || 0;
+
       const normalized = parsed.map((item, idx) => {
-        const start = parseTimeSec(item.start_time);
+        let start = parseTimeSec(item.start_time);
         let end = parseTimeSec(item.end_time);
+
+        // Smart check for MM:SS:00 malformed format from LLMs (e.g. "11:05:00" -> 11 min 5 sec)
+        const rawStartStr = String(item.start_time || '').trim();
+        const rawEndStr = String(item.end_time || '').trim();
+        const startParts = rawStartStr.split(':');
+        const endParts = rawEndStr.split(':');
+
+        if (startParts.length === 3 && endParts.length === 3) {
+          const asMinutesStart = parseInt(startParts[0], 10) * 60 + parseInt(startParts[1], 10);
+          const asMinutesEnd = parseInt(endParts[0], 10) * 60 + parseInt(endParts[1], 10);
+          const minDur = asMinutesEnd - asMinutesStart;
+
+          // If standard parse is huge (> 180s) or exceeds video duration, but MM:SS is a valid short (10s to 180s)
+          if ((end - start > 180 || (videoDuration > 0 && start > videoDuration)) && minDur > 5 && minDur <= 180) {
+            start = asMinutesStart;
+            end = asMinutesEnd;
+          }
+        }
+
         if (end <= start && item.duration) {
           end = start + parseTimeSec(item.duration);
         }

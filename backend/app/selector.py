@@ -248,6 +248,7 @@ CRITICAL VIRAL CRITERIA:
 4. VIRALITY SCORE & RANKING (50-99): Rate each clip's virality and audience retention potential with an integer score ("hook_score") from 50 to 99. Evaluate curiosity strength, emotional tension, and payoff. Sort the clips in descending order so the #1 highest-scoring viral short appears first.
 5. NON-OVERLAPPING: Selected clips must not overlap each other in time.
 6. TONE-ALIGNED METADATA: Match the "hook", "suggested_headline", and "hashtags" to the clip's specific vibe (e.g. comedic & playful for funny gaming, authoritative & intriguing for podcasts, dramatic for storytelling).
+7. TIMESTAMPS: Use standard MM:SS format (e.g. "01:15" to "01:52", or "11:05" to "11:57"). Do NOT append extra :00 at the end (e.g. never write "11:05:00" for 11 minutes).
 
 OUTPUT FORMAT:
 Return ONLY a valid JSON array of objects without any conversational chit-chat, preamble, or commentary outside the JSON array.
@@ -315,6 +316,23 @@ def parse_llm_clips_json(raw_text: str, total_duration: Optional[float] = None) 
 
         start_sec = parse_time_flexible(raw_start)
         end_sec = parse_time_flexible(raw_end)
+
+        # Smart check for MM:SS:00 malformed format from LLMs (e.g. "11:05:00" -> 11 min 5 sec)
+        raw_start_str = str(raw_start or "").strip()
+        raw_end_str = str(raw_end or "").strip()
+        start_parts = raw_start_str.split(":")
+        end_parts = raw_end_str.split(":")
+
+        if len(start_parts) == 3 and len(end_parts) == 3:
+            try:
+                as_min_start = int(start_parts[0]) * 60 + int(start_parts[1])
+                as_min_end = int(end_parts[0]) * 60 + int(end_parts[1])
+                min_dur = as_min_end - as_min_start
+                if (end_sec - start_sec > 180 or (total_duration and start_sec > total_duration)) and 5 < min_dur <= 180:
+                    start_sec = float(as_min_start)
+                    end_sec = float(as_min_end)
+            except Exception:
+                pass
 
         # Fallback for duration if end_time wasn't directly provided
         if end_sec <= start_sec and "duration" in item:
