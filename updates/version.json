@@ -1,16 +1,17 @@
 {
-  "version": "1.6.9",
+  "version": "1.7.0",
   "min_version": "1.0.0",
-  "release_date": "2026-11-17T12:43:54Z",
-  "title": "ViralClip AI v1.6.9 - Long Video Whisper Timeout Fix & Live Neural Timer",
+  "release_date": "2026-11-17T13:03:26Z",
+  "title": "ViralClip AI v1.7.0 - Subtitle ON/OFF Toggle & Long Video Neural Sync",
   "changelog": [
+    "Added Subtitle ON/OFF button to completely disable burned captions on demand",
     "Dynamic Whisper transcription timeout up to 45 mins for long gaming & podcast videos",
     "Real-time live elapsed timer during Kaggle GPU Whisper transcription",
     "Saved short clips unique folder scoping & SRT subtitle auto-sync"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.6.9.zip",
-  "checksum": "sha256:3b85f8c6ed1b595ed72c355853163074a0243fe5091963f5ccde225c14eefbe0",
-  "size_bytes": 255837,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.7.0.zip",
+  "checksum": "sha256:dc29e44b6b9479defe6fb0b430e4a5815e11c8a8af72c4b4af7dfb3c70c15ff7",
+  "size_bytes": 256549,
   "mandatory": false,
   "rollback_version": null
 }
