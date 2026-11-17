@@ -233,12 +233,21 @@ def generate_ai_prompt(
 
 Analyze the timestamped transcript below from {title_str} and select the top {num_clips} most viral, high-retention moments.
 
+CONTENT GENRE & TONE AUTO-DETECTION:
+First, automatically detect the primary genre, pacing, and emotional vibe of the script:
+- FUNNY GAMING / COMEDY / STREAM (e.g., GTA 5, Minecraft, Roasting, Banter): Prioritize the funniest hilarious punchlines, trolling, epic fails, shouting/rage reactions, comedic timings, and laugh-out-loud moments!
+- PODCAST / INTERVIEW / DEEP TALK: Prioritize breakthrough insights, controversial opinions, deep life lessons, shocking secrets, mind-shifts, and untold stories!
+- SUSPENSE / DOCUMENTARY / STORYTELLING: Prioritize mystery cliffhangers, dramatic build-ups, intense revelations, and shocking plot twists!
+- TECH / BUSINESS / FINANCE / EDUCATION: Prioritize high-value actionable advice, wealth secrets, futuristic tools, and counter-intuitive facts!
+- MIXED / DIVERSE TONE (Videos containing a mix of funny, serious, sad, or emotional parts): Do NOT stick to only one mood! Deliver a dynamic, well-balanced selection reflecting the true variety of the video — give the funniest comedy moment, the most serious/intense discussion, the most shocking surprise, and the emotional climax so every dimension is captured!
+
 CRITICAL VIRAL CRITERIA:
 1. DURATION: Every clip MUST be between {min_duration} and {max_duration} seconds long.
-2. KILLER OPENING HOOK (FIRST 3 SECONDS): The clip must start with a compelling question, shocking revelation, counter-intuitive statement, or intense curiosity gap that stops people from scrolling.
+2. KILLER OPENING HOOK (FIRST 3 SECONDS): The clip must start with a compelling question, shocking revelation, counter-intuitive statement, hilarious reaction, or intense curiosity gap that stops people from scrolling.
 3. COMPLETE STORY ARC / PUNCHLINE: The clip must deliver on its hook and end on a satisfying conclusion, punchline, or valuable takeaway. Never end mid-sentence!
 4. VIRALITY SCORE & RANKING (50-99): Rate each clip's virality and audience retention potential with an integer score ("hook_score") from 50 to 99. Evaluate curiosity strength, emotional tension, and payoff. Sort the clips in descending order so the #1 highest-scoring viral short appears first.
 5. NON-OVERLAPPING: Selected clips must not overlap each other in time.
+6. TONE-ALIGNED METADATA: Match the "hook", "suggested_headline", and "hashtags" to the clip's specific vibe (e.g. comedic & playful for funny gaming, authoritative & intriguing for podcasts, dramatic for storytelling).
 
 OUTPUT FORMAT:
 Return ONLY a valid JSON array of objects without any conversational chit-chat, preamble, or commentary outside the JSON array.
@@ -249,11 +258,11 @@ Use this exact JSON schema:
     "start_time": "00:01:15",
     "end_time": "00:01:52",
     "hook_score": 96,
-    "hook_reason": "High emotional tension in the opening 3 seconds with an unexpected punchline payoff",
+    "hook_reason": "Comedy Punchline: Epic funny fail moment with hilarious laughter climax",
     "hook": "Short Catchy Hook Headline (Max 6 words)",
     "suggested_headline": "Short Catchy Title (Max 7 words)",
     "description": "Engaging 1-2 sentence caption for YouTube Shorts & Reels",
-    "hashtags": ["#shorts", "#viral", "#trending", "#mindset", "#success"]
+    "hashtags": ["#shorts", "#viral", "#gaming", "#funny", "#trending"]
   }}
 ]
 

@@ -1,16 +1,17 @@
 {
   "version": "1.7.0",
   "min_version": "1.0.0",
-  "release_date": "2026-11-17T13:17:59Z",
-  "title": "ViralClip AI v1.7.0 - Subtitle ON/OFF Toggle Fix",
+  "release_date": "2026-11-17T13:36:27Z",
+  "title": "ViralClip AI v1.7.0 - Adaptive Script Tone & Genre AI Detection",
   "changelog": [
     "Added Subtitle ON/OFF button to completely disable burned captions on demand",
+    "Adaptive script tone & genre AI auto-detection (comedy gaming, podcasts, suspense, mixed)",
     "Fixed SubtitleStyle import in rendering pipeline",
     "Dynamic Whisper transcription timeout up to 45 mins"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.7.0.zip",
-  "checksum": "sha256:ff17f4263a0ec94e5b61d0c6743b59c92e7a76624c1f15ae29069dd37a2d1b9f",
-  "size_bytes": 256652,
+  "checksum": "sha256:fb89fea1912bc067d4c8230fe5bd98189a611305dec0e56a2c17b70a9ef8c50a",
+  "size_bytes": 257396,
   "mandatory": false,
   "rollback_version": null
 }
