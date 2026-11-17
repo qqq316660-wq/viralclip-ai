@@ -1,16 +1,16 @@
 {
-  "version": "1.6.8",
+  "version": "1.6.9",
   "min_version": "1.0.0",
-  "release_date": "2026-11-17T09:00:51Z",
-  "title": "Fix Multi-Project Folder Clip Isolation",
+  "release_date": "2026-11-17T12:43:54Z",
+  "title": "ViralClip AI v1.6.9 - Long Video Whisper Timeout Fix & Live Neural Timer",
   "changelog": [
-    "Fixed issue where multiple project folders shared identical clip filenames",
-    "Uniquely scoped all generated clips to their respective project job ID",
-    "Prevented clips from being overwritten when creating new projects"
+    "Dynamic Whisper transcription timeout up to 45 mins for long gaming & podcast videos",
+    "Real-time live elapsed timer during Kaggle GPU Whisper transcription",
+    "Saved short clips unique folder scoping & SRT subtitle auto-sync"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.6.8.zip",
-  "checksum": "sha256:74d246a2a57aca6dbf68644d9fc57adc6badc191e91a80528465f1874340c8cc",
-  "size_bytes": 257185,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.6.9.zip",
+  "checksum": "sha256:3b85f8c6ed1b595ed72c355853163074a0243fe5091963f5ccde225c14eefbe0",
+  "size_bytes": 255837,
   "mandatory": false,
   "rollback_version": null
 }
