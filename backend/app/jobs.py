@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, Optional, List
 
 from app.config import DOWNLOADS_DIR, AUDIO_DIR, CLIPS_DIR, STORAGE_DIR
-from app.models import CreateJobRequest, JobResponse, JobStatus, ClipCandidate, AspectRatio
+from app.models import CreateJobRequest, JobResponse, JobStatus, ClipCandidate, AspectRatio, SubtitleStyle
 from app.downloader import download_video, extract_audio
 from app.transcriber import transcribe_audio
 from app.srt_parser import parse_srt_file
@@ -503,6 +503,7 @@ async def render_job_clips(
             subtitles_disabled = (
                 str(getattr(request, "subtitle_style", "")).lower() in ("none", "off", "disabled")
                 or getattr(request, "subtitle_style", None) == SubtitleStyle.NONE
+                or getattr(request, "subtitle_style", None) == "none"
             )
 
             if not subtitles_disabled:
