@@ -3,7 +3,7 @@
 ; bundled FFmpeg, production React frontend SPA, and silent background daemon launcher.
 
 #define MyAppName "ViralClip AI Studio"
-#define MyAppVersion "1.6.8"
+#define MyAppVersion "1.6.9"
 #define MyAppPublisher "ViralClip AI"
 #define MyAppURL "https://github.com"
 #define MyAppExeName "ViralClip.vbs"

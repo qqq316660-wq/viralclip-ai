@@ -897,8 +897,22 @@ async def run_pipeline(job_id: str, request: CreateJobRequest):
 
                     poll_url = f"{status_base}/{colab_task_id}"
                     start_time = time.time()
-                    while time.time() - start_time < 600:  # Max 10 minutes wait
+                    # Dynamic timeout: Minimum 30 minutes (1800s) or 1.5x duration for long podcasts/gaming videos
+                    max_wait = max(1800, int((job.duration or 3600) * 1.5))
+                    last_ui_update = 0
+
+                    while time.time() - start_time < max_wait:
                         time.sleep(2)
+                        elapsed = int(time.time() - start_time)
+
+                        # Provide live progress feedback so UI never appears stuck
+                        if time.time() - last_ui_update >= 2.0:
+                            mins, secs = divmod(elapsed, 60)
+                            job.stage_message = f"Whisper Large-V3 transcribing on Kaggle GPU ({mins}m {secs:02d}s)..."
+                            est_dur = max(300, (job.duration or 600) * 0.35)
+                            job.progress = min(64, int(45 + (elapsed / est_dur) * 19))
+                            last_ui_update = time.time()
+
                         try:
                             st_resp = session.get(poll_url, timeout=15)
                             if st_resp.status_code != 200:
@@ -906,13 +920,16 @@ async def run_pipeline(job_id: str, request: CreateJobRequest):
                             st_data = st_resp.json()
                             status = st_data.get("status")
                             if status == "completed":
+                                job.stage_message = "Transcription complete! Parsing AI hooks..."
+                                job.progress = 65
                                 return st_data.get("result", {})
                             elif status == "error":
                                 raise RuntimeError(f"Kaggle GPU transcription failed: {st_data.get('error')}")
                         except requests.exceptions.RequestException:
                             continue
 
-                    raise TimeoutError("Remote Kaggle GPU transcription timed out after 10 minutes.")
+                    timeout_mins = max_wait // 60
+                    raise TimeoutError(f"Remote Kaggle GPU transcription timed out after {timeout_mins} minutes.")
 
                 transcription_result = await asyncio.to_thread(_execute_remote_transcription)
                 job.progress = 65
