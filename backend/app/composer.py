@@ -31,6 +31,7 @@ def render_clip(
     music_start_time: float = 0.0,
     template_bg_color: Optional[str] = None,
     template_card_padding: bool = False,
+    card_aspect_ratio: Optional[str] = None,
     social_card_enabled: bool = False,
     has_hook: bool = False,
     has_footer: bool = False,
@@ -44,8 +45,12 @@ def render_clip(
     Cuts video segment, reframes to vertical/square/landscape, overlays branding/template elements,
     burns animated ASS karaoke subtitles, and mixes background music track in a single fast FFmpeg pass.
     """
-    target_width = 1080 if aspect_ratio != AspectRatio.LANDSCAPE_16_9 else 1920
-    target_height = 1920 if (aspect_ratio == AspectRatio.PORTRAIT_9_16 or social_card_enabled or template_card_padding) else (1080 if aspect_ratio == AspectRatio.LANDSCAPE_16_9 else 1080)
+    if template_card_padding or social_card_enabled:
+        target_width = 1080
+        target_height = 1920
+    else:
+        target_width = 1080 if aspect_ratio != AspectRatio.LANDSCAPE_16_9 else 1920
+        target_height = 1920 if aspect_ratio == AspectRatio.PORTRAIT_9_16 else 1080
 
     duration = end_time - start_time
     reframe_filter = build_reframe_filter(
@@ -54,6 +59,7 @@ def render_clip(
         target_width=target_width,
         target_height=target_height,
         card_padding=template_card_padding,
+        card_aspect_ratio=card_aspect_ratio,
         social_card_enabled=social_card_enabled,
         bg_color=template_bg_color,
         has_hook=has_hook,

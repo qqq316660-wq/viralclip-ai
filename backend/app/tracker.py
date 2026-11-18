@@ -15,6 +15,7 @@ def build_reframe_filter(
     target_width: int = 1080,
     target_height: int = 1920,
     card_padding: bool = False,
+    card_aspect_ratio: Optional[str] = None,
     social_card_enabled: bool = False,
     bg_color: Optional[str] = None,
     has_hook: bool = False,
@@ -72,10 +73,35 @@ def build_reframe_filter(
 
     # CASE B: Bordered Canvas Mode (Floating Inset Video with Margin Bars)
     if card_padding and aspect_ratio == AspectRatio.PORTRAIT_9_16:
-        card_dim = 960
-        x_off = (target_width - card_dim) // 2
-        y_off = (target_height - card_dim) // 2
-        crop_filter = f"crop='min(iw,ih)':'min(iw,ih)',scale={card_dim}:{card_dim}:flags=lanczos"
+        # Check inner card aspect ratio (16:9 widescreen vs 1:1 square vs 9:16 portrait)
+        effective_card_ratio = str(card_aspect_ratio or kwargs.get("card_aspect_ratio", "") or "16:9").lower()
+        if "16:9" in effective_card_ratio or card_aspect_ratio == AspectRatio.LANDSCAPE_16_9:
+            # 16:9 Landscape Card (Exact match to Mockup: 292x164 -> 960x540)
+            card_w = 960
+            card_h = 540
+            x_off = (target_width - card_w) // 2
+            y_off = (target_height - card_h) // 2
+            crop_filter = (
+                f"crop='trunc(min(iw,ih*16/9)/2)*2':'trunc(min(ih,iw*9/16)/2)*2':(iw-ow)/2:(ih-oh)/2,"
+                f"scale={card_w}:{card_h}:flags=lanczos"
+            )
+        elif "9:16" in effective_card_ratio or card_aspect_ratio == AspectRatio.PORTRAIT_9_16:
+            # 9:16 Portrait Card (960x1706)
+            card_w = 960
+            card_h = 1706
+            x_off = (target_width - card_w) // 2
+            y_off = (target_height - card_h) // 2
+            crop_filter = (
+                f"crop='trunc(min(iw,ih*9/16)/2)*2':'trunc(min(ih,iw*16/9)/2)*2':(iw-ow)/2:(ih-oh)/2,"
+                f"scale={card_w}:{card_h}:flags=lanczos"
+            )
+        else:
+            # 1:1 Square Card (960x960)
+            card_w = 960
+            card_h = 960
+            x_off = (target_width - card_w) // 2
+            y_off = (target_height - card_h) // 2
+            crop_filter = f"crop='min(iw,ih)':'min(iw,ih)',scale={card_w}:{card_h}:flags=lanczos"
 
         if (bg_color and bg_color.strip()) or fit_mode in (FitMode.BLACK_BARS, FitMode.WHITE_BARS):
             return f"{crop_filter},pad={target_width}:{target_height}:{x_off}:{y_off}:{pad_color},setsar=1"

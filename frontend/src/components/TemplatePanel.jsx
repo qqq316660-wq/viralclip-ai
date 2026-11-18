@@ -149,9 +149,13 @@ export default function TemplatePanel({
     if (setTemplatePreset) setTemplatePreset(color === '#ffffff' ? 'shorts_white_card' : 'midnight_black');
     if (setTemplateBgColor) setTemplateBgColor(color);
     if (setTemplateCardPadding) setTemplateCardPadding(true);
-    if (setAspectRatio) setAspectRatio('9:16');
+    // If not already 16:9 or 1:1, default to 16:9 for bordered card
+    if (setAspectRatio && aspectRatio !== '16:9' && aspectRatio !== '1:1') {
+      setAspectRatio('16:9');
+    }
     if (setFitMode) setFitMode(color === '#ffffff' ? 'white_bars' : 'black_bars');
     if (setTemplateHookEnabled) setTemplateHookEnabled(true);
+    if (setTemplateHookY) setTemplateHookY(18);
     if (setTemplateHookColor) setTemplateHookColor(color === '#ffffff' ? '#000000' : '#ffffff');
     if (setTemplateLogoEnabled) setTemplateLogoEnabled(true);
   };
@@ -939,6 +943,49 @@ export default function TemplatePanel({
                 })}
               </div>
             </div>
+
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '6px' }}>
+                <span style={{ color: 'var(--text-subdued)' }}>Inner Video Aspect Ratio:</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--spotify-green)' }}>
+                  {aspectRatio}
+                </span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
+                {[
+                  { id: '16:9', label: '16:9 Widescreen' },
+                  { id: '1:1', label: '1:1 Square' },
+                  { id: '9:16', label: '9:16 Inset' }
+                ].map((item) => {
+                  const isSel = aspectRatio === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setAspectRatio && setAspectRatio(item.id)}
+                      style={{
+                        background: isSel ? '#252525' : '#101010',
+                        border: isSel ? '1.5px solid var(--spotify-green)' : '1px solid var(--border-subtle)',
+                        borderRadius: 'var(--radius-sm)',
+                        padding: '7px 8px',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        color: isSel ? '#ffffff' : 'var(--text-subdued)',
+                        cursor: 'pointer',
+                        textAlign: 'center',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '5px'
+                      }}
+                    >
+                      <span>{item.label}</span>
+                      {isSel && <Check size={12} weight="bold" color="var(--spotify-green)" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
           {/* Top Hook Headline (Banner over video) */}
@@ -1145,8 +1192,8 @@ export default function TemplatePanel({
                     </div>
                     <input
                       type="range"
-                      min="20"
-                      max="80"
+                      min="5"
+                      max="85"
                       value={templateHookY}
                       onChange={(e) => setTemplateHookY && setTemplateHookY(parseInt(e.target.value, 10))}
                       style={{ width: '100%' }}

@@ -1,16 +1,14 @@
 {
   "version": "1.7.1",
   "min_version": "1.0.0",
-  "release_date": "2026-11-18T19:20:39Z",
-  "title": "ViralClip AI v1.7.1 - Perfect Center Headline Alignment & Smart Text Wrap",
+  "release_date": "2026-11-18T19:46:20Z",
+  "title": "ViralClip AI Update v1.7.1",
   "changelog": [
-    "Fixed top hook headline alignment: exact optical center placement",
-    "Smart auto-wrap: prevents overflow and wraps long headlines into balanced lines",
-    "Fixed vertical margin positioning in Bordered Canvas layout"
+    "Maintenance and stability improvements."
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.7.1.zip",
-  "checksum": "sha256:978ff34afeec435752717fb4a16ea88cb1faffbde35ca7c908df7d752590349e",
-  "size_bytes": 262133,
+  "checksum": "sha256:c2b6217e1fa6d3261468a3be3c6c0328929acedc9fb1f6905fa3ff070df90400",
+  "size_bytes": 262679,
   "mandatory": false,
   "rollback_version": null
 }

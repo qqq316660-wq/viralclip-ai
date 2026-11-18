@@ -483,8 +483,8 @@ async def render_job_clips(
             output_mp4 = CLIPS_DIR / f"{clip.id}.mp4"
 
             # 1. Determine Target Dimensions & Canvas Spec
-            is_social_card = bool(getattr(request, "template_social_card_enabled", False))
-            is_bordered_card = bool(getattr(request, "template_card_padding", False))
+            is_social_card = bool(getattr(request, "template_social_card_enabled", False)) or (getattr(request, "template_preset", "") == "social_card")
+            is_bordered_card = bool(getattr(request, "template_card_padding", False)) or (getattr(request, "template_preset", "") == "shorts_white_card")
 
             if is_social_card or is_bordered_card:
                 target_w = 1080
@@ -575,8 +575,8 @@ async def render_job_clips(
                     social_card_bg=getattr(request, "template_social_card_bg", "#0c0f14") or "#0c0f14",
                     social_footer_enabled=bool(getattr(request, "template_social_footer_enabled", False)),
                     corner_radius=getattr(request, "template_corner_radius", 14) or 14,
-                    aspect_ratio="1:1" if is_social_card else str(request.aspect_ratio),
-                    card_padding=bool(getattr(request, "template_card_padding", False))
+                    aspect_ratio=str(request.aspect_ratio),
+                    card_padding=is_bordered_card
                 )
             except Exception as e:
                 print(f"Error generating branding overlay for clip {clip.id}: {e}")
@@ -598,6 +598,7 @@ async def render_job_clips(
                 ass_subtitle_path=None if subtitles_disabled else sub_path,
                 output_clip_path=output_mp4,
                 aspect_ratio=render_aspect,
+                card_aspect_ratio=str(request.aspect_ratio),
                 fit_mode=request.fit_mode,
                 progress_callback=render_cb,
                 music_path=music_file,

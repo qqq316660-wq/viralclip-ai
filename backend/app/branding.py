@@ -328,16 +328,31 @@ def generate_branding_overlay(
         total_text_h += line_spacing * (len(lines) - 1)
 
         # Optical Vertical Centering (hy):
-        # In Bordered Canvas mode (card_padding): top white/black margin bar is 0 to 480px, center is 240px.
         if card_padding:
-            base_center_y = 240
-            if hook_y is not None:
-                # Map slider (default ~38-48) smoothly around optical center (240px)
-                y_offset = (float(hook_y) - 48.0) * 2.2
-                center_y = int(base_center_y + y_offset)
-                center_y = max(total_text_h // 2 + 40, min(440 - total_text_h // 2, center_y))
+            # Bordered Canvas Mode: optical center depends on inner video card aspect ratio
+            aspect_str = str(aspect_ratio or "16:9").lower()
+            if "16:9" in aspect_str:
+                # 16:9 Inset Card (960x540) starts at y=690. Top margin is 0 to 690px.
+                default_center_y = 345
+                max_allowed_y = 690 - (total_text_h // 2) - 35
+                min_allowed_y = (total_text_h // 2) + 60
+            elif "1:1" in aspect_str:
+                # 1:1 Inset Card (960x960) starts at y=480. Top margin is 0 to 480px.
+                default_center_y = 240
+                max_allowed_y = 480 - (total_text_h // 2) - 30
+                min_allowed_y = (total_text_h // 2) + 50
             else:
-                center_y = base_center_y
+                default_center_y = 120
+                max_allowed_y = 200 - (total_text_h // 2) - 20
+                min_allowed_y = (total_text_h // 2) + 40
+
+            if hook_y is not None and float(hook_y) < 36.0:
+                # User intentionally placed headline within top margin
+                raw_y = int((float(hook_y) / 100.0) * target_height)
+                center_y = max(min_allowed_y, min(max_allowed_y, raw_y))
+            else:
+                # Use perfect optical center of the top margin bar
+                center_y = default_center_y
             start_y = center_y - (total_text_h // 2)
         else:
             # Clean video mode (9:16 full-bleed)
