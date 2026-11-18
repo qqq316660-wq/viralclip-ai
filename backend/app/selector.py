@@ -55,7 +55,19 @@ def select_clips_heuristic(
 
                     score = min(98, max(50, score))
 
-                    headline = current_text[0][:40] + "..." if len(current_text[0]) > 40 else current_text[0]
+                    raw_seg = current_text[0].strip()
+                    if len(raw_seg) > 75:
+                        seg_words = raw_seg.split()
+                        kept_words = []
+                        c_len = 0
+                        for w in seg_words:
+                            if c_len + len(w) + 1 > 65:
+                                break
+                            kept_words.append(w)
+                            c_len += len(w) + 1
+                        headline = " ".join(kept_words) if kept_words else raw_seg[:60]
+                    else:
+                        headline = raw_seg
 
                     candidates.append({
                         "start_time": seg_start,

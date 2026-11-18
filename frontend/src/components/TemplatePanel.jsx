@@ -1140,13 +1140,13 @@ export default function TemplatePanel({
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '6px' }}>
                       <span style={{ color: 'var(--text-subdued)' }}>Vertical Position</span>
                       <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--spotify-green)' }}>
-                        {templateHookY}px
+                        {templateHookY}%
                       </span>
                     </div>
                     <input
                       type="range"
                       min="20"
-                      max="140"
+                      max="80"
                       value={templateHookY}
                       onChange={(e) => setTemplateHookY && setTemplateHookY(parseInt(e.target.value, 10))}
                       style={{ width: '100%' }}

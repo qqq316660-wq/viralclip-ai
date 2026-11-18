@@ -1,17 +1,16 @@
 {
   "version": "1.7.1",
   "min_version": "1.0.0",
-  "release_date": "2026-11-18T10:36:24Z",
-  "title": "ViralClip AI v1.7.1 - Save Location Picker & Bulk Folder Support",
+  "release_date": "2026-11-18T19:20:39Z",
+  "title": "ViralClip AI v1.7.1 - Perfect Center Headline Alignment & Smart Text Wrap",
   "changelog": [
-    "Native Save As location dialog: choose exact folder and filename when saving",
-    "Bulk download folder picker: select destination folder once for all clips",
-    "Animated ZIP packaging loading screen with real-time progress",
-    "Fixed ZIP bundle corruption and duplicate download prompts"
+    "Fixed top hook headline alignment: exact optical center placement",
+    "Smart auto-wrap: prevents overflow and wraps long headlines into balanced lines",
+    "Fixed vertical margin positioning in Bordered Canvas layout"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.7.1.zip",
-  "checksum": "sha256:a432caa9d21e749506045b03ca98ccb3186016a6b8c6e71b99e35e55a4ac3f7d",
-  "size_bytes": 261019,
+  "checksum": "sha256:978ff34afeec435752717fb4a16ea88cb1faffbde35ca7c908df7d752590349e",
+  "size_bytes": 262133,
   "mandatory": false,
   "rollback_version": null
 }

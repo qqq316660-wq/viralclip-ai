@@ -123,6 +123,7 @@ def generate_branding_overlay(
     social_footer_enabled: bool = False,
     corner_radius: int = 14,
     aspect_ratio: str = "1:1",
+    card_padding: bool = False,
     **kwargs
 ) -> Optional[Path]:
     """
@@ -276,39 +277,118 @@ def generate_branding_overlay(
 
     # 2. TOP HOOK HEADLINE (When not inside social card)
     if has_hook and not has_card:
-        font_hook = get_font(52, bold=True)
-        h_text = hook_text.strip()
-        h_bbox = draw.textbbox((0, 0), h_text, font=font_hook)
-        hw = h_bbox[2] - h_bbox[0]
-        hh = h_bbox[3] - h_bbox[1]
+        raw_text = hook_text.strip()
+        words = raw_text.split()
 
+        # Canvas width is 1080px. Safe text box is 900px (leaves 90px clean margin on left & right)
+        max_line_width = target_width - 180
+
+        # Dynamic font sizing based on word count:
+        # 54px for punchy short hooks, 48px for medium, 42px for longer sentences
+        if len(words) <= 5:
+            base_font_size = 54
+        elif len(words) <= 9:
+            base_font_size = 48
+        else:
+            base_font_size = 42
+
+        font_hook = get_font(base_font_size, bold=True)
+
+        # Clean auto-wrap words into balanced lines
+        lines = []
+        current_words = []
+        for word in words:
+            test_line = " ".join(current_words + [word])
+            bbox = draw.textbbox((0, 0), test_line, font=font_hook)
+            if (bbox[2] - bbox[0]) <= max_line_width or not current_words:
+                current_words.append(word)
+            else:
+                lines.append(" ".join(current_words))
+                current_words = [word]
+        if current_words:
+            lines.append(" ".join(current_words))
+
+        # Keep max 3 lines to avoid crowding
+        if len(lines) > 3:
+            lines = lines[:3]
+
+        # Calculate line metrics (width, height, bbox for each line)
+        line_metrics = []
+        max_line_w = 0
+        line_spacing = 14
+        total_text_h = 0
+        for line in lines:
+            bbox = draw.textbbox((0, 0), line, font=font_hook)
+            lw = bbox[2] - bbox[0]
+            lh = bbox[3] - bbox[1]
+            line_metrics.append((line, lw, lh, bbox))
+            if lw > max_line_w:
+                max_line_w = lw
+            total_text_h += lh
+        total_text_h += line_spacing * (len(lines) - 1)
+
+        # Optical Vertical Centering (hy):
+        # In Bordered Canvas mode (card_padding): top white/black margin bar is 0 to 480px, center is 240px.
+        if card_padding:
+            base_center_y = 240
+            if hook_y is not None:
+                # Map slider (default ~38-48) smoothly around optical center (240px)
+                y_offset = (float(hook_y) - 48.0) * 2.2
+                center_y = int(base_center_y + y_offset)
+                center_y = max(total_text_h // 2 + 40, min(440 - total_text_h // 2, center_y))
+            else:
+                center_y = base_center_y
+            start_y = center_y - (total_text_h // 2)
+        else:
+            # Clean video mode (9:16 full-bleed)
+            if hook_y is not None:
+                center_y = int((float(hook_y) / 100.0) * target_height)
+                center_y = max(total_text_h // 2 + 50, min(int(target_height * 0.4), center_y))
+            else:
+                center_y = 200
+            start_y = center_y - (total_text_h // 2)
+
+        # Center X position:
         if hook_x is not None:
-            hx = int(max(20, min(target_width - hw - 20, (hook_x / 100.0) * target_width)))
+            center_x = int((float(hook_x) / 100.0) * target_width)
         else:
-            hx = (target_width - hw) // 2
-
-        if hook_y is not None:
-            hy = int((hook_y / 100.0) * target_height * 0.7)
-            if hy < 140:
-                hy = 180
-        else:
-            hy = 200
+            center_x = target_width // 2
 
         text_color = hex_to_rgba(hook_color, 1.0)
+        is_dark_text = (text_color[0] * 0.299 + text_color[1] * 0.587 + text_color[2] * 0.114) < 120
+
+        # Background Box (if fill or pill mode)
         if hook_bg in ["fill", "pill"]:
             bg_rgba = hex_to_rgba(hook_bg_color or "#facc15", 1.0)
-            pad_x = 32
-            pad_y = 16
+            pad_x = 36
+            pad_y = 18
+            box_x0 = center_x - (max_line_w // 2) - pad_x
+            box_y0 = start_y - pad_y
+            box_x1 = center_x + (max_line_w // 2) + pad_x
+            box_y1 = start_y + total_text_h + pad_y
             draw.rounded_rectangle(
-                [hx - pad_x, hy - pad_y, hx + hw + pad_x, hy + hh + pad_y],
+                [box_x0, box_y0, box_x1, box_y1],
                 radius=18,
                 fill=bg_rgba
             )
-            draw.text((hx, hy - h_bbox[1]), h_text, fill=text_color, font=font_hook)
-        else:
-            for ox, oy in [(-3, -3), (3, -3), (-3, 3), (3, 3), (0, 4)]:
-                draw.text((hx + ox, hy - h_bbox[1] + oy), h_text, fill=(0, 0, 0, 220), font=font_hook)
-            draw.text((hx, hy - h_bbox[1]), h_text, fill=text_color, font=font_hook)
+
+        # Draw EACH line centered horizontally!
+        curr_y = start_y
+        for line, lw, lh, bbox in line_metrics:
+            # DEAD CENTER: center_x - (lw // 2)
+            line_x = center_x - (lw // 2)
+            # Ensure line stays within safe screen margins
+            line_x = max(20, min(target_width - lw - 20, line_x))
+            draw_y = curr_y - bbox[1]
+
+            if hook_bg not in ["fill", "pill"]:
+                # Outline / shadow: subtle shadow on dark backgrounds for crisp readability
+                if not is_dark_text:
+                    for ox, oy in [(-2, -2), (2, -2), (-2, 2), (2, 2), (0, 3)]:
+                        draw.text((line_x + ox, draw_y + oy), line, fill=(0, 0, 0, 220), font=font_hook)
+
+            draw.text((line_x, draw_y), line, fill=text_color, font=font_hook)
+            curr_y += lh + line_spacing
 
     # 3. FLOATING BRAND LOGO (Clean Video & Bordered Canvas Modes)
     if has_logo and logo_enabled and not has_card:

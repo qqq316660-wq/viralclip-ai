@@ -575,7 +575,8 @@ async def render_job_clips(
                     social_card_bg=getattr(request, "template_social_card_bg", "#0c0f14") or "#0c0f14",
                     social_footer_enabled=bool(getattr(request, "template_social_footer_enabled", False)),
                     corner_radius=getattr(request, "template_corner_radius", 14) or 14,
-                    aspect_ratio="1:1" if is_social_card else str(request.aspect_ratio)
+                    aspect_ratio="1:1" if is_social_card else str(request.aspect_ratio),
+                    card_padding=bool(getattr(request, "template_card_padding", False))
                 )
             except Exception as e:
                 print(f"Error generating branding overlay for clip {clip.id}: {e}")
