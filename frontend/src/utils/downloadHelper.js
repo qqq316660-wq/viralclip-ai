@@ -18,7 +18,12 @@ export const sanitizeFilename = (name) => {
   return `${clean}.mp4`;
 };
 
-export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl = 'http://127.0.0.1:8001') => {
+export const downloadVideoFile = async (
+  videoUrl,
+  suggestedFilename,
+  backendUrl = 'http://127.0.0.1:8001',
+  onProgress = null
+) => {
   const filename = sanitizeFilename(suggestedFilename);
   const isZip = filename.toLowerCase().endsWith('.zip');
 
@@ -31,6 +36,10 @@ export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl 
     targetUrl = `${backendUrl}${targetUrl}`;
   }
 
+  if (onProgress) {
+    onProgress({ phase: 'fetching', message: 'Downloading package from server...' });
+  }
+
   // 1. Fetch data as blob FIRST to guarantee 200 OK and non-empty content before opening file picker
   const res = await fetch(targetUrl);
   if (!res.ok) {
@@ -39,6 +48,10 @@ export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl 
   const blob = await res.blob();
   if (!blob || blob.size === 0) {
     throw new Error('Downloaded file is empty (0 bytes)');
+  }
+
+  if (onProgress) {
+    onProgress({ phase: 'prompting', message: 'Windows Save As dialog is open. Choose where to save your file.' });
   }
 
   // 2. Try native File System Access API (Save As dialog)
@@ -66,6 +79,9 @@ export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl 
 
     // If user selected a location in the Save As dialog:
     if (fileHandle) {
+      if (onProgress) {
+        onProgress({ phase: 'writing', message: 'Saving file to selected folder...' });
+      }
       try {
         const writable = await fileHandle.createWritable();
         await writable.write(blob);

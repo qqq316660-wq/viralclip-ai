@@ -20,7 +20,8 @@ import {
   ArrowCounterClockwise,
   SortAscending,
   ArrowLeft,
-  ArrowRight
+  ArrowRight,
+  CircleNotch
 } from '@phosphor-icons/react';
 import { downloadVideoFile, openLocalClipsFolder } from '../utils/downloadHelper';
 
@@ -54,6 +55,12 @@ export default function SavedLibrary({
   const [isDownloadingBulk, setIsDownloadingBulk] = useState(false);
   const [downloadingClipId, setDownloadingClipId] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
+  const [zipLoadingState, setZipLoadingState] = useState({
+    active: false,
+    title: '',
+    subtitle: '',
+    message: ''
+  });
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -393,11 +400,35 @@ export default function SavedLibrary({
   const handleDownloadBundle = async (bundle) => {
     try {
       setIsDownloadingBulk(true);
+      setZipLoadingState({
+        active: true,
+        title: `Packaging "${bundle.title || 'Shorts Folder'}"`,
+        subtitle: `Compressing ${bundle.clips ? bundle.clips.length : 'all'} viral shorts into a single ZIP archive... Please wait a moment.`,
+        message: 'Compressing high-quality video files on server...'
+      });
       showToast(`Preparing folder bundle "${bundle.title || 'shorts'}"...`);
       const targetJobId = bundle.jobId || (bundle.id ? bundle.id.replace('bundle_', '') : 'shorts_bundle');
       const zipUrl = `${backendUrl}/api/jobs/${encodeURIComponent(targetJobId)}/download-zip`;
       const zipName = `${bundle.title || 'shorts'}_bundle.zip`;
-      const res = await downloadVideoFile(zipUrl, zipName, backendUrl);
+
+      const res = await downloadVideoFile(zipUrl, zipName, backendUrl, (prog) => {
+        if (prog.phase === 'prompting') {
+          setZipLoadingState((prev) => ({
+            ...prev,
+            title: 'Choose Save Location',
+            subtitle: 'Windows Save As dialog is open. Choose which folder to save your ZIP file into.',
+            message: 'Waiting for folder selection in Windows...'
+          }));
+        } else if (prog.phase === 'writing') {
+          setZipLoadingState((prev) => ({
+            ...prev,
+            title: 'Saving ZIP to Disk...',
+            subtitle: 'Writing completed ZIP archive to your selected folder...',
+            message: 'Saving file to disk...'
+          }));
+        }
+      });
+
       if (res && res.cancelled) {
         showToast('Bundle save cancelled.');
       } else {
@@ -408,6 +439,7 @@ export default function SavedLibrary({
       showToast(`Could not download folder bundle: ${e.message || 'Error creating zip'}`);
     } finally {
       setIsDownloadingBulk(false);
+      setZipLoadingState({ active: false, title: '', subtitle: '', message: '' });
     }
   };
 
@@ -2015,6 +2047,146 @@ export default function SavedLibrary({
           >
             Deselect All
           </button>
+        </div>
+      )}
+
+      {/* ZIP Packaging & Download Loading Screen */}
+      {zipLoadingState.active && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.78)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 999999,
+            animation: 'fadeIn 0.2s ease-out'
+          }}
+        >
+          <div
+            style={{
+              background: '#161616',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              borderRadius: '20px',
+              padding: '36px 32px',
+              maxWidth: '440px',
+              width: '90%',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '18px',
+              boxShadow: '0 24px 60px rgba(0, 0, 0, 0.8), 0 0 45px rgba(30, 215, 96, 0.15)',
+              animation: 'zipModalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+            }}
+          >
+            {/* Spinning Glow Indicator */}
+            <div
+              style={{
+                position: 'relative',
+                width: '68px',
+                height: '68px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, rgba(30, 215, 96, 0.28) 0%, transparent 70%)',
+                  filter: 'blur(6px)'
+                }}
+              />
+              <CircleNotch
+                size={58}
+                weight="bold"
+                color="var(--spotify-green)"
+                style={{
+                  animation: 'spin-spotify 1s linear infinite'
+                }}
+              />
+              <Folder
+                size={24}
+                weight="fill"
+                color="#ffffff"
+                style={{ position: 'absolute' }}
+              />
+            </div>
+
+            {/* Title & Message */}
+            <div>
+              <h3
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: 800,
+                  color: '#ffffff',
+                  marginBottom: '8px',
+                  letterSpacing: '-0.02em'
+                }}
+              >
+                {zipLoadingState.title || 'Preparing ZIP Bundle...'}
+              </h3>
+              <p
+                style={{
+                  fontSize: '13px',
+                  color: 'var(--text-subdued)',
+                  lineHeight: '1.5',
+                  margin: 0
+                }}
+              >
+                {zipLoadingState.subtitle || 'Compressing your shorts into a single ZIP archive...'}
+              </p>
+            </div>
+
+            {/* Glowing Shimmer Bar */}
+            <div
+              style={{
+                width: '100%',
+                height: '5px',
+                background: '#242424',
+                borderRadius: '999px',
+                overflow: 'hidden',
+                position: 'relative'
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  width: '50%',
+                  background: 'linear-gradient(90deg, transparent, var(--spotify-green), #a7f3d0, transparent)',
+                  borderRadius: '999px',
+                  animation: 'shimmerProgress 1.6s ease-in-out infinite'
+                }}
+              />
+            </div>
+
+            {/* Bottom Status pill */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: '#202020',
+                padding: '6px 14px',
+                borderRadius: 'var(--radius-full)',
+                fontSize: '11px',
+                color: '#aaaaaa',
+                fontFamily: 'var(--font-mono)'
+              }}
+            >
+              <Sparkle size={13} weight="fill" color="var(--spotify-green)" />
+              <span>{zipLoadingState.message || 'Compressing videos into ZIP...'}</span>
+            </div>
+          </div>
         </div>
       )}
     </div>
