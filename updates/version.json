@@ -1,16 +1,16 @@
 {
   "version": "1.7.1",
   "min_version": "1.0.0",
-  "release_date": "2026-11-18T10:22:56Z",
-  "title": "ViralClip AI v1.7.1 - Save Location Picker & ZIP Loading Overlay",
+  "release_date": "2026-11-18T10:31:42Z",
+  "title": "ViralClip AI v1.7.1 - Instant Save As & Bulk Folder Picker",
   "changelog": [
-    "Added animated loading screen during ZIP packaging",
-    "Fixed ZIP bundle corruption and duplicate download prompt",
-    "Direct file system access picker for custom save folders"
+    "Instant Save As location picker: zero delay user activation preserved",
+    "Bulk download folder picker: select destination folder once for all clips",
+    "Fixed ZIP packaging and added dynamic progress overlay"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.7.1.zip",
-  "checksum": "sha256:f85b05f67f2c74ecad92e5df9bfd625ce575e1c77139dad450adf7889393af4f",
-  "size_bytes": 260409,
+  "checksum": "sha256:5fed13577be201fea52f65b652a56bca43466906f44f91ccc27a21e5b2b72a47",
+  "size_bytes": 261019,
   "mandatory": false,
   "rollback_version": null
 }

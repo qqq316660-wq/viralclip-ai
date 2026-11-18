@@ -23,7 +23,7 @@ import {
   ArrowRight,
   CircleNotch
 } from '@phosphor-icons/react';
-import { downloadVideoFile, openLocalClipsFolder } from '../utils/downloadHelper';
+import { downloadVideoFile, openLocalClipsFolder, sanitizeFilename } from '../utils/downloadHelper';
 
 export default function SavedLibrary({
   savedJobs,
@@ -384,15 +384,106 @@ export default function SavedLibrary({
     }
   };
 
-  // Bulk Download Selected Clips
+  // Bulk Download Selected Clips (Prompts for destination folder or creates ZIP)
   const handleBulkDownloadClips = async () => {
     if (selectedClipIds.length === 0) return;
     const targets = filteredClips.filter((c) => selectedClipIds.includes(c.id));
+    if (targets.length === 0) return;
+
+    if (targets.length === 1) {
+      return handleDownloadSingleClip(targets[0]);
+    }
+
     try {
       setIsDownloadingBulk(true);
-      await downloadClipsList(targets, 'shorts');
+
+      // Method A: Check if showDirectoryPicker is supported -> user picks ONE folder for all clips!
+      if (typeof window !== 'undefined' && typeof window.showDirectoryPicker === 'function') {
+        let dirHandle = null;
+        try {
+          dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+        } catch (pickerErr) {
+          if (pickerErr.name === 'AbortError') {
+            showToast('Bulk save cancelled.');
+            return;
+          }
+          console.warn('showDirectoryPicker failed, falling back to ZIP bundle:', pickerErr);
+        }
+
+        if (dirHandle) {
+          setZipLoadingState({
+            active: true,
+            title: `Saving ${targets.length} Shorts...`,
+            subtitle: `Saving individual video files directly to your chosen folder...`,
+            message: `Starting bulk save...`
+          });
+
+          for (let i = 0; i < targets.length; i++) {
+            const clip = targets[i];
+            const rawName = sanitizeFilename(clip.suggested_headline || clip.title || `short_${i + 1}`);
+            setZipLoadingState((prev) => ({
+              ...prev,
+              subtitle: `Saving "${rawName}" (${i + 1}/${targets.length})...`,
+              message: `Saving clip ${i + 1} of ${targets.length}`
+            }));
+
+            const videoSrc = `${backendUrl}${clip.rendered_url}`;
+            const res = await fetch(videoSrc);
+            if (res.ok) {
+              const blob = await res.blob();
+              const fileHandle = await dirHandle.getFileHandle(rawName, { create: true });
+              const writable = await fileHandle.createWritable();
+              await writable.write(blob);
+              await writable.close();
+            }
+          }
+
+          showToast(`Successfully saved all ${targets.length} shorts to selected folder!`);
+          return;
+        }
+      }
+
+      // Method B: Fallback to single ZIP bundle of all selected clips (asks location for ZIP)
+      setZipLoadingState({
+        active: true,
+        title: `Packaging ${targets.length} Selected Shorts`,
+        subtitle: `Compressing selected shorts into a single ZIP archive...`,
+        message: 'Packaging files...'
+      });
+
+      const clipIdsParam = targets.map((c) => c.id).join(',');
+      const zipUrl = `${backendUrl}/api/download-clips-zip?clip_ids=${encodeURIComponent(clipIdsParam)}&title=selected_${targets.length}_shorts`;
+      const zipName = `selected_${targets.length}_shorts.zip`;
+
+      const res = await downloadVideoFile(zipUrl, zipName, backendUrl, (prog) => {
+        if (prog.phase === 'prompting') {
+          setZipLoadingState((prev) => ({
+            ...prev,
+            title: 'Choose Save Location',
+            subtitle: 'Windows Save As dialog is open. Choose where to save your ZIP archive.',
+            message: 'Waiting for folder selection in Windows...'
+          }));
+        } else if (prog.phase === 'writing') {
+          setZipLoadingState((prev) => ({
+            ...prev,
+            title: 'Saving ZIP to Disk...',
+            subtitle: 'Writing completed ZIP archive to your selected folder...',
+            message: 'Saving file to disk...'
+          }));
+        }
+      });
+
+      if (res && res.cancelled) {
+        showToast('Bulk save cancelled.');
+      } else {
+        showToast(`Saved ${targets.length} shorts as ZIP archive!`);
+      }
+    } catch (e) {
+      console.error('Bulk download error:', e);
+      showToast(`Error during bulk download: ${e.message}`);
     } finally {
       setIsDownloadingBulk(false);
+      setZipLoadingState({ active: false, title: '', subtitle: '', message: '' });
     }
   };
 
@@ -498,9 +589,62 @@ export default function SavedLibrary({
 
     try {
       setIsDownloadingBulk(true);
-      await downloadClipsList(allSelectedClips, `shorts across ${selectedBundles.length} folders`);
+
+      if (typeof window !== 'undefined' && typeof window.showDirectoryPicker === 'function') {
+        let dirHandle = null;
+        try {
+          dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+        } catch (pickerErr) {
+          if (pickerErr.name === 'AbortError') {
+            showToast('Bulk save cancelled.');
+            return;
+          }
+        }
+
+        if (dirHandle) {
+          setZipLoadingState({
+            active: true,
+            title: `Saving ${allSelectedClips.length} Shorts Across ${selectedBundles.length} Folders...`,
+            subtitle: `Writing video files directly to chosen folder...`,
+            message: `Starting bulk save...`
+          });
+
+          for (let i = 0; i < allSelectedClips.length; i++) {
+            const clip = allSelectedClips[i];
+            const rawName = sanitizeFilename(clip.suggested_headline || clip.title || `short_${i + 1}`);
+            setZipLoadingState((prev) => ({
+              ...prev,
+              subtitle: `Saving "${rawName}" (${i + 1}/${allSelectedClips.length})...`,
+              message: `Saving clip ${i + 1} of ${allSelectedClips.length}`
+            }));
+
+            const videoSrc = `${backendUrl}${clip.rendered_url}`;
+            const res = await fetch(videoSrc);
+            if (res.ok) {
+              const blob = await res.blob();
+              const fileHandle = await dirHandle.getFileHandle(rawName, { create: true });
+              const writable = await fileHandle.createWritable();
+              await writable.write(blob);
+              await writable.close();
+            }
+          }
+
+          showToast(`Saved all ${allSelectedClips.length} shorts to selected folder!`);
+          return;
+        }
+      }
+
+      // Fallback to zip bundle
+      const clipIdsParam = allSelectedClips.map((c) => c.id).join(',');
+      const zipUrl = `${backendUrl}/api/download-clips-zip?clip_ids=${encodeURIComponent(clipIdsParam)}&title=viral_shorts_multi_folders`;
+      const zipName = `viral_shorts_multi_folders.zip`;
+      await downloadVideoFile(zipUrl, zipName, backendUrl);
+    } catch (e) {
+      console.error(e);
+      showToast('Error during bulk download');
     } finally {
       setIsDownloadingBulk(false);
+      setZipLoadingState({ active: false, title: '', subtitle: '', message: '' });
     }
   };
 

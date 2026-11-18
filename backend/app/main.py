@@ -608,16 +608,27 @@ async def download_job_bundle_zip(job_id: str):
         }
     )
 
+@app.get("/api/download-clips-zip")
 @app.post("/api/download-clips-zip")
-async def download_selected_clips_zip(payload: Dict[str, Any]):
+async def download_selected_clips_zip(
+    clip_ids: Optional[str] = None,
+    title: Optional[str] = "shorts_bundle",
+    payload: Optional[Dict[str, Any]] = None
+):
     """
     Downloads any array of clip IDs as a valid, non-corrupted ZIP archive.
+    Accepts GET query param ?clip_ids=id1,id2 or POST JSON body {"clip_ids": [...]}.
     """
-    clip_ids = payload.get("clip_ids", [])
-    title = payload.get("title", "shorts_bundle")
+    ids_list = []
+    bundle_title = title or "shorts_bundle"
+    if payload:
+        ids_list = payload.get("clip_ids", [])
+        bundle_title = payload.get("title", bundle_title)
+    if not ids_list and clip_ids:
+        ids_list = [c.strip() for c in clip_ids.split(",") if c.strip()]
 
     valid_clips = []
-    for cid in clip_ids:
+    for cid in ids_list:
         clean_cid = Path(cid).stem
         target_file = CLIPS_DIR / f"{clean_cid}.mp4"
         if not target_file.exists():
@@ -637,7 +648,7 @@ async def download_selected_clips_zip(payload: Dict[str, Any]):
             zf.write(p, arcname=f"{idx:02d}_{safe_title}.mp4")
 
     zip_bytes = zip_buffer.getvalue()
-    safe_name = re.sub(r'[^a-zA-Z0-9_\-\s]', '', title).strip().replace(' ', '_') or "shorts_bundle"
+    safe_name = re.sub(r'[^a-zA-Z0-9_\-\s]', '', bundle_title).strip().replace(' ', '_') or "shorts_bundle"
     zip_filename = f"{safe_name}.zip"
 
     return Response(

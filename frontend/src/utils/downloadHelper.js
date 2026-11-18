@@ -1,12 +1,11 @@
 /**
  * Direct file downloader utility with native Save As location picker.
  *
- * 1. Fetches data as blob first to verify 200 OK and non-empty size.
- * 2. Prompts user with native OS "Save As" dialog (window.showSaveFilePicker)
- *    so the user chooses exactly where to save (Desktop, Videos, custom folder).
- * 3. Writes verified data directly to chosen file on disk.
- * 4. Gracefully handles user cancel (AbortError).
- * 5. Falls back to standard anchor download if showSaveFilePicker is not supported.
+ * 1. Prompts user with native OS "Save As" dialog (window.showSaveFilePicker)
+ *    IMMEDIATELY on click to preserve transient user activation!
+ * 2. Fetches and writes directly to chosen file on disk.
+ * 3. Gracefully handles user cancel (AbortError).
+ * 4. Falls back to standard anchor download if showSaveFilePicker is not supported.
  */
 
 export const sanitizeFilename = (name) => {
@@ -36,25 +35,7 @@ export const downloadVideoFile = async (
     targetUrl = `${backendUrl}${targetUrl}`;
   }
 
-  if (onProgress) {
-    onProgress({ phase: 'fetching', message: 'Downloading package from server...' });
-  }
-
-  // 1. Fetch data as blob FIRST to guarantee 200 OK and non-empty content before opening file picker
-  const res = await fetch(targetUrl);
-  if (!res.ok) {
-    throw new Error(`Download response failed with status ${res.status}`);
-  }
-  const blob = await res.blob();
-  if (!blob || blob.size === 0) {
-    throw new Error('Downloaded file is empty (0 bytes)');
-  }
-
-  if (onProgress) {
-    onProgress({ phase: 'prompting', message: 'Windows Save As dialog is open. Choose where to save your file.' });
-  }
-
-  // 2. Try native File System Access API (Save As dialog)
+  // 1. MUST CALL showSaveFilePicker IMMEDIATELY to preserve transient user activation!
   if (typeof window !== 'undefined' && typeof window.showSaveFilePicker === 'function') {
     let fileHandle = null;
     try {
@@ -71,32 +52,42 @@ export const downloadVideoFile = async (
       });
     } catch (pickerErr) {
       if (pickerErr.name === 'AbortError') {
-        // User cancelled the "Save As" dialog intentionally
+        // User explicitly cancelled the Save As dialog
         return { success: false, cancelled: true };
       }
       console.warn('showSaveFilePicker dialog error, falling back to blob/anchor:', pickerErr);
     }
 
-    // If user selected a location in the Save As dialog:
+    // User picked location! Now fetch and write:
     if (fileHandle) {
+      if (onProgress) {
+        onProgress({ phase: 'fetching', message: 'Downloading package from server...' });
+      }
+
+      const res = await fetch(targetUrl);
+      if (!res.ok) {
+        throw new Error(`Download response failed with status ${res.status}`);
+      }
+
       if (onProgress) {
         onProgress({ phase: 'writing', message: 'Saving file to selected folder...' });
       }
-      try {
-        const writable = await fileHandle.createWritable();
-        await writable.write(blob);
-        await writable.close();
-        return { success: true, saved: true, filename: fileHandle.name || filename };
-      } catch (writeErr) {
-        console.error('Failed writing to chosen file handle:', writeErr);
-        throw writeErr;
-      }
+
+      const writable = await fileHandle.createWritable();
+      const blob = await res.blob();
+      await writable.write(blob);
+      await writable.close();
+      return { success: true, saved: true, filename: fileHandle.name || filename };
     }
   }
 
-  // 3. Fallback: Blob -> temporary anchor tag download
+  // 2. Fallback: Blob -> temporary anchor tag download
   try {
+    const res = await fetch(targetUrl);
+    if (!res.ok) throw new Error(`Download response status: ${res.status}`);
+    const blob = await res.blob();
     const blobUrl = window.URL.createObjectURL(blob);
+
     const a = document.createElement('a');
     a.style.display = 'none';
     a.href = blobUrl;
