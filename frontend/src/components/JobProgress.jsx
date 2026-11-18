@@ -12,9 +12,10 @@ import {
   Fire,
   Play,
   Check,
-  X
+  X,
+  FolderOpen
 } from '@phosphor-icons/react';
-import { downloadVideoFile } from '../utils/downloadHelper';
+import { downloadVideoFile, openLocalClipsFolder } from '../utils/downloadHelper';
 import AiPromptReview from './AiPromptReview';
 
 export default function JobProgress({
@@ -531,24 +532,39 @@ export default function JobProgress({
                         <span>Short #{idx + 1}</span>
                         <span>{Math.round(clip.duration || 30)}s</span>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleDownloadClip(clip, idx)}
-                        disabled={downloadingClipId === (clip.id || idx)}
-                        className="btn-spotify-primary"
-                        style={{
-                          padding: '8px 12px',
-                          fontSize: '11px',
-                          justifyContent: 'center',
-                          marginTop: 'auto',
-                          cursor: downloadingClipId === (clip.id || idx) ? 'wait' : 'pointer',
-                          opacity: downloadingClipId === (clip.id || idx) ? 0.75 : 1
-                        }}
-                        title="Download MP4 video directly"
-                      >
-                        <DownloadSimple size={14} weight="bold" />
-                        <span>{downloadingClipId === (clip.id || idx) ? 'Saving...' : 'Download Short'}</span>
-                      </button>
+                      <div style={{ display: 'flex', gap: '6px', marginTop: 'auto' }}>
+                        <button
+                          type="button"
+                          onClick={() => handleDownloadClip(clip, idx)}
+                          disabled={downloadingClipId === (clip.id || idx)}
+                          className="btn-spotify-primary"
+                          style={{
+                            flex: 1,
+                            padding: '8px 12px',
+                            fontSize: '11px',
+                            justifyContent: 'center',
+                            cursor: downloadingClipId === (clip.id || idx) ? 'wait' : 'pointer',
+                            opacity: downloadingClipId === (clip.id || idx) ? 0.75 : 1
+                          }}
+                          title="Download MP4 video directly"
+                        >
+                          <DownloadSimple size={14} weight="bold" />
+                          <span>{downloadingClipId === (clip.id || idx) ? 'Saving...' : 'Download Short'}</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const clipFile = clip.rendered_url ? clip.rendered_url.split('/').pop().split('?')[0] : `${clip.id}.mp4`;
+                            openLocalClipsFolder(backendUrl, clipFile);
+                          }}
+                          className="btn-spotify-secondary"
+                          style={{ padding: '8px 10px' }}
+                          title="Locate & show this video file in Windows File Explorer"
+                        >
+                          <FolderOpen size={14} weight="bold" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );

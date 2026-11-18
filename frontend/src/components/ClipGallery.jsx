@@ -11,7 +11,7 @@ import {
   Sparkle,
   FolderOpen
 } from '@phosphor-icons/react';
-import { downloadVideoFile } from '../utils/downloadHelper';
+import { downloadVideoFile, openLocalClipsFolder } from '../utils/downloadHelper';
 
 export default function ClipGallery({ clips, backendUrl, onStartNew, onOpenLibrary }) {
   const [copiedId, setCopiedId] = useState(null);
@@ -147,6 +147,17 @@ export default function ClipGallery({ clips, backendUrl, onStartNew, onOpenLibra
               <span>Saved Shorts</span>
             </button>
           )}
+
+          <button
+            type="button"
+            onClick={() => openLocalClipsFolder(backendUrl)}
+            className="btn-spotify-secondary"
+            style={{ fontSize: '12px', padding: '8px 14px', gap: '6px' }}
+            title="Open local Windows storage folder where clips are rendered"
+          >
+            <FolderOpen size={15} weight="bold" />
+            <span>Open Storage Folder</span>
+          </button>
 
           {/* Start New Shorts Onboarding */}
           {onStartNew && (
@@ -643,6 +654,19 @@ export default function ClipGallery({ clips, backendUrl, onStartNew, onOpenLibra
                       >
                         <ArrowSquareOut size={16} weight="bold" />
                       </a>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const clipFile = clip.rendered_url ? clip.rendered_url.split('/').pop().split('?')[0] : `${clip.id}.mp4`;
+                          openLocalClipsFolder(backendUrl, clipFile);
+                        }}
+                        className="btn-spotify-secondary"
+                        style={{ padding: '10px 12px' }}
+                        title="Locate & show this video file in Windows File Explorer"
+                      >
+                        <FolderOpen size={16} weight="bold" />
+                      </button>
                     </>
                   ) : (
                     <div style={{ fontSize: '12px', color: 'var(--text-subdued)', fontFamily: 'var(--font-mono)' }}>

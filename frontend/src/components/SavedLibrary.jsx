@@ -22,7 +22,7 @@ import {
   ArrowLeft,
   ArrowRight
 } from '@phosphor-icons/react';
-import { downloadVideoFile } from '../utils/downloadHelper';
+import { downloadVideoFile, openLocalClipsFolder } from '../utils/downloadHelper';
 
 export default function SavedLibrary({
   savedJobs,
@@ -342,13 +342,18 @@ export default function SavedLibrary({
       const clip = clipsList[i];
       const videoSrc = `${backendUrl}${clip.rendered_url}`;
       const rawName = clip.suggested_headline || clip.title || clip.id;
-      await downloadVideoFile(videoSrc, rawName, backendUrl);
+      const res = await downloadVideoFile(videoSrc, rawName, backendUrl);
+
+      if (res && res.cancelled) {
+        showToast('Download cancelled by user.');
+        break;
+      }
 
       if (i < clipsList.length - 1) {
         await new Promise((r) => setTimeout(r, 600));
       }
     }
-    showToast(`All ${clipsList.length} ${label} downloaded successfully!`);
+    showToast(`All ${clipsList.length} ${label} saved!`);
   };
 
   // Direct single clip download
@@ -356,11 +361,14 @@ export default function SavedLibrary({
     if (!clip.rendered_url) return;
     const rawName = clip.suggested_headline || clip.title || clip.id;
     setDownloadingClipId(clip.id);
-    showToast(`Downloading "${clip.suggested_headline || clip.title || 'short'}"...`);
     try {
       const videoSrc = `${backendUrl}${clip.rendered_url}`;
-      await downloadVideoFile(videoSrc, rawName, backendUrl);
-      showToast(`Short downloaded successfully!`);
+      const res = await downloadVideoFile(videoSrc, rawName, backendUrl);
+      if (res && res.cancelled) {
+        showToast('Save cancelled.');
+      } else {
+        showToast(`Short saved successfully!`);
+      }
     } catch (e) {
       console.error(e);
       showToast(`Failed to download short.`);
@@ -385,11 +393,15 @@ export default function SavedLibrary({
   const handleDownloadBundle = async (bundle) => {
     try {
       setIsDownloadingBulk(true);
-      showToast(`Downloading folder bundle "${bundle.title || 'shorts'}"...`);
+      showToast(`Preparing folder bundle "${bundle.title || 'shorts'}"...`);
       const zipUrl = `${backendUrl}/api/jobs/${bundle.id}/download-zip`;
       const zipName = `${bundle.title || 'shorts'}_bundle.zip`;
-      await downloadVideoFile(zipUrl, zipName, backendUrl);
-      showToast(`Folder bundle downloaded!`);
+      const res = await downloadVideoFile(zipUrl, zipName, backendUrl);
+      if (res && res.cancelled) {
+        showToast('Bundle save cancelled.');
+      } else {
+        showToast(`Folder bundle saved!`);
+      }
     } catch (e) {
       console.warn('Zip bundle download fallback to sequential:', e);
       await downloadClipsList(bundle.clips, `shorts from "${bundle.title}"`);
@@ -632,6 +644,24 @@ export default function SavedLibrary({
               </button>
             </div>
           )}
+
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                await openLocalClipsFolder(backendUrl);
+                showToast('Opening storage clips folder in Windows Explorer...');
+              } catch {
+                showToast('Failed to open folder');
+              }
+            }}
+            className="btn-spotify-secondary"
+            style={{ fontSize: '12px', padding: '8px 14px', gap: '6px' }}
+            title="Open local Windows folder containing all rendered shorts"
+          >
+            <FolderOpen size={16} weight="bold" color="var(--spotify-green)" />
+            <span>Open Storage Folder</span>
+          </button>
 
           {onCreateNew && (
             <button
@@ -1744,6 +1774,20 @@ export default function SavedLibrary({
                             >
                               <ArrowSquareOut size={15} weight="bold" />
                             </a>
+
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                const clipFile = clip.rendered_url ? clip.rendered_url.split('/').pop().split('?')[0] : `${clip.id}.mp4`;
+                                await openLocalClipsFolder(backendUrl, clipFile);
+                                showToast('Showing file in Windows Explorer...');
+                              }}
+                              className="btn-spotify-secondary"
+                              style={{ padding: '9px 10px' }}
+                              title="Show this file in Windows Explorer"
+                            >
+                              <FolderOpen size={15} />
+                            </button>
 
                             <button
                               type="button"

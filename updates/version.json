@@ -1,17 +1,16 @@
 {
-  "version": "1.7.0",
+  "version": "1.7.1",
   "min_version": "1.0.0",
-  "release_date": "2026-11-17T13:59:55Z",
-  "title": "ViralClip AI v1.7.0 - Smart Timestamp Auto-Correction",
+  "release_date": "2026-11-18T09:50:35Z",
+  "title": "ViralClip AI v1.7.1 - Save Location Picker & Storage Explorer",
   "changelog": [
-    "Added Subtitle ON/OFF button to completely disable burned captions on demand",
-    "Smart auto-correction for malformed MM:SS:00 timestamps from LLMs",
-    "Adaptive script tone & genre AI auto-detection (comedy gaming, podcasts, suspense, mixed)",
-    "Fixed SubtitleStyle import in rendering pipeline"
+    "Native Save As dialog: choose exact folder and filename when downloading clips or bundles",
+    "Added Open Storage Folder and Show in Explorer buttons",
+    "Direct file system access prevents hidden downloads in Chrome app mode"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.7.0.zip",
-  "checksum": "sha256:294c96a4674aeffb5d698e9665e09fae05432a42dbf44d775fc61dcf2fc41633",
-  "size_bytes": 257810,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.7.1.zip",
+  "checksum": "sha256:84a21929387850f5a46e9193a766b78b898953be65b96bc738284814aaa9087f",
+  "size_bytes": 258945,
   "mandatory": false,
   "rollback_version": null
 }

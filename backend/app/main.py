@@ -56,7 +56,7 @@ from app.srt_parser import parse_srt_file
 app = FastAPI(
     title="ViralClip AI API",
     description="High-performance backend for automated AI video clipping & viral short creation",
-    version="1.7.0"
+    version="1.7.1"
 )
 
 # Secure CORS policy: Restricts cross-origin requests exclusively to local app origins
@@ -574,6 +574,40 @@ async def download_job_bundle_zip(job_id: str):
             "Access-Control-Expose-Headers": "Content-Disposition"
         }
     )
+
+@app.post("/api/open-clips-folder")
+async def open_clips_folder(filename: Optional[str] = None):
+    """
+    Opens the local clips directory in Windows Explorer (or OS file manager),
+    or selects the specific clip if filename is provided.
+    """
+    import subprocess
+    import platform
+
+    target_path = CLIPS_DIR
+    if filename:
+        clean_name = Path(filename).name
+        candidate = CLIPS_DIR / clean_name
+        if candidate.exists():
+            target_path = candidate
+
+    try:
+        if platform.system() == "Windows":
+            if target_path.is_file():
+                subprocess.Popen(["explorer.exe", f"/select,{str(target_path)}"])
+            else:
+                os.startfile(str(target_path))
+        elif platform.system() == "Darwin":
+            if target_path.is_file():
+                subprocess.Popen(["open", "-R", str(target_path)])
+            else:
+                subprocess.Popen(["open", str(target_path)])
+        else:
+            folder = target_path if target_path.is_dir() else target_path.parent
+            subprocess.Popen(["xdg-open", str(folder)])
+        return {"status": "ok", "path": str(target_path)}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 @app.get("/api/download-kaggle-notebook")
 async def download_kaggle_notebook():

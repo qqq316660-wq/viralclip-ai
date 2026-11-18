@@ -1,28 +1,25 @@
 /**
- * Direct file downloader utility that triggers native browser downloads
- * directly to the user's disk without opening video players or new tabs.
+ * Direct file downloader utility with native Save As location picker.
+ *
+ * 1. Prompts user with native OS "Save As" dialog (window.showSaveFilePicker)
+ *    so the user chooses exactly where to save (Desktop, Videos, custom folder).
+ * 2. Fetches and writes directly to chosen file on disk.
+ * 3. Gracefully handles user cancel (AbortError).
+ * 4. Falls back to standard anchor download if showSaveFilePicker is not supported.
  */
 
 export const sanitizeFilename = (name) => {
   if (!name) return 'short.mp4';
   const clean = name.replace(/[^a-zA-Z0-9_\-\.\s]/g, '').trim().replace(/\s+/g, '_');
-  return clean.toLowerCase().endsWith('.mp4') ? clean : `${clean}.mp4`;
+  if (clean.toLowerCase().endsWith('.mp4') || clean.toLowerCase().endsWith('.zip')) {
+    return clean;
+  }
+  return `${clean}.mp4`;
 };
 
-/**
- * Downloads a video file directly to the user's computer.
- *
- * Why this works:
- * 1. Cross-origin <a href="..." download> tags are ignored by modern browsers,
- *    causing Chrome to navigate to the MP4 file and display the black screen player.
- * 2. Fetching the file as a Blob and creating an in-memory `blob:` object URL makes
- *    the download same-origin, forcing Chrome/Edge/Firefox to trigger an immediate,
- *    direct file save without any player or new tab.
- * 3. As an additional guarantee, the backend endpoint sends
- *    'Content-Disposition: attachment; filename="..."'.
- */
 export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl = 'http://127.0.0.1:8001') => {
   const filename = sanitizeFilename(suggestedFilename);
+  const isZip = filename.toLowerCase().endsWith('.zip');
 
   // Derive direct attachment endpoint
   let targetUrl = videoUrl;
@@ -33,8 +30,49 @@ export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl 
     targetUrl = `${backendUrl}${targetUrl}`;
   }
 
+  // 1. Try native File System Access API (Save As dialog)
+  if (typeof window !== 'undefined' && typeof window.showSaveFilePicker === 'function') {
+    let fileHandle = null;
+    try {
+      fileHandle = await window.showSaveFilePicker({
+        suggestedName: filename,
+        types: [
+          {
+            description: isZip ? 'ZIP Archive (*.zip)' : 'MP4 Video (*.mp4)',
+            accept: isZip
+              ? { 'application/zip': ['.zip'] }
+              : { 'video/mp4': ['.mp4'] }
+          }
+        ]
+      });
+    } catch (pickerErr) {
+      if (pickerErr.name === 'AbortError') {
+        // User cancelled the "Save As" dialog intentionally
+        return { success: false, cancelled: true };
+      }
+      console.warn('showSaveFilePicker dialog error, falling back to blob/anchor:', pickerErr);
+    }
+
+    // If user selected a location in the Save As dialog:
+    if (fileHandle) {
+      try {
+        const res = await fetch(targetUrl);
+        if (!res.ok) throw new Error(`Fetch failed with status ${res.status}`);
+
+        const writable = await fileHandle.createWritable();
+        const blob = await res.blob();
+        await writable.write(blob);
+        await writable.close();
+        return { success: true, saved: true, filename: fileHandle.name || filename };
+      } catch (writeErr) {
+        console.error('Failed writing to chosen file handle:', writeErr);
+        throw writeErr;
+      }
+    }
+  }
+
+  // 2. Fallback: Blob -> temporary anchor tag download
   try {
-    // 1. Fetch as Blob (guarantees local blob: url trigger)
     const res = await fetch(targetUrl);
     if (!res.ok) throw new Error(`Download response status: ${res.status}`);
     const blob = await res.blob();
@@ -50,11 +88,10 @@ export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl 
 
     setTimeout(() => {
       window.URL.revokeObjectURL(blobUrl);
-    }, 10000);
-    return true;
+    }, 15000);
+    return { success: true, saved: true, filename };
   } catch (err) {
-    console.warn('Direct blob download failed, falling back to direct attachment link:', err);
-    // 2. Fallback to direct navigation of attachment endpoint
+    console.warn('Blob fallback failed, trying direct link navigation:', err);
     const fallbackLink = document.createElement('a');
     fallbackLink.style.display = 'none';
     fallbackLink.href = targetUrl;
@@ -62,6 +99,22 @@ export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl 
     document.body.appendChild(fallbackLink);
     fallbackLink.click();
     document.body.removeChild(fallbackLink);
-    return true;
+    return { success: true, saved: true, filename };
+  }
+};
+
+/**
+ * Tells the backend to open the local storage directory in Windows File Explorer
+ * or highlight a specific clip file.
+ */
+export const openLocalClipsFolder = async (backendUrl = 'http://127.0.0.1:8001', clipFilename = null) => {
+  try {
+    const url = `${backendUrl}/api/open-clips-folder${clipFilename ? `?filename=${encodeURIComponent(clipFilename)}` : ''}`;
+    const res = await fetch(url, { method: 'POST' });
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error('Failed to open local clips folder:', err);
+    return { status: 'error', message: err.message };
   }
 };
