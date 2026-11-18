@@ -389,22 +389,23 @@ export default function SavedLibrary({
     }
   };
 
-  // Download entire bundle (prefer zip bundle download, fallback to sequential)
+  // Download entire bundle (prefer zip bundle download)
   const handleDownloadBundle = async (bundle) => {
     try {
       setIsDownloadingBulk(true);
       showToast(`Preparing folder bundle "${bundle.title || 'shorts'}"...`);
-      const zipUrl = `${backendUrl}/api/jobs/${bundle.id}/download-zip`;
+      const targetJobId = bundle.jobId || (bundle.id ? bundle.id.replace('bundle_', '') : 'shorts_bundle');
+      const zipUrl = `${backendUrl}/api/jobs/${encodeURIComponent(targetJobId)}/download-zip`;
       const zipName = `${bundle.title || 'shorts'}_bundle.zip`;
       const res = await downloadVideoFile(zipUrl, zipName, backendUrl);
       if (res && res.cancelled) {
         showToast('Bundle save cancelled.');
       } else {
-        showToast(`Folder bundle saved!`);
+        showToast(`Folder bundle saved successfully!`);
       }
     } catch (e) {
-      console.warn('Zip bundle download fallback to sequential:', e);
-      await downloadClipsList(bundle.clips, `shorts from "${bundle.title}"`);
+      console.error('Zip bundle download error:', e);
+      showToast(`Could not download folder bundle: ${e.message || 'Error creating zip'}`);
     } finally {
       setIsDownloadingBulk(false);
     }

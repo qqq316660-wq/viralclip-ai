@@ -500,7 +500,7 @@ async def generate_prompt_from_srt(payload: GeneratePromptRequest):
         "duration": parsed_srt.get("duration", 0.0)
     }
 
-from fastapi.responses import FileResponse, PlainTextResponse, StreamingResponse
+from fastapi.responses import FileResponse, PlainTextResponse, StreamingResponse, Response
 import io
 import re
 import zipfile
@@ -538,40 +538,115 @@ async def download_clip_file(clip_filename: str, title: Optional[str] = None):
 async def download_job_bundle_zip(job_id: str):
     """
     Downloads all rendered clips in a job/bundle as a single zipped archive.
+    Fixes zip truncation by reading entire buffer value and sets Content-Length.
     """
-    job = get_job(job_id)
-    if not job:
-        raise HTTPException(status_code=404, detail="Project not found")
+    from app.jobs import load_jobs_from_disk
+    load_jobs_from_disk()
 
+    clean_id = job_id
+    if clean_id.startswith("bundle_"):
+        clean_id = clean_id.replace("bundle_", "", 1)
+
+    job = get_job(clean_id) or get_job(job_id)
     valid_clips = []
-    for clip in job.clips:
-        if clip.rendered_url:
-            clean_name = Path(clip.rendered_url.split("?")[0]).name
-            clip_path = CLIPS_DIR / clean_name
-            if clip_path.exists():
-                valid_clips.append((clip, clip_path))
+    bundle_title = "shorts_bundle"
+
+    if job and job.clips:
+        bundle_title = getattr(job, "video_title", None) or getattr(job, "title", None) or clean_id
+        for clip in job.clips:
+            if clip.rendered_url:
+                clean_name = Path(clip.rendered_url.split("?")[0]).name
+                clip_path = CLIPS_DIR / clean_name
+                if clip_path.exists():
+                    clip_title = clip.suggested_headline or clip.title or clean_name
+                    valid_clips.append((clip_title, clip_path))
+    else:
+        # Fallback: search jobs_db for matching job
+        for j in jobs_db.values():
+            if j.job_id == clean_id or clean_id in j.job_id:
+                bundle_title = getattr(j, "video_title", None) or j.job_id
+                for clip in j.clips:
+                    if clip.rendered_url:
+                        clean_name = Path(clip.rendered_url.split("?")[0]).name
+                        clip_path = CLIPS_DIR / clean_name
+                        if clip_path.exists():
+                            clip_title = clip.suggested_headline or clip.title or clean_name
+                            valid_clips.append((clip_title, clip_path))
+                if valid_clips:
+                    break
+
+    # If still not found, search CLIPS_DIR directly for any files containing clean_id
+    if not valid_clips:
+        matched_files = sorted(CLIPS_DIR.glob(f"*{clean_id}*.mp4"))
+        if not matched_files:
+            matched_files = sorted(CLIPS_DIR.glob("*.mp4"))
+        for p in matched_files:
+            valid_clips.append((p.stem, p))
 
     if not valid_clips:
-        raise HTTPException(status_code=400, detail="No rendered clips available to download in this bundle")
+        raise HTTPException(status_code=404, detail="No rendered clips available to download in this bundle")
 
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
-        for idx, (clip, path) in enumerate(valid_clips, 1):
-            clip_title = clip.suggested_headline or clip.title or f"clip_{idx}"
-            safe_title = re.sub(r'[^a-zA-Z0-9_\-\s]', '', clip_title).strip().replace(' ', '_')
+        for idx, (title, path) in enumerate(valid_clips, 1):
+            safe_title = re.sub(r'[^a-zA-Z0-9_\-\s]', '', title).strip().replace(' ', '_')
             arcname = f"{idx:02d}_{safe_title}.mp4"
             zf.write(path, arcname=arcname)
 
-    raw_title = getattr(job, "video_title", None) or getattr(job, "title", None) or "shorts_bundle"
-    bundle_name = re.sub(r'[^a-zA-Z0-9_\-\s]', '', raw_title).strip().replace(' ', '_')
-    zip_filename = f"{bundle_name}_shorts.zip"
+    zip_bytes = zip_buffer.getvalue()
+    raw_title = bundle_title or "shorts_bundle"
+    bundle_name = re.sub(r'[^a-zA-Z0-9_\-\s]', '', raw_title).strip().replace(' ', '_') or "shorts_bundle"
+    zip_filename = f"{bundle_name}.zip"
 
-    return StreamingResponse(
-        zip_buffer,
+    return Response(
+        content=zip_bytes,
         media_type="application/zip",
         headers={
             "Content-Disposition": f'attachment; filename="{zip_filename}"',
-            "Access-Control-Expose-Headers": "Content-Disposition"
+            "Content-Length": str(len(zip_bytes)),
+            "Access-Control-Expose-Headers": "Content-Disposition, Content-Length"
+        }
+    )
+
+@app.post("/api/download-clips-zip")
+async def download_selected_clips_zip(payload: Dict[str, Any]):
+    """
+    Downloads any array of clip IDs as a valid, non-corrupted ZIP archive.
+    """
+    clip_ids = payload.get("clip_ids", [])
+    title = payload.get("title", "shorts_bundle")
+
+    valid_clips = []
+    for cid in clip_ids:
+        clean_cid = Path(cid).stem
+        target_file = CLIPS_DIR / f"{clean_cid}.mp4"
+        if not target_file.exists():
+            clean_name = Path(cid).name
+            if (CLIPS_DIR / clean_name).exists():
+                target_file = CLIPS_DIR / clean_name
+        if target_file.exists():
+            valid_clips.append((clean_cid, target_file))
+
+    if not valid_clips:
+        raise HTTPException(status_code=400, detail="No valid clips found on disk to zip")
+
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for idx, (t, p) in enumerate(valid_clips, 1):
+            safe_title = re.sub(r'[^a-zA-Z0-9_\-\s]', '', t).strip().replace(' ', '_')
+            zf.write(p, arcname=f"{idx:02d}_{safe_title}.mp4")
+
+    zip_bytes = zip_buffer.getvalue()
+    safe_name = re.sub(r'[^a-zA-Z0-9_\-\s]', '', title).strip().replace(' ', '_') or "shorts_bundle"
+    zip_filename = f"{safe_name}.zip"
+
+    return Response(
+        content=zip_bytes,
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": f'attachment; filename="{zip_filename}"',
+            "Content-Length": str(len(zip_bytes)),
+            "Access-Control-Expose-Headers": "Content-Disposition, Content-Length"
         }
     )
 

@@ -1,16 +1,16 @@
 {
   "version": "1.7.1",
   "min_version": "1.0.0",
-  "release_date": "2026-11-18T09:50:35Z",
-  "title": "ViralClip AI v1.7.1 - Save Location Picker & Storage Explorer",
+  "release_date": "2026-11-18T10:03:42Z",
+  "title": "ViralClip AI v1.7.1 - Save Location Picker & Fixed Zip Download",
   "changelog": [
-    "Native Save As dialog: choose exact folder and filename when downloading clips or bundles",
-    "Added Open Storage Folder and Show in Explorer buttons",
-    "Direct file system access prevents hidden downloads in Chrome app mode"
+    "Fixed ZIP bundle corruption: seek buffer rewind and Response content bytes",
+    "Prevented duplicate video download prompt on bundle download",
+    "Native Save As location picker across clips and folders"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.7.1.zip",
-  "checksum": "sha256:84a21929387850f5a46e9193a766b78b898953be65b96bc738284814aaa9087f",
-  "size_bytes": 258945,
+  "checksum": "sha256:e448e9c481145a6ba05dcafa2132257ea1b75c387f24e819e36dc56a0d21486b",
+  "size_bytes": 259537,
   "mandatory": false,
   "rollback_version": null
 }

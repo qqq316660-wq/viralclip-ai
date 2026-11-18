@@ -1,11 +1,12 @@
 /**
  * Direct file downloader utility with native Save As location picker.
  *
- * 1. Prompts user with native OS "Save As" dialog (window.showSaveFilePicker)
+ * 1. Fetches data as blob first to verify 200 OK and non-empty size.
+ * 2. Prompts user with native OS "Save As" dialog (window.showSaveFilePicker)
  *    so the user chooses exactly where to save (Desktop, Videos, custom folder).
- * 2. Fetches and writes directly to chosen file on disk.
- * 3. Gracefully handles user cancel (AbortError).
- * 4. Falls back to standard anchor download if showSaveFilePicker is not supported.
+ * 3. Writes verified data directly to chosen file on disk.
+ * 4. Gracefully handles user cancel (AbortError).
+ * 5. Falls back to standard anchor download if showSaveFilePicker is not supported.
  */
 
 export const sanitizeFilename = (name) => {
@@ -30,7 +31,17 @@ export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl 
     targetUrl = `${backendUrl}${targetUrl}`;
   }
 
-  // 1. Try native File System Access API (Save As dialog)
+  // 1. Fetch data as blob FIRST to guarantee 200 OK and non-empty content before opening file picker
+  const res = await fetch(targetUrl);
+  if (!res.ok) {
+    throw new Error(`Download response failed with status ${res.status}`);
+  }
+  const blob = await res.blob();
+  if (!blob || blob.size === 0) {
+    throw new Error('Downloaded file is empty (0 bytes)');
+  }
+
+  // 2. Try native File System Access API (Save As dialog)
   if (typeof window !== 'undefined' && typeof window.showSaveFilePicker === 'function') {
     let fileHandle = null;
     try {
@@ -56,11 +67,7 @@ export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl 
     // If user selected a location in the Save As dialog:
     if (fileHandle) {
       try {
-        const res = await fetch(targetUrl);
-        if (!res.ok) throw new Error(`Fetch failed with status ${res.status}`);
-
         const writable = await fileHandle.createWritable();
-        const blob = await res.blob();
         await writable.write(blob);
         await writable.close();
         return { success: true, saved: true, filename: fileHandle.name || filename };
@@ -71,13 +78,9 @@ export const downloadVideoFile = async (videoUrl, suggestedFilename, backendUrl 
     }
   }
 
-  // 2. Fallback: Blob -> temporary anchor tag download
+  // 3. Fallback: Blob -> temporary anchor tag download
   try {
-    const res = await fetch(targetUrl);
-    if (!res.ok) throw new Error(`Download response status: ${res.status}`);
-    const blob = await res.blob();
     const blobUrl = window.URL.createObjectURL(blob);
-
     const a = document.createElement('a');
     a.style.display = 'none';
     a.href = blobUrl;
