@@ -1,16 +1,17 @@
 {
-  "version": "1.7.1",
+  "version": "1.8.0",
   "min_version": "1.0.0",
-  "release_date": "2026-11-18T19:20:39Z",
-  "title": "ViralClip AI v1.7.1 - Perfect Center Headline Alignment & Smart Text Wrap",
+  "release_date": "2026-11-20T19:34:18Z",
+  "title": "ViralClip AI v1.8.0 - Stream Sniper VOD Scanner & Google Colab",
   "changelog": [
-    "Fixed top hook headline alignment: exact optical center placement",
-    "Smart auto-wrap: prevents overflow and wraps long headlines into balanced lines",
-    "Fixed vertical margin positioning in Bordered Canvas layout"
+    "New Feature: Stream Sniper 30m VOD Scanner with AI Reframe & Hook Detection",
+    "Added 1-Click Free Google Colab GPU (No Phone Verification Needed)",
+    "Added Bulk Download with Windows Folder Picker & Save As",
+    "Performance optimizations & clean modern UI"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.7.1.zip",
-  "checksum": "sha256:978ff34afeec435752717fb4a16ea88cb1faffbde35ca7c908df7d752590349e",
-  "size_bytes": 262133,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.0.zip",
+  "checksum": "sha256:88861bdb26e3a6bb26ec21274f056b978d18180e49daa284104d635954dfe07f",
+  "size_bytes": 547183,
   "mandatory": false,
   "rollback_version": null
 }
