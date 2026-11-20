@@ -717,6 +717,15 @@ async def get_kaggle_code():
 app.mount("/api/clips", StaticFiles(directory=str(CLIPS_DIR)), name="clips")
 app.mount("/api/audio", StaticFiles(directory=str(DOWNLOADS_DIR)), name="audio")
 
+# Mount Stream Sniper
+try:
+    from app.stream_sniper.router import router as sniper_router
+    from app.stream_sniper import config as sniper_config
+    app.include_router(sniper_router, prefix="/api/sniper", tags=["Stream Sniper"])
+    app.mount("/sniper/clips", StaticFiles(directory=str(sniper_config.CLIPS_DIR)), name="sniper_clips")
+except Exception as e:
+    print(f"[Stream Sniper] Failed to mount sniper router: {e}")
+
 # Mount production Frontend SPA if built (frontend/dist or web/)
 FRONTEND_DIST = BASE_DIR / "frontend" / "dist"
 if not FRONTEND_DIST.exists():
@@ -733,8 +742,8 @@ if FRONTEND_DIST.exists():
 
     @app.get("/{full_path:path}")
     async def serve_spa(full_path: str):
-        # Do not intercept API requests
-        if full_path.startswith("api"):
+        # Do not intercept API or sniper static requests
+        if full_path.startswith("api") or full_path.startswith("sniper"):
             raise HTTPException(status_code=404, detail="Not Found")
         # Prevent Path Traversal
         try:

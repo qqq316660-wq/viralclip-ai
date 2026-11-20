@@ -80,6 +80,7 @@ export default function IngestionPanel({
   const [isCopied, setIsCopied] = useState(false);
   const [showKaggleCodePreview, setShowKaggleCodePreview] = useState(false);
   const [codeSelectStatus, setCodeSelectStatus] = useState(false);
+  const [gpuProvider, setGpuProvider] = useState('colab'); // 'colab' | 'kaggle'
   const [historyVideos, setHistoryVideos] = useState([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [historyError, setHistoryError] = useState('');
@@ -1591,7 +1592,7 @@ export default function IngestionPanel({
             )}
           </div>
 
-          {/* Question 2: If user said NO to .SRT -> Ask for Kaggle Free GPU */}
+          {/* Question 2: If user said NO to .SRT -> Ask for Free Cloud GPU (Google Colab / Kaggle) */}
           {hasSrtOption === 'no' && (
             <div
               style={{
@@ -1614,14 +1615,14 @@ export default function IngestionPanel({
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Cpu size={18} color="var(--spotify-green)" weight="bold" />
-                    <span>Connect Kaggle Free GPU (T4 x2) for AI Transcription?</span>
+                    <span>Connect Free Cloud GPU for AI Transcription?</span>
                   </div>
                   <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '4px' }}>
-                    Kaggle provides 30 hours of free dual T4 GPU every week for high-speed Whisper transcription.
+                    Use <strong>Google Colab (Instant — No mobile number needed)</strong> or <strong>Kaggle (30h/week T4 x2)</strong> for free Whisper Large-v3.
                   </div>
                 </div>
 
-                {/* Yes / No Toggle for Kaggle */}
+                {/* Yes / No Toggle for Cloud GPU */}
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <button
                     type="button"
@@ -1649,7 +1650,7 @@ export default function IngestionPanel({
                     }}
                   >
                     <Check size={14} weight="bold" />
-                    <span>Yes, I have Kaggle URL</span>
+                    <span>Yes, I have Cloudflare URL</span>
                   </button>
 
                   <button
@@ -1684,7 +1685,7 @@ export default function IngestionPanel({
                 </div>
               </div>
 
-              {/* If YES to Kaggle GPU: URL Input Field */}
+              {/* If YES to Cloud GPU: URL Input Field & Quick Action Buttons */}
               {hasColabOption === 'yes' && (
                 <div
                   style={{
@@ -1693,7 +1694,7 @@ export default function IngestionPanel({
                     paddingTop: '14px'
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
                     <label
                       style={{
                         display: 'block',
@@ -1703,9 +1704,53 @@ export default function IngestionPanel({
                         color: 'var(--text-subdued)'
                       }}
                     >
-                      Kaggle GPU Tunnel URL
+                      Cloudflare GPU Tunnel URL (Google Colab / Kaggle)
                     </label>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                      <a
+                        href="https://colab.research.google.com/#create=true"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          color: '#00F0FF',
+                          background: 'rgba(0, 240, 255, 0.1)',
+                          border: '1px solid rgba(0, 240, 255, 0.35)',
+                          padding: '4px 10px',
+                          borderRadius: '4px',
+                          textDecoration: 'none',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        <span>🚀 Open Google Colab</span>
+                        <ArrowSquareOut size={12} weight="bold" />
+                      </a>
+
+                      <a
+                        href="https://www.kaggle.com/code"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          color: '#20beff',
+                          background: 'rgba(32, 190, 255, 0.1)',
+                          border: '1px solid rgba(32, 190, 255, 0.35)',
+                          padding: '4px 10px',
+                          borderRadius: '4px',
+                          textDecoration: 'none',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        <span>⚡ Open Kaggle</span>
+                        <ArrowSquareOut size={12} weight="bold" />
+                      </a>
+
                       <button
                         type="button"
                         onClick={handleCopyKaggleCode}
@@ -1725,7 +1770,7 @@ export default function IngestionPanel({
                         }}
                       >
                         {isCopied ? <Check size={13} weight="bold" /> : <Copy size={13} weight="bold" />}
-                        <span>{isCopied ? 'Copied to Clipboard!' : 'Copy Python Code'}</span>
+                        <span>{isCopied ? 'Copied Script!' : 'Copy Python Script'}</span>
                       </button>
 
                       <button
@@ -1748,7 +1793,7 @@ export default function IngestionPanel({
                         title="Drag-down / View full Python code"
                       >
                         {showKaggleCodePreview ? <CaretUp size={13} weight="bold" /> : <CaretDown size={13} weight="bold" />}
-                        <span>{showKaggleCodePreview ? 'Hide Code ▲' : 'Drag-Down Code ▼'}</span>
+                        <span>{showKaggleCodePreview ? 'Hide Code ▲' : 'View Code ▼'}</span>
                       </button>
                     </div>
                   </div>
@@ -1757,7 +1802,7 @@ export default function IngestionPanel({
                       type="text"
                       value={colabUrl}
                       onChange={(e) => setColabUrl(e.target.value)}
-                      placeholder="https://your-tunnel.trycloudflare.com or https://xxxx.ngrok-free.app"
+                      placeholder="https://xxxx-xxxx.trycloudflare.com or https://xxxx.ngrok-free.app"
                       disabled={isProcessing}
                       className="spotify-pill-input"
                       style={{ height: '42px', fontSize: '13px' }}
@@ -1776,8 +1821,8 @@ export default function IngestionPanel({
                     <CloudCheck size={14} />
                     <span>
                       {colabUrl.trim()
-                        ? 'Kaggle GPU endpoint connected! Pipeline will send audio here for high-speed transcription.'
-                        : 'Paste the public URL generated by your Kaggle notebook cell above.'}
+                        ? '✓ Cloud GPU endpoint connected! Pipeline will send audio here for high-speed Whisper transcription.'
+                        : 'Paste the public Cloudflare URL generated by your Google Colab or Kaggle cell above.'}
                     </span>
                   </div>
 
@@ -1786,7 +1831,7 @@ export default function IngestionPanel({
                 </div>
               )}
 
-              {/* If NO to Kaggle GPU: Complete Step-by-Step Setup Guide */}
+              {/* If NO to Cloud GPU: Provider Selection Tabs & Complete Setup Guide */}
               {hasColabOption === 'no' && (
                 <div
                   style={{
@@ -1804,120 +1849,280 @@ export default function IngestionPanel({
                       color: '#ffffff'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
-                      <div style={{ fontWeight: 700, fontSize: '13px', color: 'var(--spotify-green)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span>⚡ Get 30 Hours/Week of Free T4 x2 GPU on Kaggle</span>
-                      </div>
-                      <a
-                        href="https://www.kaggle.com/code"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    {/* Platform Selector Tabs */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', flexWrap: 'wrap' }}>
+                      <button
+                        type="button"
+                        onClick={() => setGpuProvider('colab')}
                         style={{
-                          background: 'var(--spotify-green)',
-                          color: '#000000',
-                          padding: '5px 12px',
-                          borderRadius: 'var(--radius-full)',
-                          fontSize: '11px',
+                          background: gpuProvider === 'colab' ? 'rgba(0, 240, 255, 0.15)' : '#222',
+                          border: gpuProvider === 'colab' ? '1px solid #00F0FF' : '1px solid #383838',
+                          color: gpuProvider === 'colab' ? '#00F0FF' : '#aaa',
+                          padding: '6px 14px',
+                          borderRadius: '8px',
+                          fontSize: '12px',
                           fontWeight: 700,
-                          textDecoration: 'none',
-                          display: 'inline-flex',
+                          cursor: 'pointer',
+                          display: 'flex',
                           alignItems: 'center',
-                          gap: '4px'
+                          gap: '6px',
+                          transition: 'all 0.15s ease'
                         }}
                       >
-                        <span>Open Kaggle Notebooks</span>
-                        <ArrowSquareOut size={13} weight="bold" />
-                      </a>
+                        <span>🚀 Google Colab (Recommended — No Phone Needed)</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setGpuProvider('kaggle')}
+                        style={{
+                          background: gpuProvider === 'kaggle' ? 'rgba(32, 190, 255, 0.15)' : '#222',
+                          border: gpuProvider === 'kaggle' ? '1px solid #20beff' : '1px solid #383838',
+                          color: gpuProvider === 'kaggle' ? '#20beff' : '#aaa',
+                          padding: '6px 14px',
+                          borderRadius: '8px',
+                          fontSize: '12px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        <span>⚡ Kaggle Free GPU (T4 x2)</span>
+                      </button>
                     </div>
 
-                    {/* Step-by-step numbered instructions */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px', color: '#cccccc' }}>
-                      <div style={{ display: 'flex', gap: '10px' }}>
-                        <span style={{ background: '#292929', color: 'var(--spotify-green)', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>1</span>
-                        <div>
-                          <strong style={{ color: '#ffffff' }}>Verify Mobile Number (Required for GPU):</strong>
-                          <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
-                            Go to your Kaggle Profile ➔ Settings ➔ <strong>Phone Verification</strong>. Verifying your mobile number instantly unlocks 30 hours of free GPU T4 x2 quota every week!
+                    {/* GOOGLE COLAB GUIDE */}
+                    {gpuProvider === 'colab' ? (
+                      <>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+                          <div style={{ fontWeight: 700, fontSize: '13px', color: '#00F0FF', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span>🚀 Google Colab: Free NVIDIA T4 GPU (Zero Phone Verification)</span>
                           </div>
+                          <a
+                            href="https://colab.research.google.com/#create=true"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              background: '#00F0FF',
+                              color: '#000000',
+                              padding: '5px 14px',
+                              borderRadius: 'var(--radius-full)',
+                              fontSize: '11px',
+                              fontWeight: 800,
+                              textDecoration: 'none',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}
+                          >
+                            <span>Open New Colab Notebook</span>
+                            <ArrowSquareOut size={13} weight="bold" />
+                          </a>
                         </div>
-                      </div>
 
-                      <div style={{ display: 'flex', gap: '10px' }}>
-                        <span style={{ background: '#292929', color: 'var(--spotify-green)', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>2</span>
-                        <div>
-                          <strong style={{ color: '#ffffff' }}>Create New Notebook & Enable GPU:</strong>
-                          <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
-                            Click "New Notebook" on Kaggle. In the right sidebar: <strong>Settings ➔ Accelerator ➔ select "GPU T4 x2"</strong>. Also ensure <strong>Internet: On</strong> is toggled.
-                          </div>
-                        </div>
-                      </div>
-
-                      <div style={{ display: 'flex', gap: '10px' }}>
-                        <span style={{ background: '#292929', color: 'var(--spotify-green)', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>3</span>
-                        <div style={{ flex: 1 }}>
-                          <strong style={{ color: '#ffffff' }}>Copy Whisper GPU Server Code:</strong>
-                          <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                            <button
-                              type="button"
-                              onClick={handleCopyKaggleCode}
-                              style={{
-                                background: isCopied ? 'var(--spotify-green)' : '#2b2b2b',
-                                color: isCopied ? '#000000' : '#ffffff',
-                                border: isCopied ? '1px solid var(--spotify-green)' : '1px solid #444444',
-                                borderRadius: 'var(--radius-full)',
-                                padding: '7px 16px',
-                                fontSize: '12px',
-                                fontWeight: 700,
-                                cursor: 'pointer',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                transition: 'all 0.15s ease'
-                              }}
-                            >
-                              {isCopied ? <Check size={15} weight="bold" /> : <Copy size={15} weight="bold" />}
-                              <span>{isCopied ? 'Code Copied to Clipboard!' : 'Copy Python Code for Kaggle/Colab'}</span>
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={() => setShowKaggleCodePreview(!showKaggleCodePreview)}
-                              style={{
-                                background: showKaggleCodePreview ? 'rgba(29, 185, 84, 0.15)' : '#222222',
-                                color: showKaggleCodePreview ? 'var(--spotify-green)' : '#ffffff',
-                                border: showKaggleCodePreview ? '1px solid var(--spotify-green)' : '1px solid #444444',
-                                borderRadius: 'var(--radius-full)',
-                                padding: '7px 14px',
-                                fontSize: '12px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                transition: 'all 0.15s ease'
-                              }}
-                              title="Drag-down to reveal entire Python code"
-                            >
-                              {showKaggleCodePreview ? <CaretUp size={14} weight="bold" /> : <CaretDown size={14} weight="bold" />}
-                              <span>{showKaggleCodePreview ? 'Hide Python Script ▲' : 'Drag-Down / View Full Code ▼'}</span>
-                            </button>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px', color: '#cccccc' }}>
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <span style={{ background: '#292929', color: '#00F0FF', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>1</span>
+                            <div>
+                              <strong style={{ color: '#ffffff' }}>Login with your Google Account:</strong>
+                              <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
+                                Click the button above to open Google Colab. Sign in with any regular Google account. <strong>No mobile number or SMS verification required!</strong>
+                              </div>
+                            </div>
                           </div>
 
-                          {/* Drag-Down Code Viewer */}
-                          {renderKaggleCodeViewer()}
-                        </div>
-                      </div>
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <span style={{ background: '#292929', color: '#00F0FF', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>2</span>
+                            <div>
+                              <strong style={{ color: '#ffffff' }}>Enable Free T4 GPU:</strong>
+                              <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
+                                In the top menu: Click <strong>Runtime ➔ Change runtime type ➔ select "T4 GPU" ➔ Save</strong>.
+                              </div>
+                            </div>
+                          </div>
 
-                      <div style={{ display: 'flex', gap: '10px' }}>
-                        <span style={{ background: '#292929', color: 'var(--spotify-green)', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>4</span>
-                        <div>
-                          <strong style={{ color: '#ffffff' }}>Run Cell & Copy Link:</strong>
-                          <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
-                            Run the cell on Kaggle. It will output: <code style={{ color: 'var(--spotify-green)', background: '#111', padding: '1px 4px', borderRadius: '3px' }}>🔥 YOUR PUBLIC KAGGLE WHISPER URL IS: https://xyz.trycloudflare.com</code>. Copy that link.
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <span style={{ background: '#292929', color: '#00F0FF', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>3</span>
+                            <div style={{ flex: 1 }}>
+                              <strong style={{ color: '#ffffff' }}>Paste & Run Python Whisper Script:</strong>
+                              <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                <button
+                                  type="button"
+                                  onClick={handleCopyKaggleCode}
+                                  style={{
+                                    background: isCopied ? '#00F0FF' : '#2b2b2b',
+                                    color: isCopied ? '#000000' : '#ffffff',
+                                    border: isCopied ? '1px solid #00F0FF' : '1px solid #444444',
+                                    borderRadius: 'var(--radius-full)',
+                                    padding: '7px 16px',
+                                    fontSize: '12px',
+                                    fontWeight: 700,
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                >
+                                  {isCopied ? <Check size={15} weight="bold" /> : <Copy size={15} weight="bold" />}
+                                  <span>{isCopied ? 'Code Copied to Clipboard!' : 'Copy Python Code for Colab'}</span>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => setShowKaggleCodePreview(!showKaggleCodePreview)}
+                                  style={{
+                                    background: showKaggleCodePreview ? 'rgba(0, 240, 255, 0.12)' : '#222222',
+                                    color: showKaggleCodePreview ? '#00F0FF' : '#ffffff',
+                                    border: showKaggleCodePreview ? '1px solid #00F0FF' : '1px solid #444444',
+                                    borderRadius: 'var(--radius-full)',
+                                    padding: '7px 14px',
+                                    fontSize: '12px',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px'
+                                  }}
+                                >
+                                  {showKaggleCodePreview ? <CaretUp size={14} weight="bold" /> : <CaretDown size={14} weight="bold" />}
+                                  <span>{showKaggleCodePreview ? 'Hide Python Script ▲' : 'View Full Code ▼'}</span>
+                                </button>
+                              </div>
+
+                              {renderKaggleCodeViewer()}
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <span style={{ background: '#292929', color: '#00F0FF', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>4</span>
+                            <div>
+                              <strong style={{ color: '#ffffff' }}>Run Cell & Copy Public Tunnel Link:</strong>
+                              <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
+                                Click Play (▶) on Colab. It will automatically install Whisper and print: <code style={{ color: '#00F0FF', background: '#111', padding: '1px 4px', borderRadius: '3px' }}>YOUR PUBLIC WHISPER URL IS: https://xyz.trycloudflare.com</code>. Copy that link!
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
+                      </>
+                    ) : (
+                      /* KAGGLE GUIDE */
+                      <>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+                          <div style={{ fontWeight: 700, fontSize: '13px', color: '#20beff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span>⚡ Get 30 Hours/Week of Free T4 x2 GPU on Kaggle</span>
+                          </div>
+                          <a
+                            href="https://www.kaggle.com/code"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              background: '#20beff',
+                              color: '#000000',
+                              padding: '5px 12px',
+                              borderRadius: 'var(--radius-full)',
+                              fontSize: '11px',
+                              fontWeight: 700,
+                              textDecoration: 'none',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}
+                          >
+                            <span>Open Kaggle Notebooks</span>
+                            <ArrowSquareOut size={13} weight="bold" />
+                          </a>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px', color: '#cccccc' }}>
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <span style={{ background: '#292929', color: '#20beff', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>1</span>
+                            <div>
+                              <strong style={{ color: '#ffffff' }}>Verify Mobile Number (Required on Kaggle):</strong>
+                              <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
+                                Go to Kaggle Settings ➔ <strong>Phone Verification</strong> to unlock 30 hours of free GPU T4 x2 every week.
+                              </div>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <span style={{ background: '#292929', color: '#20beff', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>2</span>
+                            <div>
+                              <strong style={{ color: '#ffffff' }}>Create New Notebook & Enable GPU:</strong>
+                              <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
+                                Click "New Notebook". In right sidebar: <strong>Settings ➔ Accelerator ➔ select "GPU T4 x2"</strong>. Toggle <strong>Internet: On</strong>.
+                              </div>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <span style={{ background: '#292929', color: '#20beff', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>3</span>
+                            <div style={{ flex: 1 }}>
+                              <strong style={{ color: '#ffffff' }}>Copy Whisper GPU Server Code:</strong>
+                              <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                <button
+                                  type="button"
+                                  onClick={handleCopyKaggleCode}
+                                  style={{
+                                    background: isCopied ? '#20beff' : '#2b2b2b',
+                                    color: isCopied ? '#000000' : '#ffffff',
+                                    border: isCopied ? '1px solid #20beff' : '1px solid #444444',
+                                    borderRadius: 'var(--radius-full)',
+                                    padding: '7px 16px',
+                                    fontSize: '12px',
+                                    fontWeight: 700,
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                >
+                                  {isCopied ? <Check size={15} weight="bold" /> : <Copy size={15} weight="bold" />}
+                                  <span>{isCopied ? 'Code Copied to Clipboard!' : 'Copy Python Code for Kaggle'}</span>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => setShowKaggleCodePreview(!showKaggleCodePreview)}
+                                  style={{
+                                    background: showKaggleCodePreview ? 'rgba(32, 190, 255, 0.15)' : '#222222',
+                                    color: showKaggleCodePreview ? '#20beff' : '#ffffff',
+                                    border: showKaggleCodePreview ? '1px solid #20beff' : '1px solid #444444',
+                                    borderRadius: 'var(--radius-full)',
+                                    padding: '7px 14px',
+                                    fontSize: '12px',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px'
+                                  }}
+                                >
+                                  {showKaggleCodePreview ? <CaretUp size={14} weight="bold" /> : <CaretDown size={14} weight="bold" />}
+                                  <span>{showKaggleCodePreview ? 'Hide Python Script ▲' : 'View Full Code ▼'}</span>
+                                </button>
+                              </div>
+
+                              {renderKaggleCodeViewer()}
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <span style={{ background: '#292929', color: '#20beff', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', flexShrink: 0 }}>4</span>
+                            <div>
+                              <strong style={{ color: '#ffffff' }}>Run Cell & Copy Link:</strong>
+                              <div style={{ fontSize: '11px', color: 'var(--text-subdued)', marginTop: '2px' }}>
+                                Run the cell on Kaggle. It will output: <code style={{ color: '#20beff', background: '#111', padding: '1px 4px', borderRadius: '3px' }}>YOUR PUBLIC WHISPER URL IS: https://xyz.trycloudflare.com</code>. Copy that link!
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
 
                     {/* Bottom Action Switchers */}
                     <div style={{ marginTop: '14px', paddingTop: '12px', borderTop: '1px solid #282828', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>

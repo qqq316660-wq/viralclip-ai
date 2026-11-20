@@ -14,5 +14,6 @@ tools/*.txt
 __pycache__/
 *.pyc
 *.log
+repos/
 
 

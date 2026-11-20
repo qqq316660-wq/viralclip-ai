@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lightning, FolderOpen, Sparkle, Plus, Power, Cookie, InstagramLogo } from '@phosphor-icons/react';
+import { Lightning, FolderOpen, Sparkle, Plus, Power, Cookie, InstagramLogo, Broadcast } from '@phosphor-icons/react';
 import ViralClipLogo from './ViralClipLogo';
 
 export default function Header({

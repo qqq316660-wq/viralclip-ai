@@ -28,8 +28,8 @@ export const downloadVideoFile = async (
 
   // Derive direct attachment endpoint
   let targetUrl = videoUrl;
-  if (videoUrl && videoUrl.includes('/api/clips/')) {
-    const clipFile = videoUrl.split('/api/clips/').pop().split('?')[0];
+  if (videoUrl && (videoUrl.includes('/api/clips/') || videoUrl.includes('/sniper/clips/'))) {
+    const clipFile = videoUrl.split(/\/api\/clips\/|\/sniper\/clips\//).pop().split('?')[0];
     targetUrl = `${backendUrl}/api/download-clip/${clipFile}?title=${encodeURIComponent(filename)}`;
   } else if (!targetUrl.startsWith('http')) {
     targetUrl = `${backendUrl}${targetUrl}`;

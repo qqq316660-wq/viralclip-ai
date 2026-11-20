@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { WarningCircle } from '@phosphor-icons/react';
+import { WarningCircle, Broadcast } from '@phosphor-icons/react';
 import Header from './components/Header';
 import StepBar from './components/StepBar';
 import IngestionPanel from './components/IngestionPanel';
@@ -7,6 +7,7 @@ import SettingsBar from './components/SettingsBar';
 import JobProgress from './components/JobProgress';
 import ClipGallery from './components/ClipGallery';
 import SavedLibrary from './components/SavedLibrary';
+import StreamSniper from './components/StreamSniper';
 import Footer from './components/Footer';
 import ActivationModal from './components/ActivationModal';
 import LicenseInfoModal from './components/LicenseInfoModal';
@@ -708,9 +709,108 @@ export default function App() {
         </div>
       )}
 
+      {/* Corner Promo for Stream Sniper (Premium Cyberpunk Gaming HUD Badge) */}
+      {currentView === 'studio' && (
+        <div
+          onClick={() => setCurrentView('sniper')}
+          role="button"
+          tabIndex={0}
+          title="Open Stream Sniper (Gaming & Live Stream Clipper)"
+          style={{
+            position: 'fixed',
+            top: '18px',
+            right: '22px',
+            zIndex: 999,
+            background: 'linear-gradient(135deg, rgba(16, 20, 28, 0.94) 0%, rgba(9, 11, 16, 0.98) 100%)',
+            border: '1px solid rgba(0, 240, 255, 0.35)',
+            borderRadius: '14px',
+            padding: '8px 14px 8px 10px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            boxShadow: '0 10px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(16px)',
+            transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
+            userSelect: 'none'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(0, 240, 255, 0.85)';
+            e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
+            e.currentTarget.style.boxShadow = '0 14px 38px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 240, 255, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(0, 240, 255, 0.35)';
+            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+            e.currentTarget.style.boxShadow = '0 10px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08)';
+          }}
+        >
+          {/* Custom High-Tech Sniper Crosshair HUD Icon */}
+          <div
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.16) 0%, rgba(255, 68, 68, 0.15) 100%)',
+              border: '1px solid rgba(0, 240, 255, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              boxShadow: '0 0 14px rgba(0, 240, 255, 0.2)'
+            }}
+          >
+            <svg width="30" height="30" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="14" stroke="#00F0FF" strokeWidth="1.2" strokeDasharray="3 2" opacity="0.6" />
+              <circle cx="18" cy="18" r="9" stroke="#00F0FF" strokeWidth="1.4" opacity="0.9" />
+              <circle cx="18" cy="18" r="4.5" stroke="#ff4444" strokeWidth="1.2" opacity="0.85" />
+              <circle cx="18" cy="18" r="1.8" fill="#ff4444" />
+              <line x1="18" y1="2" x2="18" y2="7" stroke="#00F0FF" strokeWidth="1.6" strokeLinecap="round" />
+              <line x1="18" y1="29" x2="18" y2="34" stroke="#00F0FF" strokeWidth="1.6" strokeLinecap="round" />
+              <line x1="2" y1="18" x2="7" y2="18" stroke="#00F0FF" strokeWidth="1.6" strokeLinecap="round" />
+              <line x1="29" y1="18" x2="34" y2="18" stroke="#00F0FF" strokeWidth="1.6" strokeLinecap="round" />
+              <path d="M6 10 L6 6 L10 6" stroke="#00F0FF" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />
+              <path d="M26 6 L30 6 L30 10" stroke="#00F0FF" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />
+              <path d="M6 26 L6 30 L10 30" stroke="#00F0FF" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />
+              <path d="M26 30 L30 30 L30 26" stroke="#00F0FF" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />
+            </svg>
+          </div>
+
+          {/* Badge Typography & Actions */}
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span
+                style={{
+                  fontSize: '9px',
+                  fontWeight: 900,
+                  letterSpacing: '0.6px',
+                  background: 'linear-gradient(90deg, #00F0FF, #00c3ff)',
+                  color: '#050a10',
+                  padding: '1px 5px',
+                  borderRadius: '3px',
+                  boxShadow: '0 0 8px rgba(0, 240, 255, 0.45)'
+                }}
+              >
+                NEW
+              </span>
+              <span style={{ fontSize: '13px', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.2px' }}>
+                Stream Sniper
+              </span>
+            </div>
+            <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00e676', display: 'inline-block', boxShadow: '0 0 6px #00e676' }} />
+              <span>Instant Live & VOD Clipper</span>
+              <span style={{ color: '#00F0FF', fontWeight: 900, fontSize: '12px' }}>➔</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main style={{ maxWidth: '1240px', width: '100%', margin: '0 auto', padding: '0 20px 60px', flex: 1 }}>
-        {/* Saved Shorts Library View */}
-        {currentView === 'library' ? (
+        {/* Stream Sniper View */}
+        {currentView === 'sniper' ? (
+          <StreamSniper backendUrl={BACKEND_URL} onBackToStudio={() => setCurrentView('studio')} />
+        ) : currentView === 'library' ? (
           <SavedLibrary
             savedJobs={savedJobs}
             backendUrl={BACKEND_URL}
