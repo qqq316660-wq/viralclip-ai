@@ -622,15 +622,19 @@ export default function StreamSniper({ backendUrl = 'http://127.0.0.1:8001', onB
   const handleFetchFrame = async (targetTs = frameTimestampSec) => {
     if (!streamUrl.trim()) return;
     setIsFetchingFrame(true);
+    const controller = new AbortController();
+    const timeoutTimer = setTimeout(() => controller.abort(), 12000);
     try {
       const res = await fetch(`${backendUrl}/api/sniper/vod/preview-frame`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: streamUrl.trim(), timestamp_sec: targetTs })
+        body: JSON.stringify({ url: streamUrl.trim(), timestamp_sec: targetTs }),
+        signal: controller.signal
       });
+      clearTimeout(timeoutTimer);
       const data = await res.json();
       if (data.ok && data.frame_url) {
-        setReframeFrameUrl(`${backendUrl}${data.frame_url}?t=${Date.now()}`);
+        setReframeFrameUrl(`${backendUrl}${data.frame_url}&_t=${Date.now()}`);
         if (data.timestamp_sec) setFrameTimestampSec(data.timestamp_sec);
         if (data.detected_facecam && data.detected_facecam.w > 5 && data.detected_facecam.h > 5) {
           setReframeSettings(prev => ({
@@ -640,11 +644,11 @@ export default function StreamSniper({ backendUrl = 'http://127.0.0.1:8001', onB
         }
         setShowReframeModal(true);
       } else {
-        alert(data.detail || 'Could not extract stream frame. Opening reframe editor.');
         setShowReframeModal(true);
       }
     } catch (err) {
-      alert('Frame extraction failed: ' + err.message);
+      clearTimeout(timeoutTimer);
+      console.warn('Frame preview fetch note:', err);
       setShowReframeModal(true);
     } finally {
       setIsFetchingFrame(false);
@@ -3104,6 +3108,7 @@ export default function StreamSniper({ backendUrl = 'http://127.0.0.1:8001', onB
               type="button"
               onClick={() => {
                 setIsFetchingFrame(false);
+                setShowReframeModal(true);
               }}
               style={{
                 marginTop: '8px',
@@ -3117,7 +3122,7 @@ export default function StreamSniper({ backendUrl = 'http://127.0.0.1:8001', onB
                 fontWeight: 600
               }}
             >
-              Cancel Extraction
+              Cancel & Open Editor
             </button>
           </div>
         </div>

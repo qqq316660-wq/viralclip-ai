@@ -11,7 +11,7 @@ OUT_W = 1080
 OUT_H = 1920
 OUT_FPS = 30
 
-BASE_DIR = Path(r"D:\ns1")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 STORAGE_DIR = BASE_DIR / "storage"
 FONTS_DIR = STORAGE_DIR / "fonts"
 MODELS_DIR = STORAGE_DIR / "models"
@@ -26,8 +26,16 @@ KEYS_FILE = STORAGE_DIR / "sniper_ai_keys.json"
 for d in (STORAGE_DIR, FONTS_DIR, MODELS_DIR, SNIPER_DIR, BUFFER_DIR, CLIPS_DIR):
     d.mkdir(parents=True, exist_ok=True)
 
+# Add bundled ffmpeg to PATH if present
+bundled_ffmpeg_dir = BASE_DIR / "ffmpeg"
+if bundled_ffmpeg_dir.exists() and str(bundled_ffmpeg_dir) not in os.environ.get("PATH", ""):
+    os.environ["PATH"] = str(bundled_ffmpeg_dir) + os.pathsep + os.environ.get("PATH", "")
+
 # Detect ffmpeg path
 def _find_ffmpeg() -> str:
+    bundled = BASE_DIR / "ffmpeg" / "ffmpeg.exe"
+    if bundled.exists():
+        return str(bundled)
     which_ffmpeg = shutil.which("ffmpeg")
     if which_ffmpeg:
         return which_ffmpeg
