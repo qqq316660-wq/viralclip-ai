@@ -2,12 +2,13 @@
   "version": "1.8.1",
   "min_version": "1.0.0",
   "release_date": "2026-11-20T20:18:15Z",
-  "title": "ViralClip AI v1.8.1 - Ultra-Fast Stream Frame Seek & Fixes",
+  "title": "ViralClip AI v1.8.1 - Stream Sniper VOD Scanner & Google Colab GPU",
   "changelog": [
-    "Instant <1s Stream Frame Preview for Reframe Layout",
-    "Fixed stream slice extraction freeze on YouTube live streams",
-    "Added automatic YouTube thumbnail fallback",
-    "Performance improvements"
+    "Stream Sniper: 30m VOD Scanner with AI Reframe & Hook Detection",
+    "Google Colab Free GPU: 1-Click Whisper AI (No Phone Verification Needed)",
+    "Ultra-Fast Stream Frame Preview (<1s) & Auto Facecam Locking",
+    "Bulk Download with Windows Folder Picker & Save As",
+    "Performance improvements & fixes"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.1.zip",
   "checksum": "sha256:24fcff0ec5d35bbfb6edd37df4b7f1caf7ac4dc7c666c2aba40ad15193c5d549",
