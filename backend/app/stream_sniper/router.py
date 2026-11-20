@@ -291,11 +291,12 @@ def get_preview_frame(req: PreviewFrameRequest):
             except Exception:
                 pass
 
-    # 3. Extract the REAL stream frame at exact target timestamp (ts) using unthrottled direct format seek
+    # 3. Extract the REAL stream frame at exact target timestamp (ts) using HLS H.264 seek (unthrottled)
     if not frame_file.exists() or frame_file.stat().st_size < 2000:
         stream_url = None
         try:
-            fmt_choice = "18/134/229/worst[ext=mp4]/bestvideo[height<=480]/best[height<=480]"
+            # Strictly prioritize H.264 (avc1) itags 230/231/229/311 or mp4 HLS (prevents slow VP9 header parsing)
+            fmt_choice = "230/231/229/311/bv*[protocol=m3u8_native][vcodec^=avc1][height<=480]/18/134/worst[ext=mp4]/bestvideo[height<=480]/best[height<=480]"
             with media._ydl({"format": fmt_choice, "extract_flat": False}) as ydl:
                 info = ydl.extract_info(url, download=False)
                 stream_url = info.get("url")
@@ -314,7 +315,7 @@ def get_preview_frame(req: PreviewFrameRequest):
                     "-q:v", "2",
                     str(frame_file)
                 ]
-                subprocess.run(ff_cmd, capture_output=True, timeout=30, creationflags=config.NO_WINDOW)
+                subprocess.run(ff_cmd, capture_output=True, timeout=45, creationflags=config.NO_WINDOW)
         except Exception as e:
             logger.warning(f"Real stream frame seek failed at {ts}s: {e}")
 
@@ -332,23 +333,9 @@ def get_preview_frame(req: PreviewFrameRequest):
                     "-q:v", "2",
                     str(frame_file)
                 ]
-                subprocess.run(ff_fallback, capture_output=True, timeout=20, creationflags=config.NO_WINDOW)
+                subprocess.run(ff_fallback, capture_output=True, timeout=30, creationflags=config.NO_WINDOW)
             except Exception as fe:
                 logger.warning(f"Real stream frame fallback seek failed: {fe}")
-
-    # 4. Ultimate fallback (offline only) - generate clean 16:9 stream canvas with facecam zone guide
-    if not frame_file.exists() or frame_file.stat().st_size < 1000:
-        try:
-            from PIL import Image, ImageDraw
-            img = Image.new("RGB", (1280, 720), color=(15, 17, 21))
-            draw = ImageDraw.Draw(img)
-            draw.rectangle([0, 0, 1280, 720], outline=(40, 45, 55), width=4)
-            draw.rectangle([980, 30, 1250, 230], fill=(25, 30, 38), outline=(0, 240, 255), width=2)
-            draw.text((1000, 50), "STREAMER WEBCAM", fill=(0, 240, 255))
-            draw.text((450, 350), f"Real Stream: {vid} ({int(ts//60)}m)", fill=(180, 180, 180))
-            img.save(frame_file, "JPEG", quality=85)
-        except Exception as e:
-            logger.error(f"Failed to generate canvas fallback frame: {e}")
 
     # Process and return response with AI Facecam YuNet coordinates
     if frame_file.exists() and frame_file.stat().st_size > 500:
@@ -401,7 +388,15 @@ def serve_preview_image(filename: str):
         media_type = "image/png"
     elif p.suffix.lower() == ".webp":
         media_type = "image/webp"
-    return FileResponse(p, media_type=media_type)
+    return FileResponse(
+        p,
+        media_type=media_type,
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
+    )
 
 
 class DetectFacecamRequest(BaseModel):
