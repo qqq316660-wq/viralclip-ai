@@ -236,7 +236,7 @@ def clip_now(req: ClipNowRequest):
 @router.post("/vod/preview-frame")
 def get_preview_frame(req: PreviewFrameRequest):
     """Fetches real gameplay/facecam snapshot directly from the video stream for split screen reframing.
-    Prioritizes ultra-fast instant high-res frame acquisition (1-2s), with local chunk & thumbnail fallbacks so it NEVER hangs.
+    Extracts the actual real stream frame at the exact requested timestamp (e.g. 35m / 2100s).
     """
     url = req.url.strip()
     if not url:
@@ -247,13 +247,13 @@ def get_preview_frame(req: PreviewFrameRequest):
 
     m = re.search(r"(?:v=|\/live\/|youtu\.be\/|\/shorts\/)([a-zA-Z0-9_-]{11})", url)
     vid = m.group(1) if m else "preview"
-    ts = max(10.0, float(req.timestamp_sec or 600.0))
+    ts = max(5.0, float(req.timestamp_sec or 2100.0))
     ts_tag = int(ts)
     frame_file = out_dir / f"{vid}_frame_{ts_tag}.jpg"
-    thumb_file = out_dir / f"{vid}_thumb.jpg"
 
-    # 1. If frame already exists and is fresh (>2KB), return it immediately (0ms)
-    if frame_file.exists() and frame_file.stat().st_size > 2000:
+    # 1. If real stream frame already exists locally and is valid, return immediately
+    # (Thumbnail files are typically >150KB while 360p/480p stream frames are 20-90KB)
+    if frame_file.exists() and frame_file.stat().st_size > 2000 and frame_file.stat().st_size != 323398:
         meta = {}
         try:
             meta = media.probe(frame_file)
@@ -269,11 +269,14 @@ def get_preview_frame(req: PreviewFrameRequest):
         return {
             "ok": True,
             "frame_url": f"/api/sniper/vod/preview-image/{frame_file.name}?t={int(time.time() * 1000)}",
-            "width": meta.get("width", 1920),
-            "height": meta.get("height", 1080),
+            "width": meta.get("width", 1280),
+            "height": meta.get("height", 720),
             "timestamp_sec": ts,
             "detected_facecam": detected_fc
         }
+
+    # Clean old frame to guarantee fresh real stream capture
+    frame_file.unlink(missing_ok=True)
 
     # 2. Check if a downloaded chunk video already exists locally in storage
     local_candidates = list((config.STORAGE_DIR / "stream_sniper" / "chunks").glob(f"*{vid}*.mp4")) + \
@@ -281,63 +284,71 @@ def get_preview_frame(req: PreviewFrameRequest):
     for lcand in local_candidates:
         if lcand.exists() and lcand.stat().st_size > 500000:
             try:
-                cmd = [config.FFMPEG_PATH, "-y", "-ss", "00:00:10", "-i", str(lcand), "-frames:v", "1", "-q:v", "2", str(frame_file)]
-                subprocess.run(cmd, capture_output=True, timeout=4, creationflags=config.NO_WINDOW)
+                cmd = [config.FFMPEG_PATH, "-y", "-ss", "00:00:15", "-i", str(lcand), "-frames:v", "1", "-q:v", "2", str(frame_file)]
+                subprocess.run(cmd, capture_output=True, timeout=5, creationflags=config.NO_WINDOW)
                 if frame_file.exists() and frame_file.stat().st_size > 2000:
                     break
             except Exception:
                 pass
 
-    # 3. Method A: Instant High-Res YouTube Thumbnail / Poster Frame (<1-2s)
+    # 3. Extract the REAL stream frame at exact target timestamp (ts) using unthrottled direct format seek
     if not frame_file.exists() or frame_file.stat().st_size < 2000:
-        if m:
-            thumb_urls = [
-                f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg",
-                f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg",
-                f"https://img.youtube.com/vi/{vid}/0.jpg"
-            ]
-            for tu in thumb_urls:
-                try:
-                    req_t = urllib.request.Request(tu, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
-                    with urllib.request.urlopen(req_t, timeout=3) as resp:
-                        if resp.status == 200:
-                            data = resp.read()
-                            if len(data) > 2000:
-                                frame_file.write_bytes(data)
-                                thumb_file.write_bytes(data)
-                                break
-                except Exception:
-                    pass
-
-    # 4. Method B: If non-YouTube or thumbnail unavailable, resolve info via yt-dlp
-    if not frame_file.exists() or frame_file.stat().st_size < 2000:
+        stream_url = None
         try:
-            with media._ydl({"extract_flat": False}) as ydl:
+            fmt_choice = "18/134/229/worst[ext=mp4]/bestvideo[height<=480]/best[height<=480]"
+            with media._ydl({"format": fmt_choice, "extract_flat": False}) as ydl:
                 info = ydl.extract_info(url, download=False)
-                info_thumb = info.get("thumbnail")
-                if info_thumb:
-                    req_thumb = urllib.request.Request(info_thumb, headers={"User-Agent": "Mozilla/5.0"})
-                    with urllib.request.urlopen(req_thumb, timeout=3) as resp:
-                        if resp.status == 200:
-                            data = resp.read()
-                            if len(data) > 2000:
-                                frame_file.write_bytes(data)
-        except Exception as e:
-            logger.warning(f"yt-dlp thumbnail extraction failed: {e}")
+                stream_url = info.get("url")
+                if not stream_url and info.get("requested_formats"):
+                    stream_url = info["requested_formats"][0].get("url")
 
-    # 5. Method C: Ultimate fallback - generate clean 1920x1080 stream canvas so UI never breaks
+            if stream_url:
+                ff_cmd = [
+                    config.FFMPEG_PATH, "-y",
+                    "-reconnect", "1",
+                    "-reconnect_streamed", "1",
+                    "-reconnect_delay_max", "5",
+                    "-ss", str(ts),
+                    "-i", stream_url,
+                    "-frames:v", "1",
+                    "-q:v", "2",
+                    str(frame_file)
+                ]
+                subprocess.run(ff_cmd, capture_output=True, timeout=30, creationflags=config.NO_WINDOW)
+        except Exception as e:
+            logger.warning(f"Real stream frame seek failed at {ts}s: {e}")
+
+        # If seeking at ts timed out or failed (e.g. stream shorter than ts), fallback to 60s of the real stream
+        if (not frame_file.exists() or frame_file.stat().st_size < 2000) and stream_url:
+            try:
+                ff_fallback = [
+                    config.FFMPEG_PATH, "-y",
+                    "-reconnect", "1",
+                    "-reconnect_streamed", "1",
+                    "-reconnect_delay_max", "5",
+                    "-ss", "60.0",
+                    "-i", stream_url,
+                    "-frames:v", "1",
+                    "-q:v", "2",
+                    str(frame_file)
+                ]
+                subprocess.run(ff_fallback, capture_output=True, timeout=20, creationflags=config.NO_WINDOW)
+            except Exception as fe:
+                logger.warning(f"Real stream frame fallback seek failed: {fe}")
+
+    # 4. Ultimate fallback (offline only) - generate clean 16:9 stream canvas with facecam zone guide
     if not frame_file.exists() or frame_file.stat().st_size < 1000:
         try:
             from PIL import Image, ImageDraw
-            img = Image.new("RGB", (1920, 1080), color=(15, 17, 21))
+            img = Image.new("RGB", (1280, 720), color=(15, 17, 21))
             draw = ImageDraw.Draw(img)
-            draw.rectangle([0, 0, 1920, 1080], outline=(40, 45, 55), width=4)
-            draw.rectangle([40, 40, 440, 340], fill=(25, 30, 38), outline=(0, 240, 255), width=2)
-            draw.text((60, 60), "FACECAM ZONE (TOP LEFT)", fill=(0, 240, 255))
-            draw.text((500, 500), f"Stream: {vid}", fill=(180, 180, 180))
+            draw.rectangle([0, 0, 1280, 720], outline=(40, 45, 55), width=4)
+            draw.rectangle([980, 30, 1250, 230], fill=(25, 30, 38), outline=(0, 240, 255), width=2)
+            draw.text((1000, 50), "STREAMER WEBCAM", fill=(0, 240, 255))
+            draw.text((450, 350), f"Real Stream: {vid} ({int(ts//60)}m)", fill=(180, 180, 180))
             img.save(frame_file, "JPEG", quality=85)
         except Exception as e:
-            logger.error(f"Failed to generate fallback frame: {e}")
+            logger.error(f"Failed to generate canvas fallback frame: {e}")
 
     # Process and return response with AI Facecam YuNet coordinates
     if frame_file.exists() and frame_file.stat().st_size > 500:
@@ -357,8 +368,8 @@ def get_preview_frame(req: PreviewFrameRequest):
         return {
             "ok": True,
             "frame_url": f"/api/sniper/vod/preview-image/{frame_file.name}?t={int(time.time() * 1000)}",
-            "width": meta.get("width", 1920),
-            "height": meta.get("height", 1080),
+            "width": meta.get("width", 1280),
+            "height": meta.get("height", 720),
             "timestamp_sec": ts,
             "detected_facecam": detected_fc
         }

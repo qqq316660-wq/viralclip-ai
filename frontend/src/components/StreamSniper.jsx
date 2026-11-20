@@ -623,7 +623,7 @@ export default function StreamSniper({ backendUrl = 'http://127.0.0.1:8001', onB
     if (!streamUrl.trim()) return;
     setIsFetchingFrame(true);
     const controller = new AbortController();
-    const timeoutTimer = setTimeout(() => controller.abort(), 12000);
+    const timeoutTimer = setTimeout(() => controller.abort(), 60000);
     try {
       const res = await fetch(`${backendUrl}/api/sniper/vod/preview-frame`, {
         method: 'POST',

@@ -1,18 +1,14 @@
 {
   "version": "1.8.1",
   "min_version": "1.0.0",
-  "release_date": "2026-11-20T20:18:15Z",
-  "title": "ViralClip AI v1.8.1 - Stream Sniper VOD Scanner & Google Colab GPU",
+  "release_date": "2026-11-20T20:40:11Z",
+  "title": "ViralClip AI Update v1.8.1",
   "changelog": [
-    "Stream Sniper: 30m VOD Scanner with AI Reframe & Hook Detection",
-    "Google Colab Free GPU: 1-Click Whisper AI (No Phone Verification Needed)",
-    "Ultra-Fast Stream Frame Preview (<1s) & Auto Facecam Locking",
-    "Bulk Download with Windows Folder Picker & Save As",
-    "Performance improvements & fixes"
+    "Maintenance and stability improvements."
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.1.zip",
-  "checksum": "sha256:24fcff0ec5d35bbfb6edd37df4b7f1caf7ac4dc7c666c2aba40ad15193c5d549",
-  "size_bytes": 547094,
+  "checksum": "sha256:a3fbfcf16fea3a04b465c5e183180f234cb21065e5e43a6f95a76b06f8735c1b",
+  "size_bytes": 547124,
   "mandatory": false,
   "rollback_version": null
 }
