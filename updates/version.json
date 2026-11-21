@@ -1,17 +1,17 @@
 {
   "version": "1.8.3",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T16:58:29Z",
-  "title": "ViralClip AI v1.8.3 - Reframe Real Stream Frame Extraction Fix",
+  "release_date": "2026-11-21T17:27:24Z",
+  "title": "ViralClip AI v1.8.3 - Reframe Real Stream Frame Extraction & Elapsed Timer Fix",
   "changelog": [
-    "Strictly extract real gameplay stream frame at target timestamp",
-    "Added User-Agent headers to ffmpeg stream seeking to prevent 403 Forbidden",
-    "Added native 2-second real stream slice download fallback (100% real gameplay, zero thumbnails)",
-    "Removed all thumbnail fallbacks"
+    "Fixed elapsed timer screen displaying during stream frame download",
+    "Fixed 35m stream frame extraction with timestamp duration clamping",
+    "Enhanced FFmpeg path resolution across custom drive installations",
+    "Added fallback real stream slice extraction without thumbnails"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.3.zip",
-  "checksum": "sha256:180b1410c2b2385c6f88850aaed16c6549bf48f65c56498550523d532db86ebf",
-  "size_bytes": 554651,
+  "checksum": "sha256:ff07a5cd9a939e2e0106ef9163ad711f2d4045ac3bca964e7ad0f5584083430e",
+  "size_bytes": 554885,
   "mandatory": false,
   "rollback_version": null
 }
