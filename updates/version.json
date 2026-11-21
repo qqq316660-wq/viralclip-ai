@@ -1,15 +1,15 @@
 {
-  "version": "1.8.6",
+  "version": "1.8.7",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T18:11:09Z",
-  "title": "ViralClip AI v1.8.6 - Stream Sniper Transcription & Reframe Fix",
+  "release_date": "2026-11-21T18:36:37Z",
+  "title": "ViralClip AI v1.8.7 - In-App Parakeet High-Speed Engine Setup",
   "changelog": [
-    "Fixed sherpa_onnx missing module error with native Faster-Whisper fallback",
-    "Fixed audio loading and preview frame in Stream Sniper"
+    "Added in-app 1-click Parakeet Engine & model installer with progress tracking",
+    "Dual ASR architecture with seamless Faster-Whisper fallback"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.6.zip",
-  "checksum": "sha256:e07f3961f99a8a368009913cc12c2822dc64ac26975244fd68d42c0cc618a541",
-  "size_bytes": 555911,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.7.zip",
+  "checksum": "sha256:2220995e610b2e3ac3671882502f98b6b58cb271e636a5d1878616c302f9ec9a",
+  "size_bytes": 558522,
   "mandatory": false,
   "rollback_version": null
 }
