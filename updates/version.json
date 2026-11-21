@@ -1,15 +1,14 @@
 {
-  "version": "1.8.7",
+  "version": "1.8.8",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T18:36:37Z",
-  "title": "ViralClip AI v1.8.7 - In-App Parakeet High-Speed Engine Setup",
+  "release_date": "2026-11-21T18:45:18Z",
+  "title": "ViralClip AI v1.8.8 - Stream Sniper Black Screen Hotfix",
   "changelog": [
-    "Added in-app 1-click Parakeet Engine & model installer with progress tracking",
-    "Dual ASR architecture with seamless Faster-Whisper fallback"
+    "Fixed missing useCallback import causing black screen on Stream Sniper launch"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.7.zip",
-  "checksum": "sha256:2220995e610b2e3ac3671882502f98b6b58cb271e636a5d1878616c302f9ec9a",
-  "size_bytes": 558522,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.8.zip",
+  "checksum": "sha256:71de08e537706b4cf1706883fb2192b6f578b242dee440365836a67deaa74125",
+  "size_bytes": 558539,
   "mandatory": false,
   "rollback_version": null
 }
