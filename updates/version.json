@@ -1,17 +1,17 @@
 {
-  "version": "1.8.4",
+  "version": "1.8.5",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T17:34:42Z",
-  "title": "ViralClip AI v1.8.4 - Stream Reframe & Elapsed Timer Fix",
+  "release_date": "2026-11-21T17:44:03Z",
+  "title": "ViralClip AI v1.8.5 - Stream Sniper Router & Reframe Hotfix",
   "changelog": [
+    "Fixed Stream Sniper router mounting on clean Python environments without soundfile",
+    "Fixed 405 Method Not Allowed on stream frame extraction",
     "Fixed elapsed timer screen displaying during stream frame download",
-    "Fixed 35m stream frame extraction with timestamp duration clamping",
-    "Enhanced FFmpeg path resolution across custom drive installations",
-    "Added fallback real stream slice extraction without thumbnails"
+    "Fixed 35m stream frame extraction with timestamp duration clamping"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.4.zip",
-  "checksum": "sha256:5ed26a2805cba9799e1e6e6183f9d0298634c90fdbf0bbfe4b5d2ae1b3c40191",
-  "size_bytes": 554885,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.5.zip",
+  "checksum": "sha256:5c2a2503b50651da0296ae23064f7d6cd9e801e689de5395a257640a2cec6adc",
+  "size_bytes": 555045,
   "mandatory": false,
   "rollback_version": null
 }
