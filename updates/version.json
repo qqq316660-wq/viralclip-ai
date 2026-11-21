@@ -1,14 +1,16 @@
 {
-  "version": "1.8.8",
+  "version": "1.8.9",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T18:45:18Z",
-  "title": "ViralClip AI v1.8.8 - Stream Sniper Black Screen Hotfix",
+  "release_date": "2026-11-21T19:17:30Z",
+  "title": "ViralClip AI v1.8.9 - High-Speed Parakeet Auto-Setup & 100% CPU Fix",
   "changelog": [
-    "Fixed missing useCallback import causing black screen on Stream Sniper launch"
+    "Auto-setup sherpa-onnx for sub-minute Parakeet transcription",
+    "Lightweight Whisper fallback fixing 100% CPU freeze and 1.6GB RAM spike",
+    "Added real-time percentage progress tracking during chunk transcription"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.8.zip",
-  "checksum": "sha256:71de08e537706b4cf1706883fb2192b6f578b242dee440365836a67deaa74125",
-  "size_bytes": 558539,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.9.zip",
+  "checksum": "sha256:35854bb5621fa10019df27b491d16009eb61dfba430dcd0a1e424dfd61c0f994",
+  "size_bytes": 559502,
   "mandatory": false,
   "rollback_version": null
 }
