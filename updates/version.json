@@ -1,18 +1,17 @@
 {
-  "version": "1.8.11",
+  "version": "1.8.12",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T20:34:33Z",
-  "title": "ViralClip AI v1.8.11 - Real-Time AI Brain Analysis & Render Engine Fix",
+  "release_date": "2026-11-21T20:47:58Z",
+  "title": "ViralClip AI v1.8.12 - YouTube Bot Bypass & Stream Sniper Render Engine",
   "changelog": [
-    "Fixed premature dummy skeleton cards glitch",
-    "Added real-time AI Brain transcript analyzing state",
-    "Dynamic skeleton cards with real virality scores titles and durations",
-    "Resolved ffmpeg binary path resolution for 9:16 short rendering",
-    "Added instant CDN cache-busting to updater"
+    "Fixed YouTube Sign in to confirm you are not a bot block during video downloading",
+    "Added Android and iOS extractor fallback to stream section downloader",
+    "Instant CDN cache-busting for reliable 1-click in-app updates",
+    "Real-time AI Brain transcript scanning and dynamic skeleton cards"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.11.zip",
-  "checksum": "sha256:d82ccebed4dfade4921eea9083cba7d06551cefbabf20b16e33b376a6356aefb",
-  "size_bytes": 560358,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.12.zip",
+  "checksum": "sha256:5342a07e8ba851ac6c6f8b5fedcaffe8e10a368ffb479e6887df7cdf41fd83a3",
+  "size_bytes": 560590,
   "mandatory": false,
   "rollback_version": null
 }
