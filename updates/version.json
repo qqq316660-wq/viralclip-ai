@@ -1,17 +1,15 @@
 {
-  "version": "1.8.5",
+  "version": "1.8.6",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T17:44:03Z",
-  "title": "ViralClip AI v1.8.5 - Stream Sniper Router & Reframe Hotfix",
+  "release_date": "2026-11-21T18:11:09Z",
+  "title": "ViralClip AI v1.8.6 - Stream Sniper Transcription & Reframe Fix",
   "changelog": [
-    "Fixed Stream Sniper router mounting on clean Python environments without soundfile",
-    "Fixed 405 Method Not Allowed on stream frame extraction",
-    "Fixed elapsed timer screen displaying during stream frame download",
-    "Fixed 35m stream frame extraction with timestamp duration clamping"
+    "Fixed sherpa_onnx missing module error with native Faster-Whisper fallback",
+    "Fixed audio loading and preview frame in Stream Sniper"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.5.zip",
-  "checksum": "sha256:5c2a2503b50651da0296ae23064f7d6cd9e801e689de5395a257640a2cec6adc",
-  "size_bytes": 555045,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.6.zip",
+  "checksum": "sha256:e07f3961f99a8a368009913cc12c2822dc64ac26975244fd68d42c0cc618a541",
+  "size_bytes": 555911,
   "mandatory": false,
   "rollback_version": null
 }
