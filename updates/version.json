@@ -1,16 +1,16 @@
 {
-  "version": "1.8.10",
+  "version": "1.8.11",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T20:24:51Z",
-  "title": "ViralClip AI v1.8.10 - AI Brain Real-Time Analysis & Dynamic Skeletons",
+  "release_date": "2026-11-21T20:29:25Z",
+  "title": "ViralClip AI v1.8.11 - Real-Time AI Brain Analysis & Render Engine Fix",
   "changelog": [
-    "Fixed AI Brain premature dummy skeleton cards glitch",
-    "Real-time AI Brain analysis phase with spinner and live stage updates",
-    "Dynamic skeletons with real AI virality scores titles and durations",
+    "Fixed premature dummy skeleton cards glitch",
+    "Added real-time AI Brain transcript analyzing state",
+    "Dynamic skeleton cards with real virality scores titles and durations",
     "Resolved ffmpeg binary path resolution for 9:16 short rendering"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.10.zip",
-  "checksum": "sha256:b1ddc75e87128a7549cbd25103dbf875b47732e2b980bf636ea4f3d6747bbecc",
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.11.zip",
+  "checksum": "sha256:180c03f6a53f060c5e494410ed528512c2914145e12f69e65fb97329dc9b3159",
   "size_bytes": 560242,
   "mandatory": false,
   "rollback_version": null
