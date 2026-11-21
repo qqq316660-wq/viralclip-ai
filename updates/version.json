@@ -1,16 +1,16 @@
 {
-  "version": "1.8.9",
+  "version": "1.8.10",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T19:17:30Z",
-  "title": "ViralClip AI v1.8.9 - High-Speed Parakeet Auto-Setup & 100% CPU Fix",
+  "release_date": "2026-11-21T20:05:44Z",
+  "title": "ViralClip AI v1.8.10 - Stream Sniper Render Path Fix",
   "changelog": [
-    "Auto-setup sherpa-onnx for sub-minute Parakeet transcription",
-    "Lightweight Whisper fallback fixing 100% CPU freeze and 1.6GB RAM spike",
-    "Added real-time percentage progress tracking during chunk transcription"
+    "Fixed ffmpeg binary path resolution during short rendering",
+    "Ensured progressive gallery display and detailed error reporting",
+    "Resolved WinError 2 ffmpeg execution in Stream Sniper"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.9.zip",
-  "checksum": "sha256:35854bb5621fa10019df27b491d16009eb61dfba430dcd0a1e424dfd61c0f994",
-  "size_bytes": 559502,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.10.zip",
+  "checksum": "sha256:c48a195633f13c46ac0dc873f9ad0f42f13cecbba0e19f62c0e648066507675e",
+  "size_bytes": 559870,
   "mandatory": false,
   "rollback_version": null
 }
