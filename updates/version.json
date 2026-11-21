@@ -1,18 +1,17 @@
 {
-  "version": "1.8.2",
+  "version": "1.8.3",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T14:24:54Z",
-  "title": "ViralClip AI v1.8.2 - AI Brain & Download Fixes",
+  "release_date": "2026-11-21T16:50:59Z",
+  "title": "ViralClip AI v1.8.3 - Reframe Preview Frame & Fallback Fix",
   "changelog": [
-    "Fixed 0 KB video download bug in Stream Sniper",
-    "Prevented duplicate filename collisions on bulk download with unique clip IDs",
-    "Added 1-Click AI Brain auto-detection with pre-flight API verification",
-    "Fixed sequential chunk rendering and persistent skeleton loaders",
-    "Accurate real stream gameplay frame extraction at target timestamp"
+    "Fixed Reframe canvas frame loading on user machines",
+    "Added robust fallback frame extraction",
+    "Added User-Agent headers to ffmpeg stream seeking to prevent 403 Forbidden",
+    "Added direct thumbnail and canvas fallback so preview never stays blank"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.2.zip",
-  "checksum": "sha256:93278d0f4f710a5e46c4b290547e16c9cfc8566a12dc5eef54018c6e0dece369",
-  "size_bytes": 553928,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.3.zip",
+  "checksum": "sha256:e2cf91815f5cc8e9eeb80cc80f01bd43acedf671c2d831fcd4d9b2cfb1349780",
+  "size_bytes": 554976,
   "mandatory": false,
   "rollback_version": null
 }
