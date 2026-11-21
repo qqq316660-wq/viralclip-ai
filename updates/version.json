@@ -1,17 +1,17 @@
 {
   "version": "1.8.3",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T16:50:59Z",
-  "title": "ViralClip AI v1.8.3 - Reframe Preview Frame & Fallback Fix",
+  "release_date": "2026-11-21T16:58:29Z",
+  "title": "ViralClip AI v1.8.3 - Reframe Real Stream Frame Extraction Fix",
   "changelog": [
-    "Fixed Reframe canvas frame loading on user machines",
-    "Added robust fallback frame extraction",
+    "Strictly extract real gameplay stream frame at target timestamp",
     "Added User-Agent headers to ffmpeg stream seeking to prevent 403 Forbidden",
-    "Added direct thumbnail and canvas fallback so preview never stays blank"
+    "Added native 2-second real stream slice download fallback (100% real gameplay, zero thumbnails)",
+    "Removed all thumbnail fallbacks"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.3.zip",
-  "checksum": "sha256:e2cf91815f5cc8e9eeb80cc80f01bd43acedf671c2d831fcd4d9b2cfb1349780",
-  "size_bytes": 554976,
+  "checksum": "sha256:180b1410c2b2385c6f88850aaed16c6549bf48f65c56498550523d532db86ebf",
+  "size_bytes": 554651,
   "mandatory": false,
   "rollback_version": null
 }
