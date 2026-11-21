@@ -1,16 +1,17 @@
 {
   "version": "1.8.10",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T20:05:44Z",
-  "title": "ViralClip AI v1.8.10 - Stream Sniper Render Path Fix",
+  "release_date": "2026-11-21T20:24:51Z",
+  "title": "ViralClip AI v1.8.10 - AI Brain Real-Time Analysis & Dynamic Skeletons",
   "changelog": [
-    "Fixed ffmpeg binary path resolution during short rendering",
-    "Ensured progressive gallery display and detailed error reporting",
-    "Resolved WinError 2 ffmpeg execution in Stream Sniper"
+    "Fixed AI Brain premature dummy skeleton cards glitch",
+    "Real-time AI Brain analysis phase with spinner and live stage updates",
+    "Dynamic skeletons with real AI virality scores titles and durations",
+    "Resolved ffmpeg binary path resolution for 9:16 short rendering"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.10.zip",
-  "checksum": "sha256:c48a195633f13c46ac0dc873f9ad0f42f13cecbba0e19f62c0e648066507675e",
-  "size_bytes": 559870,
+  "checksum": "sha256:b1ddc75e87128a7549cbd25103dbf875b47732e2b980bf636ea4f3d6747bbecc",
+  "size_bytes": 560242,
   "mandatory": false,
   "rollback_version": null
 }
