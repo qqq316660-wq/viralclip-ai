@@ -1,16 +1,16 @@
 {
-  "version": "1.8.20",
+  "version": "1.8.21",
   "min_version": "1.0.0",
-  "release_date": "2026-11-22T19:38:19Z",
-  "title": "ViralClip AI v1.8.20 - Cookie Validation & Auto-Healing",
+  "release_date": "2026-11-22T20:04:33Z",
+  "title": "ViralClip AI v1.8.21 - True 1080p Full HD Cookie Downloader",
   "changelog": [
-    "Added strict Netscape cookies validator to prevent fatal yt-dlp syntax errors",
-    "Auto-heals and cleans non-cookie text (e.g. emails) to avoid chunk failures",
-    "Safe yt-dlp cookie loader that skips invalid files without crashing"
+    "Unlocked all 53 YouTube stream formats with cookies (up to 1080p and 4K)",
+    "Removed client restriction that prevented 720p/1080p formats from downloading",
+    "Auto-merges high quality audio and video streams for maximum clarity"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.20.zip",
-  "checksum": "sha256:8cabe828c656b66c308d94f2ec2e793b0d79fbb9960661ce78f4c097abbcff70",
-  "size_bytes": 564177,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.21.zip",
+  "checksum": "sha256:55af1fe2e4327e3180eeca314227e3b2374b860f1e50fcacc621b9db9a7aa423",
+  "size_bytes": 564159,
   "mandatory": false,
   "rollback_version": null
 }
