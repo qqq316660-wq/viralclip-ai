@@ -1,17 +1,16 @@
 {
   "version": "1.8.17",
   "min_version": "1.0.0",
-  "release_date": "2026-11-22T18:39:23Z",
-  "title": "ViralClip AI v1.8.17 - Stream Quality Selector & Smart TV HD Bypass",
+  "release_date": "2026-11-22T18:48:48Z",
+  "title": "ViralClip AI v1.8.17 - Stream Quality Selector",
   "changelog": [
     "Added 720p HD and 1080p Full HD video resolution selector in Stream Settings",
     "Integrated YouTube Cookie Setup modal for cinema-grade 1080p rendering",
-    "Implemented Smart TV client bypass in media downloader for guaranteed 720p True HD",
     "Fixed multi-hour stream chunk timestamp sync for accurate rendering"
   ],
   "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.17.zip",
-  "checksum": "sha256:593b730bc08481e18adee1754bc4619e4b8d2055a032389bf3a21c02fb731ac7",
-  "size_bytes": 563436,
+  "checksum": "sha256:5a401bca4829f56f6949d173bd5e48741402f35fe606b5d517db26c6bc32952a",
+  "size_bytes": 563400,
   "mandatory": false,
   "rollback_version": null
 }
