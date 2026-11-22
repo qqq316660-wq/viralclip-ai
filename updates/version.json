@@ -1,16 +1,16 @@
 {
-  "version": "1.8.18",
+  "version": "1.8.19",
   "min_version": "1.0.0",
-  "release_date": "2026-11-22T19:19:20Z",
-  "title": "ViralClip AI v1.8.18 - Stream Quality & 1-Time Cookie Setup",
+  "release_date": "2026-11-22T19:27:27Z",
+  "title": "ViralClip AI v1.8.19 - Cookie-Locked Quality Selector",
   "changelog": [
-    "Cleaned up 720p HD and 1080p Full HD selection in Stream Settings",
-    "Standardized 1-time YouTube Cookie Setup for guaranteed stream downloads",
+    "Quality selector stays locked until YouTube cookies are configured",
+    "Instant unlock for 720p HD and 1080p Full HD once cookies are active",
     "Fixed multi-hour stream chunk timestamp sync for accurate rendering"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.18.zip",
-  "checksum": "sha256:7b0654929bceb681e1462c6b285a836ea1e774f2e6c020dfca3ea289d04a2165",
-  "size_bytes": 563267,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.19.zip",
+  "checksum": "sha256:d1afe00783ad309dad28d73af1c1093d1a73e96f27522219bff64ef86ffe86cf",
+  "size_bytes": 563446,
   "mandatory": false,
   "rollback_version": null
 }
