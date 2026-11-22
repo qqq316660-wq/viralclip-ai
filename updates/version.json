@@ -1,17 +1,16 @@
 {
-  "version": "1.8.12",
+  "version": "1.8.13",
   "min_version": "1.0.0",
-  "release_date": "2026-11-21T20:47:58Z",
-  "title": "ViralClip AI v1.8.12 - YouTube Bot Bypass & Stream Sniper Render Engine",
+  "release_date": "2026-11-22T15:38:08Z",
+  "title": "ViralClip AI v1.8.13 - Elite Gen-Z Retention Prompt Engine",
   "changelog": [
-    "Fixed YouTube Sign in to confirm you are not a bot block during video downloading",
-    "Added Android and iOS extractor fallback to stream section downloader",
-    "Instant CDN cache-busting for reliable 1-click in-app updates",
-    "Real-time AI Brain transcript scanning and dynamic skeleton cards"
+    "Integrated elite 80/20 viral retention prompt engine",
+    "Gen-Z reaction captions with Roman Hinglish support",
+    "Dynamic hook score and duration synchronization"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.12.zip",
-  "checksum": "sha256:5342a07e8ba851ac6c6f8b5fedcaffe8e10a368ffb479e6887df7cdf41fd83a3",
-  "size_bytes": 560590,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.13.zip",
+  "checksum": "sha256:9d3aa5a32bd89830057fd767dfe84ca35871cf700f1e92db950210b9c5249710",
+  "size_bytes": 561919,
   "mandatory": false,
   "rollback_version": null
 }
