@@ -1,15 +1,16 @@
 {
-  "version": "1.8.15",
+  "version": "1.8.16",
   "min_version": "1.0.0",
-  "release_date": "2026-11-22T17:00:28Z",
-  "title": "ViralClip AI v1.8.15 - Google Colab Recursion Fix & Pre-fetch Engine",
+  "release_date": "2026-11-22T17:26:41Z",
+  "title": "ViralClip AI v1.8.16 - Chunk-Relative Timestamp Auto-Rebase & Subtitle Sync",
   "changelog": [
-    "Fixed Colab/Kaggle notebook double-execution recursion depth error",
-    "Updated in-app Colab/Kaggle launcher code with re-patch protection"
+    "Fixed video clipping offset for late stream chunks by auto-rebasing chunk-relative AI timestamps to global stream time",
+    "Fixed missing bouncy captions on late chunks by aligning speech word timestamps with clip range",
+    "Updated transcript formatting to support [HH:MM:SS] for long multi-hour streams"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.15.zip",
-  "checksum": "sha256:76c767a3fca276c7bf2d8bb5c306090da6e4ac8739ffb3a22162359aadfa9815",
-  "size_bytes": 562380,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.16.zip",
+  "checksum": "sha256:1791788ad88dc4f625c285790feec5bf1351821cc1b07eba237859b1c1e1de5a",
+  "size_bytes": 562561,
   "mandatory": false,
   "rollback_version": null
 }
