@@ -1,17 +1,15 @@
 {
-  "version": "1.8.14",
+  "version": "1.8.15",
   "min_version": "1.0.0",
-  "release_date": "2026-11-22T16:48:35Z",
-  "title": "ViralClip AI v1.8.14 - Parallel Pipeline Pre-fetching & Ultra-Fast Rendering",
+  "release_date": "2026-11-22T17:00:28Z",
+  "title": "ViralClip AI v1.8.15 - Google Colab Recursion Fix & Pre-fetch Engine",
   "changelog": [
-    "Decoupled Producer-Consumer download pipeline: clips pre-fetch in background while current short renders",
-    "Zero wait latency between shorts in chunk queue",
-    "Accelerated FFmpeg encoder preset for 2x faster CPU rendering",
-    "Automatic cleanup of pre-fetched temp media to protect disk storage"
+    "Fixed Colab/Kaggle notebook double-execution recursion depth error",
+    "Updated in-app Colab/Kaggle launcher code with re-patch protection"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.14.zip",
-  "checksum": "sha256:fc136a6bd57212cb8a79567d7de5dab11c8346d5d96db24997a4788f5d28c8f9",
-  "size_bytes": 562319,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.15.zip",
+  "checksum": "sha256:76c767a3fca276c7bf2d8bb5c306090da6e4ac8739ffb3a22162359aadfa9815",
+  "size_bytes": 562380,
   "mandatory": false,
   "rollback_version": null
 }
