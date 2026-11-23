@@ -1,15 +1,16 @@
 {
-  "version": "1.8.26",
+  "version": "1.8.27",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T13:33:11Z",
-  "title": "ViralClip AI v1.8.26 - Stable Skeleton Cards Fix",
+  "release_date": "2026-11-23T13:41:19Z",
+  "title": "ViralClip AI v1.8.27 - Gemini 2.0 Flash AI Brain Fix",
   "changelog": [
-    "Fixed skeleton loader flickering bug during chunk render",
-    "Consolidated render queue state to single source of truth"
+    "Fixed Gemini AI models to official gemini-2.0-flash and gemini-1.5-flash",
+    "Resolved AI Brain loop and fallback to manual prompt",
+    "Enhanced JSON clip parser for all Gemini response formats"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.26.zip",
-  "checksum": "sha256:598325e87c6629193d4cc7a2c863dfc8b1ce6947e5bacebbbd67cb3f5bf2aeab",
-  "size_bytes": 566930,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.27.zip",
+  "checksum": "sha256:9abff2b70d07c8823c2ced99833c4a5a6aa68aa10d13e2326fefcc48fc770604",
+  "size_bytes": 566981,
   "mandatory": false,
   "rollback_version": null
 }
