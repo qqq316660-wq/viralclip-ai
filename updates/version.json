@@ -1,16 +1,17 @@
 {
-  "version": "1.8.28",
+  "version": "1.8.29",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T14:09:01Z",
-  "title": "ViralClip AI v1.8.28 - Dynamic Model Discovery & AI Error Diagnostics",
+  "release_date": "2026-11-23T14:39:31Z",
+  "title": "ViralClip AI v1.8.29 - Gemini Calibration & Audio Slice Resilience Fix",
   "changelog": [
-    "Implemented real-time Google Gemini dynamic model discovery and speed ranking",
-    "Added instant error alerts for quota, rate limits and server load",
-    "Enhanced UI diagnostics badge for chunk AI state"
+    "Fixed missing time module import in brain.py for Gemini key testing and discovery",
+    "Added multi-tier fallback for audio slice extraction (prevents ffmpeg chunk crashes)",
+    "Sanitized ANSI terminal escape codes from chunk error diagnostics",
+    "Fixed stream header duration fallback for 0h display"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.28.zip",
-  "checksum": "sha256:906ef17e29b9846a4e90dfa68ec616596a7676f0ee6a5ef897c63fbb38a0827a",
-  "size_bytes": 568123,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.29.zip",
+  "checksum": "sha256:7d8d4cfdb6a0ad4acc75be236f0e426d94c54991c5cebc6246adc7f565efdc97",
+  "size_bytes": 568850,
   "mandatory": false,
   "rollback_version": null
 }
