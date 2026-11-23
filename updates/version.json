@@ -1,17 +1,16 @@
 {
-  "version": "1.8.35",
+  "version": "1.8.36",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T20:30:46Z",
-  "title": "ViralClip AI v1.8.35 - Clean Stable Multi-AI Engine & UI Restoration",
+  "release_date": "2026-11-23T20:45:31Z",
+  "title": "ViralClip AI v1.8.36 - Premium Apple iOS 3D Soft Gradient UI",
   "changelog": [
-    "Restored clean, stable UI across all modules",
-    "Universal multi-AI fallback with Groq smart prompt partitioner (0 token limit errors)",
-    "Auto-model discovery for Gemini, Groq, OpenAI and OpenRouter",
-    "Auto-cleared historical error badges on key save and retry"
+    "Refactored UI from harsh neon to eye-friendly Cupertino iOS 3D soft gradients",
+    "Tactile glassmorphism button architecture with haptic depth",
+    "Verified Gemini and Groq auto-model calibration and error clearing"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.35.zip",
-  "checksum": "sha256:580d9ff989fea4ea35aa4910e33401d2655d953173bcb152c556989acae1f8c7",
-  "size_bytes": 570082,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.36.zip",
+  "checksum": "sha256:6dd344628d97b765be288eb1953331c77e90cfc07bfce8681495cd48cee9bf10",
+  "size_bytes": 574494,
   "mandatory": false,
   "rollback_version": null
 }
