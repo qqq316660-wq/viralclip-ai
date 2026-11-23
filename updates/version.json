@@ -1,17 +1,15 @@
 {
-  "version": "1.8.25",
+  "version": "1.8.26",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T13:22:29Z",
-  "title": "ViralClip AI v1.8.25 - Smooth Drag Reframe & Colab Whisper GPU Optimization",
+  "release_date": "2026-11-23T13:33:11Z",
+  "title": "ViralClip AI v1.8.26 - Stable Skeleton Cards Fix",
   "changelog": [
-    "Fixed crop box snapping bug during reframe dragging",
-    "Guarded status polling against overwriting active user edits",
-    "Added Colab T4 GPU indicator and suppressed /status log spam",
-    "Cleaned ANSI escape codes from error badges"
+    "Fixed skeleton loader flickering bug during chunk render",
+    "Consolidated render queue state to single source of truth"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.25.zip",
-  "checksum": "sha256:4281fc81e831bf2adc41898a57c188360f46415b0d2e26aa001c06bb0c372b4e",
-  "size_bytes": 566946,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.26.zip",
+  "checksum": "sha256:598325e87c6629193d4cc7a2c863dfc8b1ce6947e5bacebbbd67cb3f5bf2aeab",
+  "size_bytes": 566930,
   "mandatory": false,
   "rollback_version": null
 }
