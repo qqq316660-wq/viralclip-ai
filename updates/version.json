@@ -1,15 +1,14 @@
 {
   "version": "1.8.33",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T19:56:01Z",
-  "title": "ViralClip AI v1.8.33 (Classic Stable Release)",
+  "release_date": "2026-11-23T17:04:46Z",
+  "title": "ViralClip AI v1.8.33",
   "changelog": [
-    "Reverted to classic stable Stream Sniper interface",
-    "Multi-environment import resilience and Groq sub-chunk parser"
+    "Stable Release"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.33.zip",
-  "checksum": "sha256:609c51bdd7379a027fa4ac4aa76cc68f90f40942a9a21102cb6a89c3c05479ce",
-  "size_bytes": 569979,
-  "mandatory": true,
-  "rollback_version": "1.8.33"
+  "download_url": "",
+  "checksum": "",
+  "size_bytes": 0,
+  "mandatory": false,
+  "rollback_version": null
 }
