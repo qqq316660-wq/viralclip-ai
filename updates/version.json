@@ -1,15 +1,16 @@
 {
-  "version": "1.8.33",
+  "version": "1.8.35",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T20:26:02Z",
-  "title": "ViralClip AI v1.8.33 - Auto-clear Stale AI Errors on Key Save & Retry",
+  "release_date": "2026-11-23T20:30:46Z",
+  "title": "ViralClip AI v1.8.35 - Clean Stable Multi-AI Engine & UI Restoration",
   "changelog": [
-    "Instantly clear historical chunk error badges when saving new working API keys",
-    "Optimized chunk AI Brain click to immediately clear old diagnostics",
-    "Synchronized VOD session state with active key verification"
+    "Restored clean, stable UI across all modules",
+    "Universal multi-AI fallback with Groq smart prompt partitioner (0 token limit errors)",
+    "Auto-model discovery for Gemini, Groq, OpenAI and OpenRouter",
+    "Auto-cleared historical error badges on key save and retry"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.33.zip",
-  "checksum": "sha256:a86d2b755954cb1c5068a078db8a0877ac64a02bcd20bbf68d713ff9b640e3a9",
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.35.zip",
+  "checksum": "sha256:580d9ff989fea4ea35aa4910e33401d2655d953173bcb152c556989acae1f8c7",
   "size_bytes": 570082,
   "mandatory": false,
   "rollback_version": null
