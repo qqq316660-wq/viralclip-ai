@@ -1,16 +1,17 @@
 {
-  "version": "1.8.24",
+  "version": "1.8.25",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T13:11:21Z",
-  "title": "ViralClip AI v1.8.24 - Auto Temp Cache Cleanup & Free Disk Space",
+  "release_date": "2026-11-23T13:22:29Z",
+  "title": "ViralClip AI v1.8.25 - Smooth Drag Reframe & Colab Whisper GPU Optimization",
   "changelog": [
-    "Auto-deletes raw audio WAVs, MP3s, and raw video slices immediately after chunk transcription and rendering",
-    "Added Clean Cache button to free up disk space with 1-click while preserving all finished clips",
-    "Auto-purges temporary cache debris when initializing streams or finishing renders to prevent disk full errors"
+    "Fixed crop box snapping bug during reframe dragging",
+    "Guarded status polling against overwriting active user edits",
+    "Added Colab T4 GPU indicator and suppressed /status log spam",
+    "Cleaned ANSI escape codes from error badges"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.24.zip",
-  "checksum": "sha256:f236b28bd1dff093d0de4680e78d443d65cd1cc96289eb9d6ecb9d71098dc7f8",
-  "size_bytes": 566235,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.25.zip",
+  "checksum": "sha256:4281fc81e831bf2adc41898a57c188360f46415b0d2e26aa001c06bb0c372b4e",
+  "size_bytes": 566946,
   "mandatory": false,
   "rollback_version": null
 }
