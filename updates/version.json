@@ -1,16 +1,16 @@
 {
-  "version": "1.8.21",
+  "version": "1.8.22",
   "min_version": "1.0.0",
-  "release_date": "2026-11-22T20:04:33Z",
-  "title": "ViralClip AI v1.8.21 - True 1080p Full HD Cookie Downloader",
+  "release_date": "2026-11-23T11:00:02Z",
+  "title": "ViralClip AI v1.8.22 - Ultra-Clean Bicubic Scaling & CRF 18",
   "changelog": [
-    "Unlocked all 53 YouTube stream formats with cookies (up to 1080p and 4K)",
-    "Removed client restriction that prevented 720p/1080p formats from downloading",
-    "Auto-merges high quality audio and video streams for maximum clarity"
+    "Switched from Lanczos to Bicubic scaling to eliminate ringing halos and jagged edges",
+    "Upgraded encoder from superfast to veryfast with CRF 18 for pristine macroblock-free skin tones",
+    "Added explicit BT.709 color primaries and transfer characteristics for natural color rendering"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.21.zip",
-  "checksum": "sha256:55af1fe2e4327e3180eeca314227e3b2374b860f1e50fcacc621b9db9a7aa423",
-  "size_bytes": 564159,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.22.zip",
+  "checksum": "sha256:f7cec977784826842a9dda1a3b343534a3bf04a0b6d5a0c1c295f4a7892985ed",
+  "size_bytes": 564182,
   "mandatory": false,
   "rollback_version": null
 }
