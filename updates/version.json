@@ -1,16 +1,16 @@
 {
-  "version": "1.8.23",
+  "version": "1.8.24",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T12:39:18Z",
-  "title": "ViralClip AI v1.8.23 - PIP Card Mode & Live Preview",
+  "release_date": "2026-11-23T13:11:21Z",
+  "title": "ViralClip AI v1.8.24 - Auto Temp Cache Cleanup & Free Disk Space",
   "changelog": [
-    "Added PIP Card Mode button in Visual Reframe Editor with live 9:16 phone preview",
-    "Floating bordered facecam with ambient blur background to prevent pixelation on webcam zoom",
-    "Full toggle support in Reframe Modal and Stream Setup layout selector"
+    "Auto-deletes raw audio WAVs, MP3s, and raw video slices immediately after chunk transcription and rendering",
+    "Added Clean Cache button to free up disk space with 1-click while preserving all finished clips",
+    "Auto-purges temporary cache debris when initializing streams or finishing renders to prevent disk full errors"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.23.zip",
-  "checksum": "sha256:be6fe852689ed25daf53ac9db7016e41ab049239f2e61cc64d5fa8fcd05c4144",
-  "size_bytes": 564924,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.24.zip",
+  "checksum": "sha256:f236b28bd1dff093d0de4680e78d443d65cd1cc96289eb9d6ecb9d71098dc7f8",
+  "size_bytes": 566235,
   "mandatory": false,
   "rollback_version": null
 }
