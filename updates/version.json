@@ -1,17 +1,14 @@
 {
-  "version": "1.8.34",
+  "version": "1.8.35",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T19:03:11Z",
-  "title": "Stream Sniper Studio Redesign (Obsidian Crimson Edition)",
+  "release_date": "2026-11-23T19:35:52Z",
+  "title": "Stream Sniper Studio Polish (Obsidian Crimson Edition)",
   "changelog": [
-    "Redesigned Stream Sniper UI with Obsidian Crimson Glass studio theme",
-    "Replaced harsh neon lights with smooth ambient dark-to-wine velvet palette",
-    "Added sleek iOS-style toggle controls and double-bezel card architecture",
-    "Full preservation of VOD chunking, Reframe Canvas, AI Keys and Storage History"
+    "Maintenance and stability improvements."
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.34.zip",
-  "checksum": "sha256:919670372ab1061f46a5790065eb8de6f2101062bb4148e81d15bea605a3c471",
-  "size_bytes": 583171,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.35.zip",
+  "checksum": "sha256:7ed31a13405ce18db3c730a97238fe28a8286d0c77ccb53ca6ac06621edb530a",
+  "size_bytes": 591819,
   "mandatory": false,
   "rollback_version": null
 }
