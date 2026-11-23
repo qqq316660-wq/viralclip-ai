@@ -1,16 +1,16 @@
 {
-  "version": "1.8.31",
+  "version": "1.8.32",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T16:18:57Z",
-  "title": "ViralClip AI v1.8.31 - Universal Dynamic Model Auto-Discovery (Groq, Gemini, OpenAI)",
+  "release_date": "2026-11-23T16:44:12Z",
+  "title": "ViralClip AI v1.8.32 - Smart Prompt Partitioning for Groq 7k TPM Free Tier",
   "changelog": [
-    "Added dynamic model auto-discovery and calibration for Groq (auto-probes and ranks models by speed)",
-    "Added dynamic model auto-discovery for OpenAI and OpenRouter",
-    "Enhanced multi-AI fallback resilience during chunk analysis"
+    "Implemented intelligent prompt partitioner for Groq (prevents 413 token limit errors on 30m chunks)",
+    "Optimized Gemini auto-discovery to save quota and prevent 503 spikes",
+    "Prioritized gpt-oss-120b and gpt-oss-20b for high-accuracy JSON viral clip extraction"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.31.zip",
-  "checksum": "sha256:d08bf17d165f5cf74e82a4b412af1602c1aad65f83ba6997a2aeb5430f1db92d",
-  "size_bytes": 569327,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.32.zip",
+  "checksum": "sha256:61c8ef36c5c96fa9cb32bd10853500133c97176b6cdd1ce5dbd864f919a073f7",
+  "size_bytes": 569952,
   "mandatory": false,
   "rollback_version": null
 }
