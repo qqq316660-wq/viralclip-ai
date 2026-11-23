@@ -1,16 +1,15 @@
 {
-  "version": "1.8.32",
+  "version": "1.8.33",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T16:44:12Z",
-  "title": "ViralClip AI v1.8.32 - Smart Prompt Partitioning for Groq 7k TPM Free Tier",
+  "release_date": "2026-11-23T17:04:46Z",
+  "title": "ViralClip AI v1.8.33 - Resilient Groq Parser & Chunk Partitioning",
   "changelog": [
-    "Implemented intelligent prompt partitioner for Groq (prevents 413 token limit errors on 30m chunks)",
-    "Optimized Gemini auto-discovery to save quota and prevent 503 spikes",
-    "Prioritized gpt-oss-120b and gpt-oss-20b for high-accuracy JSON viral clip extraction"
+    "Fixed relative import for parse_clips_json in standalone installed production builds",
+    "Ensured Groq sub-chunk prompt splitting fits strictly inside 7,000 TPM limit"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.32.zip",
-  "checksum": "sha256:61c8ef36c5c96fa9cb32bd10853500133c97176b6cdd1ce5dbd864f919a073f7",
-  "size_bytes": 569952,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.33.zip",
+  "checksum": "sha256:ca19b13b44f8ea1f8f64e067ccf5023a5129fbfb169713ed9c05eac78b248677",
+  "size_bytes": 569979,
   "mandatory": false,
   "rollback_version": null
 }
