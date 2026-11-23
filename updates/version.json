@@ -1,14 +1,15 @@
 {
-  "version": "1.8.35",
+  "version": "1.8.33",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T19:35:52Z",
-  "title": "Stream Sniper Studio Polish (Obsidian Crimson Edition)",
+  "release_date": "2026-11-23T19:56:01Z",
+  "title": "ViralClip AI v1.8.33 (Classic Stable Release)",
   "changelog": [
-    "Maintenance and stability improvements."
+    "Reverted to classic stable Stream Sniper interface",
+    "Multi-environment import resilience and Groq sub-chunk parser"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.35.zip",
-  "checksum": "sha256:7ed31a13405ce18db3c730a97238fe28a8286d0c77ccb53ca6ac06621edb530a",
-  "size_bytes": 591819,
-  "mandatory": false,
-  "rollback_version": null
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.33.zip",
+  "checksum": "sha256:609c51bdd7379a027fa4ac4aa76cc68f90f40942a9a21102cb6a89c3c05479ce",
+  "size_bytes": 569979,
+  "mandatory": true,
+  "rollback_version": "1.8.33"
 }
