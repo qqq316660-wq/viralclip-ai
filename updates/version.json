@@ -1,17 +1,16 @@
 {
-  "version": "1.8.30",
+  "version": "1.8.31",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T15:48:34Z",
-  "title": "ViralClip AI v1.8.30 - Multi-AI Seamless Fallback Engine (Gemini & Groq)",
+  "release_date": "2026-11-23T16:18:57Z",
+  "title": "ViralClip AI v1.8.31 - Universal Dynamic Model Auto-Discovery (Groq, Gemini, OpenAI)",
   "changelog": [
-    "Implemented seamless multi-AI provider fallback across Gemini, Groq, OpenAI and OpenRouter",
-    "Added latest Groq model endpoints (gpt-oss-120b, qwen3.8-27b, allam-2-7b)",
-    "Updated Google Gemini fast-tier dynamic discovery (gemini-flash-lite-latest, gemini-3.5-flash-lite, gemini-3-flash-preview)",
-    "Enhanced Stream Sniper UI with multi-AI fallback status indicator"
+    "Added dynamic model auto-discovery and calibration for Groq (auto-probes and ranks models by speed)",
+    "Added dynamic model auto-discovery for OpenAI and OpenRouter",
+    "Enhanced multi-AI fallback resilience during chunk analysis"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.30.zip",
-  "checksum": "sha256:e4d523bcd90f2f48e5efbdb3672f982bba8b954c4e9fe79697efc2994b7482cd",
-  "size_bytes": 569196,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.31.zip",
+  "checksum": "sha256:d08bf17d165f5cf74e82a4b412af1602c1aad65f83ba6997a2aeb5430f1db92d",
+  "size_bytes": 569327,
   "mandatory": false,
   "rollback_version": null
 }
