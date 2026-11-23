@@ -1,16 +1,16 @@
 {
-  "version": "1.8.40",
+  "version": "1.8.41",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T21:56:38Z",
-  "title": "ViralClip AI v1.8.40 - Authentic 3D iOS Apple Emojis Engine",
+  "release_date": "2026-11-23T22:07:31Z",
+  "title": "ViralClip AI v1.8.41 - Studio Pop-up Dialogs & Custom Confirmations",
   "changelog": [
-    "Integrated authentic 3D iOS Apple Emoji design system replacing flat Windows emojis",
-    "Added IosEmoji engine with offline bundled assets and high-res Apple 64px CDN fallback",
-    "Pixel-perfect baseline alignment and responsive scaling across Stream Sniper and Studio"
+    "Replaced ugly browser alert and confirm popups with sleek in-app Studio dialog modals",
+    "Custom frosted backdrop with Apple 3D emojis and glowing gradient action buttons",
+    "Polished diagnostic error popups and safe delete confirmation workflows"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.40.zip",
-  "checksum": "sha256:d4586a52d243d93aae3661766bb971e791a53007d28b265ce7d6acfc10960dad",
-  "size_bytes": 724787,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.41.zip",
+  "checksum": "sha256:c8d4c681fa276deb2531dbac5b3e8b91cc4625b37863f16294543d8cecb69a1b",
+  "size_bytes": 726005,
   "mandatory": false,
   "rollback_version": null
 }
