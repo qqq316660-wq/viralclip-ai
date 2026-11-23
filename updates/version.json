@@ -1,19 +1,16 @@
 {
-  "version": "1.8.39",
+  "version": "1.8.40",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T21:35:49Z",
-  "title": "ViralClip AI v1.8.39 - Groq Fallback Engine, iOS Toggles & Gallery Polish",
+  "release_date": "2026-11-23T21:56:38Z",
+  "title": "ViralClip AI v1.8.40 - Authentic 3D iOS Apple Emojis Engine",
   "changelog": [
-    "Fixed Groq fallback JSON parser module import preventing fallback during Gemini quota limits",
-    "Optimized Groq model ranking prioritizing ultra-fast high-TPM models (llama-3.1-8b-instant)",
-    "Added interactive iOS toggle switches for AI Auto-Mode and 720p / 1080p quality selection",
-    "Removed merge buttons and square checkboxes from chunk cards for clean presentation",
-    "Removed chunk separation length label while preserving 30-minute segment functionality",
-    "Polished gallery and action buttons with Studio-Tier Royal Indigo & Frosted Glass aesthetic"
+    "Integrated authentic 3D iOS Apple Emoji design system replacing flat Windows emojis",
+    "Added IosEmoji engine with offline bundled assets and high-res Apple 64px CDN fallback",
+    "Pixel-perfect baseline alignment and responsive scaling across Stream Sniper and Studio"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.39.zip",
-  "checksum": "sha256:f1da0558c11c70b68ac210efba56a69651848c12f7bb2bd613126fdcc2abb49c",
-  "size_bytes": 571114,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.40.zip",
+  "checksum": "sha256:d4586a52d243d93aae3661766bb971e791a53007d28b265ce7d6acfc10960dad",
+  "size_bytes": 724787,
   "mandatory": false,
   "rollback_version": null
 }
