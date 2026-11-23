@@ -1,16 +1,16 @@
 {
-  "version": "1.8.22",
+  "version": "1.8.23",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T11:00:02Z",
-  "title": "ViralClip AI v1.8.22 - Ultra-Clean Bicubic Scaling & CRF 18",
+  "release_date": "2026-11-23T12:39:18Z",
+  "title": "ViralClip AI v1.8.23 - PIP Card Mode & Live Preview",
   "changelog": [
-    "Switched from Lanczos to Bicubic scaling to eliminate ringing halos and jagged edges",
-    "Upgraded encoder from superfast to veryfast with CRF 18 for pristine macroblock-free skin tones",
-    "Added explicit BT.709 color primaries and transfer characteristics for natural color rendering"
+    "Added PIP Card Mode button in Visual Reframe Editor with live 9:16 phone preview",
+    "Floating bordered facecam with ambient blur background to prevent pixelation on webcam zoom",
+    "Full toggle support in Reframe Modal and Stream Setup layout selector"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.22.zip",
-  "checksum": "sha256:f7cec977784826842a9dda1a3b343534a3bf04a0b6d5a0c1c295f4a7892985ed",
-  "size_bytes": 564182,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.23.zip",
+  "checksum": "sha256:be6fe852689ed25daf53ac9db7016e41ab049239f2e61cc64d5fa8fcd05c4144",
+  "size_bytes": 564924,
   "mandatory": false,
   "rollback_version": null
 }
