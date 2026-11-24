@@ -1,15 +1,18 @@
 {
-  "version": "1.8.46",
+  "version": "1.8.47",
   "min_version": "1.0.0",
-  "release_date": "2026-11-24T10:18:13Z",
-  "title": "ViralClip AI v1.8.46 - Restored Native yt-dlp Range Slicing (v1.8.43 Baseline)",
+  "release_date": "2026-11-24T10:33:05Z",
+  "title": "ViralClip AI v1.8.47 - Smart YouTube Quality Guard & Guided Diagnostic System",
   "changelog": [
-    "Reverted stream slicing logic back to proven yt-dlp native range extraction from v1.8.43",
-    "Maintained studio modals, ANSI sanitization, and YouTube cookie guidance"
+    "Added Quality Guard Checker validating that yt-dlp downloaded streams match requested 720p/1080p resolution",
+    "Instant fail-fast halting 15-minute retry loops when YouTube restricts HD quality or challenges bots",
+    "Categorized YouTube diagnosis modal explaining exact causes (Bot 403, 360p fallback, 18+ age gate, IP 429)",
+    "Step-by-step English cookie setup guide for exporting cookies directly on youtube.com",
+    "1-Click Retry Render button on chunks resuming viral shorts without re-transcribing"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.46.zip",
-  "checksum": "sha256:fa8b25a87515ed189d8e6552696018ef8db18297d92f010e9ab5ea56319f67db",
-  "size_bytes": 727833,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.47.zip",
+  "checksum": "sha256:ceb5590cca8537515b3e03d51116f972c202e6d4f28dc4301d46311d6e2a54aa",
+  "size_bytes": 732296,
   "mandatory": false,
   "rollback_version": null
 }
