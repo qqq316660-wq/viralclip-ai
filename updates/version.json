@@ -1,17 +1,16 @@
 {
-  "version": "1.8.42",
+  "version": "1.8.43",
   "min_version": "1.0.0",
-  "release_date": "2026-11-24T07:27:47Z",
-  "title": "ViralClip AI v1.8.42 - Open Folder Sniper Fix & YouTube 403 / FFmpeg Auto-Fallback",
+  "release_date": "2026-11-24T07:51:14Z",
+  "title": "ViralClip AI v1.8.43 - Multi-Client Format Fallback & Smart YouTube Cookie Reminder",
   "changelog": [
-    "Fixed Open Folder button opening empty root directory instead of sniper storage",
-    "Added auto-refresh so rendered shorts appear immediately in the gallery",
-    "Added Smart TV & mobile client fallback with cookie guidance on YouTube 403 errors",
-    "Implemented FFmpeg subtitle safety fallback ensuring videos always render even without libass"
+    "Fixed Requested format is not available error by adding multi-client android and web fallback",
+    "Added auto-detection and smart modal reminder to attach YouTube cookies on format errors",
+    "Sanitized ANSI terminal color codes from all user-facing dialog popups"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.42.zip",
-  "checksum": "sha256:28eb94295b1a0a761ae756b4589655d0812e12019fe2d0a51ed3294887d4267b",
-  "size_bytes": 727319,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.43.zip",
+  "checksum": "sha256:7d698f530b1360901e1654e7acc4898124547c06f48f6b1d85ca4f338a5cfef5",
+  "size_bytes": 727833,
   "mandatory": false,
   "rollback_version": null
 }
