@@ -1,16 +1,15 @@
 {
-  "version": "1.8.45",
+  "version": "1.8.46",
   "min_version": "1.0.0",
-  "release_date": "2026-11-24T09:29:37Z",
-  "title": "ViralClip AI v1.8.45 - True 720p/1080p High-Bitrate Stream Slicing Fix",
+  "release_date": "2026-11-24T10:18:13Z",
+  "title": "ViralClip AI v1.8.46 - Restored Native yt-dlp Range Slicing (v1.8.43 Baseline)",
   "changelog": [
-    "Fixed resolution selector picking true 720p/1080p streams instead of fallback 360p",
-    "Removed android player client restriction allowing full HD format discovery",
-    "Enhanced FFmpeg stream copy to pair highest-bitrate video with 130kbps M4A audio"
+    "Reverted stream slicing logic back to proven yt-dlp native range extraction from v1.8.43",
+    "Maintained studio modals, ANSI sanitization, and YouTube cookie guidance"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.45.zip",
-  "checksum": "sha256:798e60ce0f421a538fa3662010e4afcbab091c0f3b90948420453b7759017746",
-  "size_bytes": 729360,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.46.zip",
+  "checksum": "sha256:fa8b25a87515ed189d8e6552696018ef8db18297d92f010e9ab5ea56319f67db",
+  "size_bytes": 727833,
   "mandatory": false,
   "rollback_version": null
 }
