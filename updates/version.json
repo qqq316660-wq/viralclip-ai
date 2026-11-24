@@ -1,16 +1,17 @@
 {
-  "version": "1.8.41",
+  "version": "1.8.42",
   "min_version": "1.0.0",
-  "release_date": "2026-11-23T22:07:31Z",
-  "title": "ViralClip AI v1.8.41 - Studio Pop-up Dialogs & Custom Confirmations",
+  "release_date": "2026-11-24T07:27:47Z",
+  "title": "ViralClip AI v1.8.42 - Open Folder Sniper Fix & YouTube 403 / FFmpeg Auto-Fallback",
   "changelog": [
-    "Replaced ugly browser alert and confirm popups with sleek in-app Studio dialog modals",
-    "Custom frosted backdrop with Apple 3D emojis and glowing gradient action buttons",
-    "Polished diagnostic error popups and safe delete confirmation workflows"
+    "Fixed Open Folder button opening empty root directory instead of sniper storage",
+    "Added auto-refresh so rendered shorts appear immediately in the gallery",
+    "Added Smart TV & mobile client fallback with cookie guidance on YouTube 403 errors",
+    "Implemented FFmpeg subtitle safety fallback ensuring videos always render even without libass"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.41.zip",
-  "checksum": "sha256:c8d4c681fa276deb2531dbac5b3e8b91cc4625b37863f16294543d8cecb69a1b",
-  "size_bytes": 726005,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.42.zip",
+  "checksum": "sha256:28eb94295b1a0a761ae756b4589655d0812e12019fe2d0a51ed3294887d4267b",
+  "size_bytes": 727319,
   "mandatory": false,
   "rollback_version": null
 }
