@@ -1,16 +1,16 @@
 {
-  "version": "1.8.44",
+  "version": "1.8.45",
   "min_version": "1.0.0",
-  "release_date": "2026-11-24T08:28:30Z",
-  "title": "ViralClip AI v1.8.44 - Direct Fast Stream Slicing & Anti-Hang Circuit Breaker",
+  "release_date": "2026-11-24T09:29:37Z",
+  "title": "ViralClip AI v1.8.45 - True 720p/1080p High-Bitrate Stream Slicing Fix",
   "changelog": [
-    "Implemented Direct Fast Stream Slicing via FFmpeg cutting clips in 3-5s directly from stream CDN",
-    "Reduced yt-dlp retry timeouts to prevent 15-minute freeze on partial segments",
-    "Added Fail-Fast Circuit Breaker halting failed renders early with smart cookie guidance"
+    "Fixed resolution selector picking true 720p/1080p streams instead of fallback 360p",
+    "Removed android player client restriction allowing full HD format discovery",
+    "Enhanced FFmpeg stream copy to pair highest-bitrate video with 130kbps M4A audio"
   ],
-  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.44.zip",
-  "checksum": "sha256:1d94c907a91342300302117bfa1970b8e67312de1cfa8b29e564e6081db12ad4",
-  "size_bytes": 729226,
+  "download_url": "https://raw.githubusercontent.com/qqq316660-wq/viralclip-ai/main/updates/ViralClip-Update-1.8.45.zip",
+  "checksum": "sha256:798e60ce0f421a538fa3662010e4afcbab091c0f3b90948420453b7759017746",
+  "size_bytes": 729360,
   "mandatory": false,
   "rollback_version": null
 }
